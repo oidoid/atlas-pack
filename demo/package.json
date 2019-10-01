@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "asepriteExportAtlas --sheet=atlas.png *.aseprite|asepriteParseAtlas > atlas.json"
+  },
+  "dependencies": {
+    "aseprite-atlas": ".."
+  }
+}

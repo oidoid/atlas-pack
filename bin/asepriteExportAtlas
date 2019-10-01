@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# asepriteExportAtlas --sheet=<filename.png> [OPTIONS] [FILES]
+# asepriteExportAtlas --data=<filename.json> --sheet=<filename.png> [OPTIONS] [FILES]
+
+exec aseprite \
+  -b \
+  "$@" \
+  --filename-format '{tag} {frame}' \
+  --list-tags \
+  --list-slices \
+  --sheet-pack \

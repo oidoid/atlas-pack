@@ -1,0 +1,106 @@
+{
+  "backpacker-walkRight": {
+    "size": {"w": 9, "h": 16},
+    "cels": [
+      {"position": {"x": 81, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 9, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 18, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 27, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 36, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 45, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 54, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 63, "y": 32}, "duration": 100, "slices": []},
+      {"position": {"x": 72, "y": 32}, "duration": 100, "slices": []}
+    ],
+    "duration": 900,
+    "direction": "forward"
+  },
+  "backpacker-walkDown": {
+    "size": {"w": 9, "h": 16},
+    "cels": [
+      {
+        "position": {"x": 0, "y": 32},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 90, "y": 32},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 99, "y": 32},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 108, "y": 32},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 117, "y": 32},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 0, "y": 48},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 9, "y": 48},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      },
+      {
+        "position": {"x": 18, "y": 48},
+        "duration": 100,
+        "slices": [{"x": 2, "y": 2, "w": 5, "h": 4}]
+      }
+    ],
+    "duration": 800,
+    "direction": "forward"
+  },
+  "backpacker-walkUp": {
+    "size": {"w": 9, "h": 16},
+    "cels": [
+      {"position": {"x": 27, "y": 48}, "duration": 100, "slices": []},
+      {"position": {"x": 64, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 118, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 109, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 100, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 91, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 82, "y": 16}, "duration": 100, "slices": []},
+      {"position": {"x": 73, "y": 16}, "duration": 100, "slices": []}
+    ],
+    "duration": 800,
+    "direction": "forward"
+  },
+  "frog-eat": {
+    "size": {"w": 16, "h": 16},
+    "cels": [
+      {"position": {"x": 16, "y": 0}, "duration": 800, "slices": []},
+      {"position": {"x": 32, "y": 0}, "duration": 1200, "slices": []},
+      {"position": {"x": 48, "y": 0}, "duration": 64, "slices": []},
+      {"position": {"x": 64, "y": 0}, "duration": 64, "slices": []},
+      {"position": {"x": 80, "y": 0}, "duration": 64, "slices": []},
+      {"position": {"x": 96, "y": 0}, "duration": 64, "slices": []},
+      {"position": {"x": 112, "y": 0}, "duration": 64, "slices": []},
+      {"position": {"x": 0, "y": 16}, "duration": null, "slices": []}
+    ],
+    "duration": null,
+    "direction": "forward"
+  },
+  "frog-idle": {
+    "size": {"w": 16, "h": 16},
+    "cels": [
+      {"position": {"x": 16, "y": 16}, "duration": 7000, "slices": []},
+      {"position": {"x": 32, "y": 16}, "duration": 2000, "slices": []},
+      {"position": {"x": 48, "y": 16}, "duration": 4000, "slices": []},
+      {"position": {"x": 0, "y": 0}, "duration": 200, "slices": []}
+    ],
+    "duration": 13200,
+    "direction": "forward"
+  }
+}

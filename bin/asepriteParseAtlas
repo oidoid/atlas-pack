@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+// <stdin>|asepriteParseAtlas
+
+const fs = require('fs')
+const AsepriteAtlas = require('..')
+const asepriteJSON = JSON.parse(fs.readFileSync(0, 'utf-8'))
+const atlas = AsepriteAtlas.Parser.parse(asepriteJSON)
+process.stdout.write(JSON.stringify(atlas))

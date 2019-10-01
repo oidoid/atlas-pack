@@ -1,0 +1,43 @@
+{
+  "name": "aseprite-atlas",
+  "version": "0.0.0",
+  "license": "GPL-3.0-only",
+  "description": "Aseprite sprite atlas parser and animator for browser and Node.js.",
+  "keywords": [
+    "Aseprite",
+    "atlas",
+    "sprite",
+    "spritesheet",
+    "game"
+  ],
+  "main": "dist/main.js",
+  "bin": {
+    "asepriteExportAtlas": "bin/asepriteExportAtlas",
+    "asepriteParseAtlas": "bin/asepriteParseAtlas"
+  },
+  "scripts": {
+    "start": "webpack -dw",
+    "test:unit": "jest -c jest.config.json",
+    "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
+    "build": "webpack -p",
+    "format": "npm -s run formatter -- --write",
+    "formatter": "prettier './**/*.{js,json,html,md,ts}'"
+  },
+  "homepage": "https://github.com/oddoid/aseprite-atlas",
+  "repository": "github:oddoid/aseprite-atlas",
+  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
+  "devDependencies": {
+    "@types/jest": "24.0.18",
+    "clean-webpack-plugin": "3.0.0",
+    "jest": "24.9.0",
+    "pre-commit": "1.2.2",
+    "prettier": "1.18.2",
+    "ts-jest": "24.1.0",
+    "ts-loader": "6.2.0",
+    "ts-node": "8.4.1",
+    "typescript": "3.6.3",
+    "webpack": "4.41.0",
+    "webpack-cli": "3.3.9"
+  },
+  "author": "oddoid"
+}
