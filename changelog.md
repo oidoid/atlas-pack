@@ -1,5 +1,9 @@
 # Changlog
 
+## v2.0.0
+
+- \[breaking\] \[CLI\] rename asepriteExportAtlas to aseprite-atlas-pack
+
 ## v1.0.0
 
 - \[breaking\] \[CLI\] remove parser CLI support and add validation

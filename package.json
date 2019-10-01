@@ -13,7 +13,7 @@
   "main": "dist/main.js",
   "types": "dist/src/index.d.ts",
   "bin": {
-    "asepriteExportAtlas": "bin/asepriteExportAtlas"
+    "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
   },
   "scripts": {
     "start": "webpack -dw",
