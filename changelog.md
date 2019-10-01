@@ -3,6 +3,7 @@
 ## v2.0.0
 
 - \[breaking\] \[CLI\] rename asepriteExportAtlas to aseprite-atlas-pack
+- \[typings\] \[build\] move typing outputs up a level
 
 ## v1.0.0
 

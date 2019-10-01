@@ -8,5 +8,6 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationDir": "dist"
-  }
+  },
+  "files": ["src/index.ts"]
 }
