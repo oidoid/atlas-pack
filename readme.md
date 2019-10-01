@@ -66,6 +66,13 @@ their code.
   consumers may wish to add tests to assure that all slices are associated to a
   cel tag.
 
+## Development
+
+### Publishing a New Version
+
+1. Update the [changelog](changelog.md).
+1. Execute `npm version <patch|minor|major>`.
+
 ## License
 
 © Stephen Niedzielski.
