@@ -12,10 +12,10 @@ Node.js.
 ### CLI
 
 Given a directory of Aseprite files, group them into a sprite sheet and dump the
-parsed output:
+unparsed output:
 
 ```sh
-asepriteExportAtlas --sheet atlas.png *.aseprite | asepriteParseAtlas > atlas.json
+asepriteExportAtlas --sheet atlas.png *.aseprite > atlas.json
 ```
 
 ### JavaScript
@@ -43,6 +43,9 @@ will likely need to provide additional code for creating and managing instances,
 collision detection, etc. It is hoped that by focusing on a small set of
 responsibilities with a simple API, it will be easy to use (or not use) this
 library.
+
+Cel durations are allowed to be infinite. This means they are incompatible with
+JSON (JSON5 supports infinite values).
 
 ## Assumptions and Conventions
 

@@ -1,7 +1,8 @@
 # Changlog
 
-## v0.0.4 (unreleased)
+## v1.0.0
 
+- \[breaking\] \[CLI\] remove parser CLI support and add validation
 - \[dev\] \[build\] transition from NPM prepublish script to prepublishOnly
 
 ## v0.0.3

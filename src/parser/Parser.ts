@@ -18,15 +18,19 @@ export namespace Parser {
     frames
   }: Aseprite.File): Atlas.AnimationRecord {
     const {frameTags, slices} = meta
-    return Object.freeze(
-      frameTags.reduce(
-        (atlas, frameTag) => ({
+    const record = Object.freeze(
+      frameTags.reduce((atlas, frameTag) => {
+        // Every tag should be unique within the sheet.
+        if (frameTag.name in atlas)
+          throw new Error(`Duplicate tag "${frameTag.name}".`)
+
+        return {
           ...atlas,
           [frameTag.name]: parseAnimation(frameTag, frames, slices)
-        }),
-        {}
-      )
+        }
+      }, {})
     )
+    return record
   }
 
   /** @internal */
@@ -42,6 +46,21 @@ export namespace Parser {
       frameTag.direction === Aseprite.AnimationDirection.PING_PONG
     if (pingPong && cels.length > 2)
       duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
+
+    if (!cels.length)
+      throw new Error(`"${frameTag.name}" animation missing cels.`)
+    if (duration <= 0)
+      throw new Error(
+        `Total duration for "${frameTag.name}" animation is non-positive.`
+      )
+    if (
+      cels
+        .slice(0, -1)
+        .some(({duration}) => duration === Number.POSITIVE_INFINITY)
+    )
+      throw new Error(
+        `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
+      )
 
     const {w, h} = frames[0].sourceSize
     return {
@@ -110,6 +129,7 @@ export namespace Parser {
 
   /** @internal */
   export function parseDuration(duration: Aseprite.Duration): number {
+    if (!duration) throw new Error('Expected positive cel duration.')
     return duration === Aseprite.INFINITE ? Number.POSITIVE_INFINITY : duration
   }
 
