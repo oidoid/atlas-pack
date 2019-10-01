@@ -3,7 +3,7 @@ import {Milliseconds} from './Milliseconds'
 import {Rect} from './Rect'
 import {WH} from './WH'
 
-/** This typing assumes the options specified in asepriteExportAtlas and
+/** This typing assumes the options specified in aseprite-atlas-pack and
     annotated herein with **via CLI**. The JSON export format appears to be
     undocumented but the related [binary format] is. Types marked
     "**by convention**" are supplemental to and unenforced by the JSON format.

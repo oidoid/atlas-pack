@@ -1,4 +1,8 @@
-# Changlog
+# Changelog
+
+## v2.0.1
+
+- \[fix\] \[CLI\] outdated asepriteExportAtlas references
 
 ## v2.0.0
 

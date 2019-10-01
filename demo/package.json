@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "asepriteExportAtlas --sheet atlas.png *.aseprite > atlas.json"
+    "build": "aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
   },
   "dependencies": {
     "aseprite-atlas": ".."
