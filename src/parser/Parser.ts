@@ -12,6 +12,7 @@ export namespace Parser {
     })
   }
 
+  /** @internal */
   export function parseAnimationRecord({
     meta,
     frames
@@ -28,6 +29,7 @@ export namespace Parser {
     )
   }
 
+  /** @internal */
   export function parseAnimation(
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
@@ -59,6 +61,7 @@ export namespace Parser {
     return frames
   }
 
+  /** @internal */
   export function parseAnimationDirection({
     direction
   }: Aseprite.FrameTag): Aseprite.AnimationDirection {
@@ -66,6 +69,7 @@ export namespace Parser {
     throw new Error(`"${direction}" is not a Direction.`)
   }
 
+  /** @internal */
   export function isAnimationDirection(
     direction: string
   ): direction is Aseprite.AnimationDirection {
@@ -73,6 +77,7 @@ export namespace Parser {
     return vals.includes(<Aseprite.AnimationDirection>direction)
   }
 
+  /** @internal */
   export function parseCel(
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
@@ -86,6 +91,7 @@ export namespace Parser {
     })
   }
 
+  /** @internal */
   export function parsePosition(frame: Aseprite.Frame): Readonly<XY> {
     const padding = parsePadding(frame)
     return Object.freeze({
@@ -94,6 +100,7 @@ export namespace Parser {
     })
   }
 
+  /** @internal */
   export function parsePadding({
     frame,
     sourceSize
@@ -101,10 +108,12 @@ export namespace Parser {
     return Object.freeze({w: frame.w - sourceSize.w, h: frame.h - sourceSize.h})
   }
 
+  /** @internal */
   export function parseDuration(duration: Aseprite.Duration): number {
     return duration === Aseprite.INFINITE ? Number.POSITIVE_INFINITY : duration
   }
 
+  /** @internal */
   export function parseSlices(
     {name}: Aseprite.FrameTag,
     index: number,

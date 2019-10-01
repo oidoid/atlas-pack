@@ -1,3 +1,4 @@
+/** @internal */
 export namespace NumberUtil {
   /** @arg min An integer < max
       @arg max An integer > min
