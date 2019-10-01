@@ -1,7 +1,7 @@
 # aseprite-atlas
 
-(Experimental) Aseprite sprite atlas parser and animator for browser and
-Node.js.
+(Experimental) Aseprite sprite atlas (or sprite atlas) parser and animator for
+browser and Node.js.
 
 ## Installation
 
@@ -11,27 +11,67 @@ Node.js.
 
 ### CLI
 
-Given a directory of Aseprite files, group them into a sprite sheet and dump the
-unparsed output:
+Given a directory of Aseprite files, pack all images and animations into a
+single sprite sheet:
 
 ```sh
-asepriteExportAtlas --sheet atlas.png *.aseprite > atlas.json
+aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
 ```
+
+The contents of atlas.json are an [`Aseprite.File`](src/types/Aseprite.ts) and
+ready for parsing.
 
 ### JavaScript
 
-todo: add documentation.
+Parse the packed sprite sheet
+
+```js
+import {Animator, Parser} from 'aseprite-atlas' // Or `const {Atlas, Parser} = require('aseprite-atlas')`.
+import * as asepriteJSON from './atlas.json' // Or `const asepriteJSON = require('./atlas.json')`.
+
+// Parse the Aseprite.File into an Atlas.
+const atlas = Parser.parse(asepriteJSON)
+
+// Retrieve the Alas.Animation tagged "frog-idle". Animations are stateless.
+const frogAnimation = atlas.animations['frog-idle']
+
+// Create a mutable Animator state. Animators keep a record of the cel index
+// oscillation period (which is used to derive the active index for the cels
+// array) and its exposure timer (which is used to determine when the period
+// should be advanced). animator's state is now {period: 0, exposure: 0}.
+let frogAnimator = Animator.animate(0, 0, frogAnimation)
+
+// Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
+// duration specified in Aseprite, this may or may not advance the active cel.
+// For a multi-cel forward animation where the first cel has a 10 millisecond
+// duration, animator's state would be {period: 1, exposure: 6.667}.
+frogAnimator = Animator.animate(
+  frogAnimator.period,
+  frogAnimator.exposure + 16.667,
+  frogAnimation
+)
+
+// Print the location of the active cel within the sprite sheet PNG.
+const frogCelIndex = Animator.index(frogAnimator.period, frogAnimation.cels)
+const {x, y} = frogAnimation.cels[frogCelIndex].position
+const {w, h} = frogAnimation.size
+console.log(x, y, w, h)
+```
 
 ## Features
 
 aseprite-atlas adds little:
 
 - A utility for playing Aseprite animations (forward, reverse, or ping-pong).
+- A sparser data structure that includes linking animation cels together in the
+  same array and associating Aseprite slices with their cels. This can be useful
+  for collision detection, for example.
 - Support (by convention) for infinite durations. When a cel's duration is set
   to 65 535 (hexadecimal ffff) in the Aseprite GUI, it will be parsed in
   JavaScript as `Number.POSITIVE_INFINITY`.
-- A slightly improved data structure that includes associating Aseprite slices
-  with their cels. This can be useful for collision detection, for example.
+- TypeScript typings for the Aseprite file format.
+- Tests for parsing and playback.
+- Open source.
 
 You might not need it.
 
@@ -65,7 +105,9 @@ detect. To the extent possible, consumers should add tests for conventions to
 their code.
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
-  aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`.
+  aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`. This value is only
+  permitted in the last cel of a tagged animation but can appear in multiple
+  tagged animations within the same Aseprite file.
 - Slices are associated to cels by tag name. This is error-prone for artists so
   consumers may wish to add tests to assure that all slices are associated to a
   cel tag.

@@ -2,6 +2,7 @@
 
 ## v2.0.0
 
+- \[docs\] add JavaScript example and revise readme
 - \[breaking\] \[CLI\] rename asepriteExportAtlas to aseprite-atlas-pack
 - \[typings\] \[build\] move typing outputs up a level
 
