@@ -1,5 +1,9 @@
 # Changlog
 
+## v0.0.4 (unreleased)
+
+- \[dev\] \[build\] transition from NPM prepublish script to prepublishOnly
+
 ## v0.0.3
 
 - \[fix\] \[build\] \[typings\] include Aseprite and Atlas in exports

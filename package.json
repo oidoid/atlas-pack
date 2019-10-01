@@ -25,7 +25,7 @@
     "formatter": "prettier './**/*.{js,json,html,md,ts}'",
     "preversion": "[ -z \"$(git status -z)\" ]",
     "postversion": "git push --follow-tags origin HEAD && npm publish",
-    "prepublish": "npm -s t"
+    "prepublishOnly": "npm -s t"
   },
   "homepage": "https://github.com/oddoid/aseprite-atlas",
   "repository": "github:oddoid/aseprite-atlas",
