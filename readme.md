@@ -23,7 +23,7 @@ ready for parsing.
 
 ### JavaScript
 
-Parse the packed sprite sheet
+Parse the packed sprite sheet and play a frog's idle animation:
 
 ```js
 import {Animator, Parser} from 'aseprite-atlas' // Or `const {Atlas, Parser} = require('aseprite-atlas')`.
@@ -63,6 +63,7 @@ console.log(x, y, w, h)
 aseprite-atlas adds little:
 
 - A utility for playing Aseprite animations (forward, reverse, or ping-pong).
+  Mutable and immutable states are kept distinct.
 - A sparser data structure that includes linking animation cels together in the
   same array and associating Aseprite slices with their cels. This can be useful
   for collision detection, for example.
@@ -79,7 +80,7 @@ You might not need it.
 
 aseprite-atlas performs light parsing to restructure the standard Aseprite
 format into a more useful one for animation and slice association. Consumers
-will likely need to provide additional code for creating and managing instances,
+will likely need to provide additional code for creating and managing sprites,
 collision detection, etc. It is hoped that by focusing on a small set of
 responsibilities with a simple API, it will be easy to use (or not use) this
 library.
