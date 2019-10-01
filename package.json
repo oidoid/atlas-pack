@@ -11,6 +11,7 @@
     "game"
   ],
   "main": "dist/main.js",
+  "types": "dist/src/index.d.ts",
   "bin": {
     "asepriteExportAtlas": "bin/asepriteExportAtlas",
     "asepriteParseAtlas": "bin/asepriteParseAtlas"
