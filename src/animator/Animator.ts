@@ -20,10 +20,7 @@ export interface Animator {
 }
 
 export namespace Animator {
-  /** Apply the time since last frame was shown. E.g.:
-        const delta = now - then
-        animator = Animator.animate(animator.period, animator.exposure + delta, atlas[tag])
-  */
+  /** Apply the time since last frame was shown. */
   export function animate(
     period: Integer,
     exposure: Milliseconds,

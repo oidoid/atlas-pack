@@ -10,8 +10,8 @@ describe('step()', () => {
       duration: 2,
       direction: Aseprite.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(0, 0.5, animation)
-    expect(ret).toMatchObject({period: 0, exposure: 0.5})
+    const animator = Animator.animate(0, 0.5, animation)
+    expect(animator).toMatchObject({period: 0, exposure: 0.5})
   })
 
   test('time === duration', () => {
@@ -22,8 +22,8 @@ describe('step()', () => {
       duration: 2,
       direction: Aseprite.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(0, 1, animation)
-    expect(ret).toMatchObject({period: 1, exposure: 0})
+    const animator = Animator.animate(0, 1, animation)
+    expect(animator).toMatchObject({period: 1, exposure: 0})
   })
 
   test('time > duration', () => {
@@ -34,8 +34,8 @@ describe('step()', () => {
       duration: 2,
       direction: Aseprite.AnimationDirection.FORWARD
     }
-    const ret = Animator.animate(0, 1.5, animation)
-    expect(ret).toMatchObject({period: 1, exposure: 0.5})
+    const animator = Animator.animate(0, 1.5, animation)
+    expect(animator).toMatchObject({period: 1, exposure: 0.5})
   })
 })
 
@@ -51,8 +51,8 @@ describe('index', () => {
         direction
       }
       const {period} = Animator.animate(0, 1, animation)
-      const ret = Animator.index(period, animation.cels)
-      expect(ret).toStrictEqual(1)
+      const animator = Animator.index(period, animation.cels)
+      expect(animator).toStrictEqual(1)
     }
   )
 
@@ -67,8 +67,8 @@ describe('index', () => {
         direction
       }
       const {period} = Animator.animate(1, 1, animation)
-      const ret = Animator.index(period, animation.cels)
-      expect(ret).toStrictEqual(0)
+      const animator = Animator.index(period, animation.cels)
+      expect(animator).toStrictEqual(0)
     }
   )
 
@@ -119,12 +119,12 @@ describe('index', () => {
       direction
     }
     let exposure = 0
-    const ret = []
+    const playback = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
       ;({period, exposure} = Animator.animate(period, exposure + 1, animation))
-      ret.push(Animator.index(period, animation.cels))
+      playback.push(Animator.index(period, animation.cels))
     }
-    expect(ret).toStrictEqual(expected)
+    expect(playback).toStrictEqual(expected)
   })
 
   test.each(Object.values(Aseprite.AnimationDirection))(
@@ -138,14 +138,14 @@ describe('index', () => {
         direction
       }
       let {period, exposure} = {period: 0, exposure: 0}
-      const ret = []
+      const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
         ;({period, exposure} = Animator.animate(
           period,
           exposure + 1,
           animation
         ))
-        ret.push(Animator.index(period, animation.cels))
+        playback.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -153,7 +153,7 @@ describe('index', () => {
         [Aseprite.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
         [Aseprite.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
-      expect(ret).toStrictEqual(expected[direction])
+      expect(playback).toStrictEqual(expected[direction])
     }
   )
 
@@ -168,14 +168,14 @@ describe('index', () => {
         direction
       }
       let {period, exposure} = {period: 0, exposure: 0}
-      const ret = []
+      const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
         ;({period, exposure} = Animator.animate(
           period,
           exposure + 6,
           animation
         ))
-        ret.push(Animator.index(period, animation.cels))
+        playback.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -183,7 +183,7 @@ describe('index', () => {
         [Aseprite.AnimationDirection.REVERSE]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
         [Aseprite.AnimationDirection.PING_PONG]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
-      expect(ret).toStrictEqual(expected[direction])
+      expect(playback).toStrictEqual(expected[direction])
     }
   )
 
@@ -198,14 +198,14 @@ describe('index', () => {
         direction
       }
       let {period, exposure} = {period: 0, exposure: 0}
-      const ret = []
+      const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
           period,
           exposure + 0.5,
           animation
         ))
-        ret.push(Animator.index(period, animation.cels))
+        playback.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -213,7 +213,7 @@ describe('index', () => {
         [Aseprite.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
         [Aseprite.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
-      expect(ret).toStrictEqual(expected[direction])
+      expect(playback).toStrictEqual(expected[direction])
     }
   )
 
@@ -228,14 +228,14 @@ describe('index', () => {
         direction
       }
       let {period, exposure} = {period: 0, exposure: 0}
-      const ret = []
+      const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
           period,
           exposure + 0.9,
           animation
         ))
-        ret.push(Animator.index(period, animation.cels))
+        playback.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -243,7 +243,7 @@ describe('index', () => {
         [Aseprite.AnimationDirection.REVERSE]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
         [Aseprite.AnimationDirection.PING_PONG]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
       }
-      expect(ret).toStrictEqual(expected[direction])
+      expect(playback).toStrictEqual(expected[direction])
     }
   )
 
@@ -258,14 +258,14 @@ describe('index', () => {
         direction
       }
       let {period, exposure} = {period: 0, exposure: 0}
-      const ret = []
+      const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
         ;({period, exposure} = Animator.animate(
           period,
           exposure + 5.5,
           animation
         ))
-        ret.push(Animator.index(period, animation.cels))
+        playback.push(Animator.index(period, animation.cels))
       }
       // prettier-ignore
       const expected = {
@@ -273,7 +273,7 @@ describe('index', () => {
         [Aseprite.AnimationDirection.REVERSE]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
         [Aseprite.AnimationDirection.PING_PONG]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
-      expect(ret).toStrictEqual(expected[direction])
+      expect(playback).toStrictEqual(expected[direction])
     }
   )
 })
