@@ -15,7 +15,7 @@ Given a directory of Aseprite files, group them into a sprite sheet and dump the
 parsed output:
 
 ```sh
-asepriteExportAtlas --sheet=atlas.png *.aseprite | asepriteParseAtlas > atlas.json
+asepriteExportAtlas --sheet atlas.png *.aseprite | asepriteParseAtlas > atlas.json
 ```
 
 ### JavaScript
