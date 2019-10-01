@@ -1,6 +1,6 @@
 {
   "name": "aseprite-atlas",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "GPL-3.0-only",
   "description": "Aseprite sprite atlas parser and animator for browser and Node.js.",
   "keywords": [
