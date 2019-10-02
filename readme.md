@@ -1,7 +1,7 @@
 # aseprite-atlas
 
-(Experimental) Aseprite sprite atlas (or sprite atlas) parser and animator for
-browser and Node.js.
+Aseprite sprite atlas (or sprite atlas) parser and animator for browser and
+Node.js.
 
 ## Installation
 
