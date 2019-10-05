@@ -1,9 +1,4 @@
-import {Animator} from './animator/Animator'
-import {Parser} from './parser/Parser'
-import {Aseprite} from './types/Aseprite'
-import {Atlas} from './types/Atlas'
-
-export import Animator = Animator
-export import Parser = Parser
-export import Aseprite = Aseprite
-export import Atlas = Atlas
+export {Animator} from './animator/Animator'
+export {Parser} from './parser/Parser'
+export {Aseprite} from './types/Aseprite'
+export {Atlas} from './types/Atlas'

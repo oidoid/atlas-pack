@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.3
+
+- \[docs\] \[dev\] revise some JSDocs and export syntax
+
 ## v2.0.2
 
 - \[docs\] revise description in readme

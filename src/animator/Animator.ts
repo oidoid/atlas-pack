@@ -1,8 +1,8 @@
+import {Aseprite} from '../types/Aseprite'
 import {Atlas} from '../types/Atlas'
 import {Integer} from '../types/Integer'
 import {Milliseconds} from '../types/Milliseconds'
 import {NumberUtil} from '../utils/NumberUtil'
-import {Aseprite} from '../types/Aseprite'
 
 /** Record and update an Atlas.Animation's state. */
 export interface Animator {
@@ -12,20 +12,22 @@ export interface Animator {
       set. Any integer in [0, length - 1] is always valid. */
   period: Integer
 
-  /** Current cel exposure in milliseconds. When the value meets or exceeds the
-      cel's exposure duration, the cel is advanced according to direction. This
-      value should be carried over from each call with the current time step
-      added, and zeroed on manual cel change. */
+  /** Current cel exposure in milliseconds. When the fractional value meets or
+      exceeds the cel's exposure duration, the cel is advanced according to
+      direction. This value should be carried over from each call with the
+      current time step added, and zeroed on manual cel change. */
   exposure: Milliseconds
 }
 
 export namespace Animator {
-  /** Apply the time since last frame was shown. */
+  /** Apply the time since last frame was shown, possibly advancing the
+      animation period. */
   export function animate(
     period: Integer,
     exposure: Milliseconds,
     animation: Atlas.Animation
   ): Animator {
+    // Avoid unnecessary iterations by skipping complete cycles.
     // animation.duration may be infinite but the modulo of any number and
     // infinity is that number.
     exposure = exposure % animation.duration
@@ -36,6 +38,7 @@ export namespace Animator {
     return {period, exposure}
   }
 
+  /** @return The animation cel index. */
   export function index(period: Integer, cels: readonly Atlas.Cel[]): number {
     return Math.abs(period % cels.length)
   }
