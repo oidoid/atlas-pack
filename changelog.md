@@ -5,6 +5,7 @@
 - \[update\] \[Atlas\] add image filename, format, and dimension properties
 - \[dev\] \[typings\] move readonly specifiers to point of use
 - \[dev\] \[typings\] expose supporting types
+- \[dev\] \[build\] upgrade TypeScript from v3.6.3 to 3.6.4
 
 ## v2.0.3
 
