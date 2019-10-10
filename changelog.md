@@ -7,6 +7,7 @@
 - \[dev\] \[typings\] expose supporting types
 - \[dev\] \[build\] upgrade TypeScript from v3.6.3 to 3.6.4
 - \[docs\] \[CLI\] fix outdated asepriteExportAtlas references and example
+- \[dev\] \[VS Code\] ignore demo/node_modules and Aseprite spelling
 
 ## v2.0.3
 
