@@ -9,6 +9,8 @@ Node.js.
 
 ## Usage
 
+See the [demo](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
+
 ### CLI
 
 Given a list of Aseprite files, pack all images and animations into a single
@@ -35,29 +37,29 @@ import * as asepriteJSON from './atlas.json'
 // Parse the Aseprite.File into an Atlas.
 const atlas = Parser.parse(asepriteJSON)
 
-// Retrieve the Alas.Animation tagged "frog-idle". Animations are stateless.
-const frogAnimation = atlas.animations['frog-idle']
-
 // Create a mutable Animator state. Animators keep a record of the cel index
 // oscillation period (which is used to derive the active index for the cels
 // array) and its exposure timer (which is used to determine when the period
-// should be advanced). animator's state is now {period: 0, exposure: 0}.
-let frogAnimator = Animator.animate(0, 0, frogAnimation)
+// should be advanced). Animators are just plain data.
+let animator = {period: 0, exposure: 0}
+
+// Retrieve the Alas.Animation tagged "frog-idle". Animations are stateless.
+const animation = atlas.animations['frog-idle']
 
 // Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
 // duration specified in Aseprite, this may or may not advance the active cel.
 // For a multi-cel forward animation where the first cel has a 10 millisecond
 // duration, animator's state would be {period: 1, exposure: 6.667}.
-frogAnimator = Animator.animate(
-  frogAnimator.period,
-  frogAnimator.exposure + 16.667,
-  frogAnimation
+animator = Animator.animate(
+  animator.period,
+  animator.exposure + 16.667,
+  animation
 )
 
 // Print the location of the active cel within the sprite sheet PNG.
-const frogCelIndex = Animator.index(frogAnimator.period, frogAnimation.cels)
-const {x, y} = frogAnimation.cels[frogCelIndex].position
-const {w, h} = frogAnimation.size
+const index = Animator.index(animator.period, animation.cels)
+const {x, y} = animation.cels[index].position
+const {w, h} = animation.size
 console.log(x, y, w, h)
 ```
 

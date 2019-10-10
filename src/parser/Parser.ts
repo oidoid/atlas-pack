@@ -95,8 +95,8 @@ export namespace Parser {
   export function isAnimationDirection(
     direction: string
   ): direction is Aseprite.AnimationDirection {
-    const vals = Object.values(Aseprite.AnimationDirection)
-    return vals.includes(<Aseprite.AnimationDirection>direction)
+    const directions = Object.values(Aseprite.AnimationDirection)
+    return directions.includes(<Aseprite.AnimationDirection>direction)
   }
 
   /** @internal */

@@ -13,7 +13,7 @@ export interface Animator {
   period: Integer
 
   /** Current cel exposure in milliseconds. When the fractional value meets or
-      exceeds the cel's exposure duration, the cel is advanced according to
+      exceeds the cel exposure duration, the cel is advanced according to
       direction. This value should be carried over from each call with the
       current time step added, and zeroed on manual cel change. */
   exposure: Milliseconds
