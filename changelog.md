@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.4
+
+- \[update\] \[Atlas\] add image filename, format, and dimension properties
+- \[dev\] \[typings\] move readonly specifiers to point of use
+- \[dev\] \[typings\] expose supporting types
+
 ## v2.0.3
 
 - \[docs\] \[dev\] revise some JSDocs and export syntax

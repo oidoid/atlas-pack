@@ -8,6 +8,9 @@ export namespace Parser {
   export function parse(file: Aseprite.File): Atlas {
     return Object.freeze({
       version: file.meta.version,
+      filename: file.meta.image,
+      format: file.meta.format,
+      size: file.meta.size,
       animations: parseAnimationRecord(file)
     })
   }
@@ -138,7 +141,7 @@ export namespace Parser {
     {name}: Aseprite.FrameTag,
     index: number,
     slices: readonly Aseprite.Slice[]
-  ): readonly Rect[] {
+  ): readonly Readonly<Rect>[] {
     // Filter out Slices not for this Tag.
     slices = slices.filter(slice => slice.name === name)
     return Object.freeze(

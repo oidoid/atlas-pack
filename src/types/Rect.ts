@@ -1,8 +1,5 @@
-import {Integer} from './Integer'
 import {WH} from './WH'
+import {XY} from './XY'
 
 /** Width and height at position x and y. */
-export interface Rect extends WH {
-  readonly x: Integer
-  readonly y: Integer
-}
+export interface Rect extends XY, WH {}

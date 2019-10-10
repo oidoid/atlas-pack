@@ -9,14 +9,20 @@ import {XY} from './XY'
     need a mutable copy, create a duplicate instance of the parts that
     change. */
 export interface Atlas {
-  /** The Aseprite version of the parsed file. */
+  /** The Aseprite version of the parsed file. E.g., '1.2.8.1'. */
   readonly version: string
+  /** The atlas image basename. E.g., 'atlas.png'. */
+  readonly filename: string
+  /** Atlas image format. E.g., 'RGBA8888' or 'I8'. */
+  readonly format: string
+  /** Atlas image dimensions (power of 2). */
+  readonly size: Readonly<WH>
   readonly animations: Atlas.AnimationRecord
 }
 
 export namespace Atlas {
   export interface AnimationRecord
-    extends Readonly<Record<Aseprite.Tag, Atlas.Animation>> {}
+    extends Readonly<Record<Aseprite.Tag, Animation>> {}
 
   /** A sequence of animation cels. */
   export interface Animation {
@@ -42,6 +48,6 @@ export namespace Atlas {
     /** Positive cel exposure in integral milliseconds, possibly infinite. */
     readonly duration: Milliseconds
     /** Slices within the cel in local pixels. */
-    readonly slices: readonly Rect[]
+    readonly slices: readonly Readonly<Rect>[]
   }
 }

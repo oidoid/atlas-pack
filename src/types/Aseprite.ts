@@ -36,7 +36,7 @@ export namespace Aseprite {
     /** E.g., 'RGBA8888' or 'I8'. */
     readonly format: string
     /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
-    readonly size: WH
+    readonly size: Readonly<WH>
     /** E.g., '1'. */
     readonly scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
@@ -58,13 +58,13 @@ export namespace Aseprite {
         **via CLI** `--inner-padding n`. The padding dimensions may also be
         calculated by subtracting member's WH dimensions from sourceSize and
         dividing by 2. */
-    readonly frame: Rect
+    readonly frame: Readonly<Rect>
     readonly rotated: boolean
     readonly trimmed: boolean
     /** The Frame's bounds within the file packed, not including padding. */
-    readonly spriteSourceSize: Rect
+    readonly spriteSourceSize: Readonly<Rect>
     /** The width and height components of spriteSourceSize. */
-    readonly sourceSize: WH
+    readonly sourceSize: Readonly<WH>
     readonly duration: Duration
   }
 
@@ -117,6 +117,6 @@ export namespace Aseprite {
         Key's Frame index may be calculated from FrameTag.index + Key.frame. */
     readonly frame: Integer
     /** The slice dimensions. */
-    readonly bounds: Rect
+    readonly bounds: Readonly<Rect>
   }
 }
