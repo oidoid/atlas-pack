@@ -1,4 +1,4 @@
-# aseprite-atlas
+# [aseprite-atlas](https://git.io/aseprite-atlas)
 
 Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
 Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
