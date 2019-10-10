@@ -6,6 +6,7 @@
 - \[dev\] \[typings\] move readonly specifiers to point of use
 - \[dev\] \[typings\] expose supporting types
 - \[dev\] \[build\] upgrade TypeScript from v3.6.3 to 3.6.4
+- \[docs\] \[CLI\] fix outdated asepriteExportAtlas references and example
 
 ## v2.0.3
 
