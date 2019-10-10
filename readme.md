@@ -1,7 +1,7 @@
 # aseprite-atlas
 
 Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
-Node.js.
+Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
 
 ## Installation
 
@@ -9,7 +9,7 @@ Node.js.
 
 ## Usage
 
-See the [demo](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
+See the [demo source](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
 
 ### CLI
 
