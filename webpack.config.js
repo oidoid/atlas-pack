@@ -1,7 +1,8 @@
-import {CleanWebpackPlugin} from 'clean-webpack-plugin'
-import * as webpack from 'webpack'
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const webpack = require('webpack')
 
-export default (): webpack.Configuration => {
+/** @return {webpack.Configuration} */
+module.exports = () => {
   return {
     stats: 'errors-warnings',
     resolve: {extensions: ['.js', '.ts']},

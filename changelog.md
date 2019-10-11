@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.5
+
+- \[dev\] drop ts-node dependency by moving to JavaScript Webpack configuration
+- \[dev\] \[docs\] link to live demo and GitHub page
+
 ## v2.0.4
 
 - \[update\] \[Atlas\] add image filename, format, and dimension properties
