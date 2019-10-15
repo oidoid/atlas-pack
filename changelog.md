@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.6
+
+- \[docs\] \[NPM\] revise keywords
+
 ## v2.0.5
 
 - \[dev\] drop ts-node dependency by moving to JavaScript Webpack configuration

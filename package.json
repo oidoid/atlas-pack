@@ -4,11 +4,15 @@
   "license": "GPL-3.0-only",
   "description": "Aseprite sprite atlas parser and animator for browser and Node.js.",
   "keywords": [
-    "Aseprite",
-    "atlas",
-    "sprite",
+    "aseprite",
+    "game",
+    "animation",
+    "pixel-art",
+    "animated-sprites",
     "spritesheet",
-    "game"
+    "sprites",
+    "sprite-atlas",
+    "sprite-parser"
   ],
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
