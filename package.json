@@ -22,7 +22,7 @@
   "scripts": {
     "start": "webpack -dw",
     "test:unit": "jest -c jest.config.json",
-    "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit",
+    "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit && cd demo && npm -s t",
     "build": "webpack -p",
     "format": "npm -s run formatter -- --write",
     "formatter": "prettier './**/*.{js,json,html,md,ts}'",

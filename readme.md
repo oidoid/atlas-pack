@@ -25,7 +25,7 @@ ready for parsing.
 
 ### JavaScript
 
-Parse the packed sprite sheet and play a frog's idle animation:
+Parse the packed sprite sheet and play the frog's idle animation:
 
 ```js
 import {Animator, Parser} from 'aseprite-atlas'
@@ -72,9 +72,9 @@ aseprite-atlas adds little:
 - A sparser data structure that includes linking animation cels together in the
   same array and associating Aseprite slices with their cels. This can be useful
   for collision detection, for example.
-- Support (by convention) for infinite durations. When a cel's duration is set
-  to 65 535 (hexadecimal ffff) in the Aseprite GUI, it will be parsed in
-  JavaScript as `Number.POSITIVE_INFINITY`.
+- Support (by convention) for infinite durations. When a cel duration is set to
+  65 535 (hexadecimal ffff) in the Aseprite GUI, it will be parsed in JavaScript
+  as `Number.POSITIVE_INFINITY`.
 - TypeScript typings for the Aseprite file format.
 - Tests for parsing and playback.
 - Open source.

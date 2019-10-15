@@ -2,6 +2,7 @@
 
 ## v2.0.6
 
+- \[dev\] \[demo\] \[build\] add type checking to demo
 - \[docs\] \[NPM\] revise keywords
 
 ## v2.0.5
