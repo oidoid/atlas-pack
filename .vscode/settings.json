@@ -5,5 +5,5 @@
     "dist": true,
     "demo/node_modules": true
   },
-  "cSpell.words": ["aseprite"]
+  "cSpell.words": ["aseprite", "rrggbbaa"]
 }
