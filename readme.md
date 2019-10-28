@@ -1,7 +1,37 @@
 # [aseprite-atlas](https://git.io/aseprite-atlas)
 
+[![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo/)
+
 Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
 Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
+
+## Table of Contents
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Generate the Atlas (CLI)](#generate-the-atlas-cli)
+  - [Parse and Render (JavaScript)](#parse-and-render-javascript)
+    - [Minimal Example](#minimal-example)
+      - [Parsing](#parsing)
+      - [Retrieve an Animation from the Atlas](#retrieve-an-animation-from-the-atlas)
+      - [Create an Animator and Animate It](#create-an-animator-and-animate-it)
+      - [Render the Animation](#render-the-animation)
+- [Features](#features)
+- [Functionality Not Provided](#functionality-not-provided)
+- [Assumptions and Conventions](#assumptions-and-conventions)
+  - [Assumptions](#assumptions)
+  - [Conventions](#conventions)
+- [Development](#development)
+  - [Publishing a New Version](#publishing-a-new-version)
+- [License](#license)
+  - [GPL-3.0-only](#gpl-30-only)
+
+<!-- /code_chunk_output -->
 
 ## Installation
 
@@ -9,9 +39,13 @@ Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
 
 ## Usage
 
+There are two steps: 1) generate the output sprite sheet image and JSON from the
+Aseprite input files 2) parse and render animations from the sprite sheet
+outputs.
+
 See the [demo source](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
 
-### CLI
+### Generate the Atlas (CLI)
 
 Given a list of Aseprite files, pack all images and animations into a single
 sprite sheet:
@@ -20,31 +54,83 @@ sprite sheet:
 npx aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
 ```
 
-The contents of atlas.json are an [`Aseprite.File`](src/types/Aseprite.ts) and
-ready for parsing.
+The output is a big image of sprites (`atlas.png`) and an
+[`Aseprite.File`](src/types/Aseprite.ts) (`atlas.json`) which is ready for
+parsing.
 
-### JavaScript
+These outputs should be regenerated any time assets (Aseprite files) change,
+usually as part of a build step.
 
-Parse the packed sprite sheet and play the frog's idle animation:
+### Parse and Render (JavaScript)
+
+Once `atlas.json` and `atlas.png` are available, a program can parse
+`atlas.json` to animate and render animations from `atlas.png`. A complete but
+minimal example follows. Subsequent sections detail each step in the example.
+
+#### Minimal Example
+
+All together, parse the packed sprite sheet and play the frog's idle animation:
 
 ```js
 import {Animator, Parser} from 'aseprite-atlas'
 import * as asepriteJSON from './atlas.json'
+
+const atlas = Parser.parse(asepriteJSON)
+
+const animation = atlas.animations['frog-idle']
+let animator = {period: 0, exposure: 0}
+
+animator = Animator.animate(
+  animator.period,
+  animator.exposure + 16.667,
+  animation
+)
+const index = Animator.index(animator.period, animation.cels)
+const {x, y} = animation.cels[index].position
+const {w, h} = animation.size
+console.log(x, y, w, h)
+```
+
+[See the demo](https://aseprite-atlas.netlify.com/demo/) for a running example
+rendered to a canvas.
+
+The following sections only detail this example.
+
+##### Parsing
+
+Parse the `Aseprite.File` into an `Atlas`:
+
+```js
+import {Parser} from 'aseprite-atlas'
+import * as asepriteJSON from './atlas.json'
 // Or:
-//   const {Animator, Parser} = require('aseprite-atlas')
+//   const {Parser} = require('aseprite-atlas')
 //   const asepriteJSON = require('./atlas.json')
 
-// Parse the Aseprite.File into an Atlas.
+// Parse the Aseprite.File (atlas.json) into an Atlas.
 const atlas = Parser.parse(asepriteJSON)
+```
+
+##### Retrieve an Animation from the Atlas
+
+Animations are stateless and are retrieved by Aseprite tag:
+
+```js
+// Retrieve the Alas.Animation tagged "frog-idle".
+const animation = atlas.animations['frog-idle']
+```
+
+##### Create an Animator and Animate It
+
+```js
+import {Animator} from 'aseprite-atlas'
+// Or: const {Animator} = require('aseprite-atlas')
 
 // Create a mutable Animator state. Animators keep a record of the cel index
 // oscillation period (which is used to derive the active index for the cels
 // array) and its exposure timer (which is used to determine when the period
 // should be advanced). Animators are just plain data.
 let animator = {period: 0, exposure: 0}
-
-// Retrieve the Alas.Animation tagged "frog-idle". Animations are stateless.
-const animation = atlas.animations['frog-idle']
 
 // Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
 // duration specified in Aseprite, this may or may not advance the active cel.
@@ -55,7 +141,14 @@ animator = Animator.animate(
   animator.exposure + 16.667,
   animation
 )
+```
 
+##### Render the Animation
+
+Once the animation has been animated, the current cel should be shown each
+render loop:
+
+```js
 // Print the location of the active cel within the sprite sheet PNG.
 const index = Animator.index(animator.period, animation.cels)
 const {x, y} = animation.cels[index].position

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.7 (unreleased)
+
+- \[dev\] \[docs\] revise examples
+
 ## v2.0.6
 
 - \[dev\] \[demo\] \[build\] add type checking to demo
