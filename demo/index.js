@@ -67,6 +67,7 @@ function loadJSON(uri) {
   return fetch(uri).then(rsp => rsp.json())
 }
 
-Promise.all([loadJSON('/demo/atlas.json'), loadImage('/demo/atlas.png')]).then(
-  ([json, image]) => onLoaded(json, image)
-)
+Promise.all([
+  loadJSON('/demo/atlas.json'),
+  loadImage('/demo/atlas.png')
+]).then(([json, image]) => onLoaded(json, image))

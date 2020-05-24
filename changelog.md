@@ -1,8 +1,8 @@
 # Changelog
 
-## v2.0.9 (unreleased)
+## v2.0.9
 
-...
+- \[dev\] \[build\] upgrade dependencies
 
 ## v2.0.8
 
