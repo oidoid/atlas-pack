@@ -13,7 +13,9 @@
     "spritesheet",
     "sprites",
     "sprite-atlas",
-    "sprite-parser"
+    "sprite-parser",
+    "8-bit",
+    "retro"
   ],
   "main": "dist/main.js",
   "types": "dist/index.d.ts",

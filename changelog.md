@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.10 (unreleased)
+
+- \[docs\] add NPM keywords
+
 ## v2.0.9
 
 - \[dev\] \[build\] upgrade dependencies
