@@ -3,6 +3,7 @@
 ## v2.0.10 (unreleased)
 
 - \[docs\] add NPM keywords
+- \[docs\] drop trailing URL slash
 
 ## v2.0.9
 

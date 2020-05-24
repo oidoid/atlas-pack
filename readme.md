@@ -1,9 +1,9 @@
 # [aseprite-atlas](https://git.io/aseprite-atlas)
 
-[![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo/)
+[![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo)
 
 Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
-Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
+Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo)
 
 ## Table of Contents
 
@@ -91,7 +91,7 @@ const {w, h} = animation.size
 console.log(x, y, w, h)
 ```
 
-[See the demo](https://aseprite-atlas.netlify.com/demo/) for a running example
+[See the demo](https://aseprite-atlas.netlify.com/demo) for a running example
 rendered to a canvas.
 
 The following sections only detail this example.
