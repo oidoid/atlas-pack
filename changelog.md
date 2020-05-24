@@ -1,9 +1,12 @@
 # Changelog
 
+## v2.0.8 (unreleased)
+
 ## v2.0.7
 
 - \[dev\] \[docs\] revise examples
 - \[dev\] \[build\] improve version scripts
+- \[docs\] add todos
 
 ## v2.0.6
 

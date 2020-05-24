@@ -28,14 +28,14 @@ Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo/)
   - [Conventions](#conventions)
 - [Development](#development)
   - [Publishing a New Version](#publishing-a-new-version)
-- [License](#license)
+- [License (GPL-3.0-only)](#license-gpl-30-only)
   - [GPL-3.0-only](#gpl-30-only)
 
 <!-- /code_chunk_output -->
 
 ## Installation
 
-`npm i aseprite-atlas`. See the [changelog](changelog.md) for version notes.
+`npm i aseprite-atlas`. See the [changelog](changelog.md) for release notes.
 
 ## Usage
 
@@ -215,12 +215,14 @@ their code.
 
 ## Development
 
+Incomplete work is tracked under [todo](todo.md).
+
 ### Publishing a New Version
 
 1. Update the [changelog](changelog.md).
 1. Execute `npm version <patch|minor|major>`.
 
-## License
+## License (GPL-3.0-only)
 
 © Stephen Niedzielski.
 
