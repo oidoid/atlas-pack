@@ -3,6 +3,7 @@
 ## v2.0.7 (unreleased)
 
 - \[dev\] \[docs\] revise examples
+- \[dev\] \[build\] improve version scripts
 
 ## v2.0.6
 
