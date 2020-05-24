@@ -3,6 +3,7 @@
 ## v2.0.9
 
 - \[dev\] \[build\] upgrade dependencies
+- \[dev\] \[build\] remove needless jest config param
 
 ## v2.0.8
 
