@@ -1,6 +1,12 @@
 # Changelog
 
-## v2.0.8 (unreleased)
+## v2.0.9 (unreleased)
+
+...
+
+## v2.0.8
+
+- \[dev\] \[build\] push branch with tag when versioning
 
 ## v2.0.7
 
