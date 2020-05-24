@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.7 (unreleased)
+## v2.0.7
 
 - \[dev\] \[docs\] revise examples
 - \[dev\] \[build\] improve version scripts
