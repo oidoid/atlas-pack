@@ -7,4 +7,4 @@ exec aseprite \
   --filename-format '{tag} {frame}' \
   --list-tags \
   --list-slices \
-  --sheet-pack \
+  --sheet-pack

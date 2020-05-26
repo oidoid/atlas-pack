@@ -4,6 +4,7 @@
 
 - \[docs\] add NPM keywords
 - \[docs\] drop trailing URL slash
+- \[dev\] \[build\] drop needless line continuation
 
 ## v2.0.9
 
