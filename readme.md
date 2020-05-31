@@ -3,7 +3,7 @@
 [![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo)
 
 Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
-Node.js. [See the live demo!](https://aseprite-atlas.netlify.com/demo)
+Node.js. See the **[demo](https://aseprite-atlas.netlify.com/demo)**.
 
 ## Table of Contents
 
