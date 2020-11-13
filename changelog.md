@@ -1,5 +1,7 @@
 # Changelog
 
+Versions and bullets are arranged chronologically from latest to oldest.
+
 ## v2.0.10 (unreleased)
 
 - \[docs\] add NPM keywords
