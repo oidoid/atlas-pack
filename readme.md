@@ -1,4 +1,4 @@
-# [aseprite-atlas](https://git.io/aseprite-atlas)
+# 🗺️ [aseprite-atlas](https://git.io/aseprite-atlas)
 
 [![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo)
 
@@ -222,7 +222,7 @@ Incomplete work is tracked under [todo](todo.md).
 1. Update the [changelog](changelog.md).
 1. Execute `npm version <patch|minor|major>`.
 
-## License (GPL-3.0-only)
+## License
 
 © Stephen Niedzielski.
 
