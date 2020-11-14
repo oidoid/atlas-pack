@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v2.0.10 (unreleased)
 
+- \[test\] Collect Jest coverage
 - \[build\] Upgrade all dependencies
   - Significant upgrade to TypeScript, Webpack, and other dependencies.
   - Source maps now output.
