@@ -48,7 +48,8 @@ export namespace Parser {
     const pingPong =
       frameTag.direction === Aseprite.AnimationDirection.PING_PONG
     if (pingPong && cels.length > 2)
-      duration += duration - (cels[0].duration + cels[cels.length - 1].duration)
+      duration +=
+        duration - (cels[0]!.duration + cels[cels.length - 1]!.duration)
 
     if (!cels.length)
       throw new Error(`"${frameTag.name}" animation missing cels.`)
@@ -65,7 +66,7 @@ export namespace Parser {
         `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
       )
 
-    const {w, h} = frames[0].sourceSize
+    const {w, h} = frames[0]!.sourceSize
     return {
       size: Object.freeze({w, h}),
       cels: Object.freeze(cels),
@@ -79,7 +80,11 @@ export namespace Parser {
     frameMap: Aseprite.FrameMap
   ): readonly Aseprite.Frame[] {
     const frames = []
-    for (; from <= to; ++from) frames.push(frameMap[`${name} ${from}`])
+    for (; from <= to; ++from) {
+      const frame = frameMap[`${name} ${from}`]
+      if (!frame) throw new Error(`Missing frame "${name} ${from}".`)
+      frames.push(frame)
+    }
     return frames
   }
 
@@ -142,13 +147,15 @@ export namespace Parser {
     index: number,
     slices: readonly Aseprite.Slice[]
   ): readonly Readonly<Rect>[] {
-    // Filter out Slices not for this Tag.
-    slices = slices.filter(slice => slice.name === name)
-    return Object.freeze(
-      slices
-        // For each Slice, get the greatest relevant Key.
-        .map(({keys}) => keys.filter(key => key.frame <= index).slice(-1)[0])
-        .map(({bounds}) => Object.freeze(bounds))
-    )
+    const tagBounds = []
+    for (const slice of slices) {
+      // Ignore Slices not for this Tag.
+      if (slice.name !== name) continue
+      // Get the greatest relevant Key.
+      const key = slice.keys.filter(key => key.frame <= index).slice(-1)[0]
+      if (!key) throw new Error(`No Keys for Tag "${slice.name}".`)
+      tagBounds.push(key.bounds)
+    }
+    return Object.freeze(tagBounds)
   }
 }

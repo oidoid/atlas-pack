@@ -27,12 +27,16 @@ export namespace Animator {
     exposure: Milliseconds,
     animation: Atlas.Animation
   ): Animator {
+    if (animation.cels.length < 1) return {period, exposure}
+
     // Avoid unnecessary iterations by skipping complete cycles.
     // animation.duration may be infinite but the modulo of any number and
     // infinity is that number.
     exposure = exposure % animation.duration
-    while (exposure >= animation.cels[index(period, animation.cels)].duration) {
-      exposure -= animation.cels[index(period, animation.cels)].duration
+    while (
+      exposure >= animation.cels[index(period, animation.cels)]!.duration
+    ) {
+      exposure -= animation.cels[index(period, animation.cels)]!.duration
       period = Period[animation.direction](period, animation.cels.length)
     }
     return {period, exposure}

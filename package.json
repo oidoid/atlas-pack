@@ -17,17 +17,17 @@
     "8-bit",
     "retro"
   ],
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
   },
   "scripts": {
-    "start": "webpack -dw",
+    "start": "webpack -w --mode development",
     "test:unit": "jest",
     "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit && cd demo && npm -s t",
-    "build": "webpack -p",
-    "format": "npm -s run formatter -- --write",
+    "build": "webpack",
+    "format": "npm -s run formatter -- -w",
     "formatter": "prettier './**/*.{js,json,html,md,ts}'",
     "preversion": "[ -z \"$(git status -z)\" ]",
     "version": "npm t",
@@ -38,15 +38,14 @@
   "repository": "github:oddoid/aseprite-atlas",
   "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
   "devDependencies": {
-    "@types/jest": "25.2.3",
     "clean-webpack-plugin": "3.0.0",
-    "jest": "26.0.1",
+    "jest": "26.6.3",
     "pre-commit": "1.2.2",
-    "prettier": "2.0.5",
-    "ts-jest": "26.0.0",
-    "ts-loader": "7.0.5",
-    "typescript": "3.9.3",
-    "webpack": "4.43.0",
-    "webpack-cli": "3.3.11"
+    "prettier": "2.1.2",
+    "ts-jest": "26.4.4",
+    "ts-loader": "8.0.11",
+    "typescript": "4.1.1-rc",
+    "webpack": "5.4.0",
+    "webpack-cli": "4.2.0"
   }
 }

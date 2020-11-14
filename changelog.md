@@ -4,6 +4,11 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v2.0.10 (unreleased)
 
+- \[build\] Upgrade all dependencies
+  - Significant upgrade to TypeScript, Webpack, and other dependencies.
+  - Source maps now output.
+  - Name library as "AsepriteAtlas" for UMD usage.
+  - Rename dist/main.js build product to index.js.
 - \[docs\] add NPM keywords
 - \[docs\] drop trailing URL slash
 - \[dev\] \[build\] drop needless line continuation

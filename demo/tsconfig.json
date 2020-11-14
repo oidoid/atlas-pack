@@ -1,15 +1,11 @@
 {
   "extends": "..",
   "compilerOptions": {
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
-
     // Demo type checking only.
     "allowJs": true,
     "checkJs": true,
     "noEmit": true
-  }
+  },
+  // Don't extend the exclusions.
+  "exclude": []
 }
