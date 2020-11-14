@@ -1,1 +1,11 @@
-{"transform": {".+\\.ts$": "ts-jest"}}
+{
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
+  "transform": {".+\\.ts$": "ts-jest"},
+  "collectCoverage": true,
+  "coverageDirectory": "dist/coverage",
+  "coveragePathIgnorePatterns": ["/node_modules/", "/dist/", "/demo/"],
+  "errorOnDeprecated": true,
+  "coverageThreshold": {
+    "global": {"branches": 67, "functions": 92, "lines": 90}
+  }
+}
