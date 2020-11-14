@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v3.0.0 (unreleased)
 
+- \[docs\] Note power of two sprite sheet size issue
 - \[enum\] Replace enums with objects and use PascalCasing
 - \[test\] Collect Jest coverage
 - \[build\] Upgrade all dependencies

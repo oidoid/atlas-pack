@@ -28,7 +28,8 @@ Node.js. See the **[demo](https://aseprite-atlas.netlify.com/demo)**.
   - [Conventions](#conventions)
 - [Development](#development)
   - [Publishing a New Version](#publishing-a-new-version)
-- [License (GPL-3.0-only)](#license-gpl-30-only)
+- [Known Issues](#known-issues)
+- [License](#license)
   - [GPL-3.0-only](#gpl-30-only)
 
 <!-- /code_chunk_output -->
@@ -221,6 +222,11 @@ Incomplete work is tracked under [todo](todo.md).
 
 1. Update the [changelog](changelog.md).
 1. Execute `npm version <patch|minor|major>`.
+
+## Known Issues
+
+- [Sprite sheet dimensions are no longer powers of two](https://github.com/aseprite/aseprite/issues/2289)
+  when exported. This is observable by re-exporting the demo/ sheet from Aseprite.
 
 ## License
 
