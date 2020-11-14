@@ -2,7 +2,7 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
-## v3.0.0 (unreleased)
+## v3.0.0
 
 - \[docs\] Note power of two sprite sheet size issue
 - \[enum\] Replace enums with objects and use PascalCasing
