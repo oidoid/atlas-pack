@@ -17,6 +17,9 @@
     "8-bit",
     "retro"
   ],
+  "homepage": "https://git.io/aseprite-atlas",
+  "repository": "github:oddoid/aseprite-atlas",
+  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -34,9 +37,6 @@
     "postversion": "npm publish",
     "prepublishOnly": "git push origin \"$(git rev-parse --abbrev-ref @)\" \"$(git tag --points-at @)\""
   },
-  "homepage": "https://github.com/oddoid/aseprite-atlas",
-  "repository": "github:oddoid/aseprite-atlas",
-  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
   "devDependencies": {
     "clean-webpack-plugin": "3.0.0",
     "jest": "26.6.3",
