@@ -45,8 +45,7 @@ export namespace Parser {
     const frames = tagFrames(frameTag, frameMap)
     const cels = frames.map((frame, i) => parseCel(frameTag, frame, i, slices))
     let duration = cels.reduce((time, {duration}) => time + duration, 0)
-    const pingPong =
-      frameTag.direction === Aseprite.AnimationDirection.PING_PONG
+    const pingPong = frameTag.direction === Aseprite.AnimationDirection.PingPong
     if (pingPong && cels.length > 2)
       duration +=
         duration - (cels[0]!.duration + cels[cels.length - 1]!.duration)
@@ -138,7 +137,7 @@ export namespace Parser {
   /** @internal */
   export function parseDuration(duration: Aseprite.Duration): number {
     if (!duration) throw new Error('Expected positive cel duration.')
-    return duration === Aseprite.INFINITE ? Number.POSITIVE_INFINITY : duration
+    return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
 
   /** @internal */

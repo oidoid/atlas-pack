@@ -53,17 +53,17 @@ const Period: Readonly<Record<
   (period: Integer, len: number) => number
 >> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [Aseprite.AnimationDirection.FORWARD](period) {
+  [Aseprite.AnimationDirection.Forward](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
 
   /** @arg period An integer in the domain (-∞, len - 1]. */
-  [Aseprite.AnimationDirection.REVERSE](period, len) {
+  [Aseprite.AnimationDirection.Reverse](period, len) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + len
   },
 
   /** @arg period An integer in the domain [2 - len, len - 1]. */
-  [Aseprite.AnimationDirection.PING_PONG](period, len) {
+  [Aseprite.AnimationDirection.PingPong](period, len) {
     return NumberUtil.wrap(period - 1, 2 - len, len)
   }
 })

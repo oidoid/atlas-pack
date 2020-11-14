@@ -84,23 +84,25 @@ export namespace Aseprite {
   }
 
   /** Positive animation length in milliseconds. **By convention**, animations
-      that should pause use the special INFINITE value. */
-  export type Duration = Milliseconds | typeof INFINITE
+      that should pause use the special Infinite value. */
+  export type Duration = Milliseconds | Infinite
 
   /** **By convention**, a reserved value to indicate a value without
       termination. */
-  export const INFINITE: 0xffff = 0xffff
+  export type Infinite = typeof Infinite
+  export const Infinite = <const>0xffff
 
-  export enum AnimationDirection {
+  export type AnimationDirection = typeof AnimationDirection[keyof typeof AnimationDirection]
+  export const AnimationDirection = <const>{
     /** Animate from start to end; when looping, return to start. */
-    FORWARD = 'forward',
+    Forward: 'forward',
     /** Animate from end to start; when looping, return to end. */
-    REVERSE = 'reverse',
+    Reverse: 'reverse',
     /** Animate from start to end - 1 or start, whichever is greater; when
         looping, change direction (initially, end to start + 1 or end, whichever
         is lesser. A traversal from start to end - 1 then end to start + 1 is
         considered a complete loop. */
-    PING_PONG = 'pingpong'
+    PingPong: 'pingpong'
   }
 
   export interface Slice {

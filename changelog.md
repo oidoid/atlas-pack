@@ -2,8 +2,9 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
-## v2.0.10 (unreleased)
+## v3.0.0 (unreleased)
 
+- \[enum\] Replace enums with objects and use PascalCasing
 - \[test\] Collect Jest coverage
 - \[build\] Upgrade all dependencies
   - Significant upgrade to TypeScript, Webpack, and other dependencies.
