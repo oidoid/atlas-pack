@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v3.0.1 (unreleased)
+
+- \[build\] Rebuild the demo assets with Aseprite v1.2.25
+
 ## v3.0.0
 
 - \[docs\] Note power of two sprite sheet size issue
