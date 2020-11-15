@@ -189,15 +189,22 @@ describe('parseAnimation()', () => {
   })
 })
 
-describe('isAnimationDirection()', () => {
-  test.each(Object.values(Aseprite.AnimationDirection))(
-    '%# Direction %p',
-    direction =>
-      expect(Parser.isAnimationDirection(direction)).toStrictEqual(true)
+describe('parseDirection()', () => {
+  test.each(Object.values(Aseprite.Direction))('%# Direction %p', direction =>
+    expect(Parser.parseDirection(direction)).toStrictEqual(direction)
   )
 
   test('Unknown.', () =>
-    expect(Parser.isAnimationDirection('unknown')).toStrictEqual(false))
+    expect(() => Parser.parseDirection('unknown')).toThrow())
+})
+
+describe('isDirection()', () => {
+  test.each(Object.values(Aseprite.Direction))('%# Direction %p', direction =>
+    expect(Parser.isDirection(direction)).toStrictEqual(true)
+  )
+
+  test('Unknown.', () =>
+    expect(Parser.isDirection('unknown')).toStrictEqual(false))
 })
 
 describe('parseCel()', () => {

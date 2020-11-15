@@ -2,8 +2,9 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
-## v3.0.1 (unreleased)
+## v4.0.0 (unreleased)
 
+- \[Direction\] Rename AnimationDirection to Direction
 - \[Animator\] Assume all Animations have at least one Cel
 - \[build\] Rebuild the demo assets with Aseprite v1.2.25
 

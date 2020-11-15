@@ -43,7 +43,7 @@ export namespace Atlas {
      * frames.
      */
     readonly duration: Milliseconds
-    readonly direction: Aseprite.AnimationDirection
+    readonly direction: Aseprite.Direction
   }
 
   /** A single frame of an animation sequence. */

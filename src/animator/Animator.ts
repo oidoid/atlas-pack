@@ -55,21 +55,21 @@ export namespace Animator {
 }
 
 const Period: Readonly<Record<
-  Aseprite.AnimationDirection,
+  Aseprite.Direction,
   (period: Integer, len: number) => number
 >> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [Aseprite.AnimationDirection.Forward](period) {
+  [Aseprite.Direction.Forward](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
 
   /** @arg period An integer in the domain (-∞, len - 1]. */
-  [Aseprite.AnimationDirection.Reverse](period, len) {
+  [Aseprite.Direction.Reverse](period, len) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + len
   },
 
   /** @arg period An integer in the domain [2 - len, len - 1]. */
-  [Aseprite.AnimationDirection.PingPong](period, len) {
+  [Aseprite.Direction.PingPong](period, len) {
     return NumberUtil.wrap(period - 1, 2 - len, len)
   }
 })

@@ -8,7 +8,7 @@ describe('animate()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.AnimationDirection.Forward
+      direction: Aseprite.Direction.Forward
     }
     const animator = Animator.animate(0, 0.5, animation)
     expect(animator).toMatchObject({period: 0, exposure: 0.5})
@@ -20,7 +20,7 @@ describe('animate()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.AnimationDirection.Forward
+      direction: Aseprite.Direction.Forward
     }
     const animator = Animator.animate(0, 1, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0})
@@ -32,7 +32,7 @@ describe('animate()', () => {
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.AnimationDirection.Forward
+      direction: Aseprite.Direction.Forward
     }
     const animator = Animator.animate(0, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
@@ -44,7 +44,7 @@ describe('animate()', () => {
       size: {w: 0, h: 0},
       cels: [cel],
       duration: 2,
-      direction: Aseprite.AnimationDirection.Forward
+      direction: Aseprite.Direction.Forward
     }
     const animator = Animator.animate(0, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
@@ -52,7 +52,7 @@ describe('animate()', () => {
 })
 
 describe('index', () => {
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# direction %p array start',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -68,7 +68,7 @@ describe('index', () => {
     }
   )
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# direction %p array end',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -84,41 +84,39 @@ describe('index', () => {
     }
   )
 
-  test.each(<
-    readonly [Aseprite.AnimationDirection, number, readonly number[]][]
-  >[
+  test.each(<readonly [Aseprite.Direction, number, readonly number[]][]>[
     [
-      Aseprite.AnimationDirection.Forward,
+      Aseprite.Direction.Forward,
       0,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      Aseprite.AnimationDirection.Forward,
+      Aseprite.Direction.Forward,
       Number.MAX_SAFE_INTEGER,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      Aseprite.AnimationDirection.Reverse,
+      Aseprite.Direction.Reverse,
       Number.MIN_SAFE_INTEGER,
       [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
     ],
     [
-      Aseprite.AnimationDirection.Reverse,
+      Aseprite.Direction.Reverse,
       3,
       [2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3]
     ],
     [
-      Aseprite.AnimationDirection.PingPong,
+      Aseprite.Direction.PingPong,
       -2,
       [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2]
     ],
     [
-      Aseprite.AnimationDirection.PingPong,
+      Aseprite.Direction.PingPong,
       0,
       [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2]
     ],
     [
-      Aseprite.AnimationDirection.PingPong,
+      Aseprite.Direction.PingPong,
       3,
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
@@ -139,7 +137,7 @@ describe('index', () => {
     expect(playback).toStrictEqual(expected)
   })
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# duration met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -161,15 +159,15 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.AnimationDirection.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        [Aseprite.AnimationDirection.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        [Aseprite.AnimationDirection.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+        [Aseprite.Direction.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        [Aseprite.Direction.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        [Aseprite.Direction.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# duration exceeded direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -191,15 +189,15 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.AnimationDirection.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        [Aseprite.AnimationDirection.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        [Aseprite.AnimationDirection.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+        [Aseprite.Direction.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        [Aseprite.Direction.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        [Aseprite.Direction.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# fractional duration met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -221,15 +219,15 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.AnimationDirection.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        [Aseprite.AnimationDirection.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        [Aseprite.AnimationDirection.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        [Aseprite.Direction.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        [Aseprite.Direction.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        [Aseprite.Direction.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# duration not met direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -251,15 +249,15 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.AnimationDirection.Forward]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
-        [Aseprite.AnimationDirection.Reverse]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
-        [Aseprite.AnimationDirection.PingPong]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
+        [Aseprite.Direction.Forward]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
+        [Aseprite.Direction.Reverse]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
+        [Aseprite.Direction.PingPong]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
   )
 
-  test.each(Object.values(Aseprite.AnimationDirection))(
+  test.each(Object.values(Aseprite.Direction))(
     '%# fractional duration exceeded direction %p cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
@@ -281,9 +279,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.AnimationDirection.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        [Aseprite.AnimationDirection.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        [Aseprite.AnimationDirection.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        [Aseprite.Direction.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        [Aseprite.Direction.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        [Aseprite.Direction.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }

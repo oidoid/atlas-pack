@@ -80,7 +80,7 @@ export namespace Aseprite {
     readonly to: Integer
     /** Loosened typing to a string so a cast isn't needed when parsing the
         Aseprite JSON. */
-    readonly direction: AnimationDirection | string
+    readonly direction: Direction | string
   }
 
   /** Positive animation length in milliseconds. **By convention**, animations
@@ -92,8 +92,8 @@ export namespace Aseprite {
   export type Infinite = typeof Infinite
   export const Infinite = <const>0xffff
 
-  export type AnimationDirection = typeof AnimationDirection[keyof typeof AnimationDirection]
-  export const AnimationDirection = <const>{
+  export type Direction = typeof Direction[keyof typeof Direction]
+  export const Direction = <const>{
     /** Animate from start to end; when looping, return to start. */
     Forward: 'forward',
     /** Animate from end to start; when looping, return to end. */

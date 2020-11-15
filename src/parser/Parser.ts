@@ -45,7 +45,7 @@ export namespace Parser {
     const frames = tagFrames(frameTag, frameMap)
     const cels = frames.map((frame, i) => parseCel(frameTag, frame, i, slices))
     let duration = cels.reduce((time, {duration}) => time + duration, 0)
-    const pingPong = frameTag.direction === Aseprite.AnimationDirection.PingPong
+    const pingPong = frameTag.direction === Aseprite.Direction.PingPong
     if (pingPong && cels.length > 2)
       duration +=
         duration - (cels[0]!.duration + cels[cels.length - 1]!.duration)
@@ -70,7 +70,7 @@ export namespace Parser {
       size: Object.freeze({w, h}),
       cels: Object.freeze(cels),
       duration,
-      direction: parseAnimationDirection(frameTag)
+      direction: parseDirection(frameTag.direction)
     }
   }
 
@@ -88,19 +88,19 @@ export namespace Parser {
   }
 
   /** @internal */
-  export function parseAnimationDirection({
-    direction
-  }: Aseprite.FrameTag): Aseprite.AnimationDirection {
-    if (isAnimationDirection(direction)) return direction
+  export function parseDirection(
+    direction: Aseprite.Direction | string
+  ): Aseprite.Direction {
+    if (isDirection(direction)) return direction
     throw new Error(`"${direction}" is not a Direction.`)
   }
 
   /** @internal */
-  export function isAnimationDirection(
+  export function isDirection(
     direction: string
-  ): direction is Aseprite.AnimationDirection {
-    const directions = Object.values(Aseprite.AnimationDirection)
-    return directions.includes(<Aseprite.AnimationDirection>direction)
+  ): direction is Aseprite.Direction {
+    const directions = Object.values(Aseprite.Direction)
+    return directions.includes(<Aseprite.Direction>direction)
   }
 
   /** @internal */
