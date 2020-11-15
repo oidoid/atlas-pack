@@ -52,10 +52,6 @@ export namespace Parser {
 
     if (!cels.length)
       throw new Error(`"${frameTag.name}" animation missing cels.`)
-    if (duration <= 0)
-      throw new Error(
-        `Total duration for "${frameTag.name}" animation is non-positive.`
-      )
     if (
       cels
         .slice(0, -1)
@@ -81,7 +77,7 @@ export namespace Parser {
     const frames = []
     for (; from <= to; ++from) {
       const frame = frameMap[`${name} ${from}`]
-      if (!frame) throw new Error(`Missing frame "${name} ${from}".`)
+      if (!frame) throw new Error(`Missing Frame "${name} ${from}".`)
       frames.push(frame)
     }
     return frames
@@ -136,7 +132,7 @@ export namespace Parser {
 
   /** @internal */
   export function parseDuration(duration: Aseprite.Duration): number {
-    if (!duration) throw new Error('Expected positive cel duration.')
+    if (duration <= 0) throw new Error('Expected positive cel duration.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
 
@@ -152,8 +148,7 @@ export namespace Parser {
       if (slice.name !== name) continue
       // Get the greatest relevant Key.
       const key = slice.keys.filter(key => key.frame <= index).slice(-1)[0]
-      if (!key) throw new Error(`No Keys for Tag "${slice.name}".`)
-      tagBounds.push(key.bounds)
+      if (key) tagBounds.push(key.bounds)
     }
     return Object.freeze(tagBounds)
   }

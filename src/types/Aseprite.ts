@@ -83,12 +83,16 @@ export namespace Aseprite {
     readonly direction: Direction | string
   }
 
-  /** Positive animation length in milliseconds. **By convention**, animations
-      that should pause use the special Infinite value. */
+  /**
+   * Positive animation length in milliseconds. **By convention**, animations
+   * that should pause use the special Infinite value.
+   */
   export type Duration = Milliseconds | Infinite
 
-  /** **By convention**, a reserved value to indicate a value without
-      termination. */
+  /**
+   * **By convention**, a reserved value to indicate a value without
+   * termination.
+   */
   export type Infinite = typeof Infinite
   export const Infinite = <const>0xffff
 

@@ -2,6 +2,32 @@ import {Aseprite} from '../types/Aseprite'
 import {Parser} from './Parser'
 
 describe('parse()', () => {
+  test('Parses Meta.', () => {
+    expect(
+      Parser.parse({
+        meta: {
+          app: 'http://www.aseprite.org/',
+          version: '1.2.8.1',
+          image: 'atlas.png',
+          format: 'I8',
+          size: {w: 1, h: 2},
+          scale: '1',
+          frameTags: [],
+          slices: []
+        },
+        frames: {}
+      })
+    ).toStrictEqual({
+      version: '1.2.8.1',
+      filename: 'atlas.png',
+      format: 'I8',
+      size: {w: 1, h: 2},
+      animations: {}
+    })
+  })
+})
+
+describe('parseAnimationRecord()', () => {
   test('Parses Animations.', () => {
     const frameTags = [
       {name: 'sceneryCloud', from: 0, to: 0, direction: 'forward'},
@@ -121,6 +147,37 @@ describe('parse()', () => {
       }
     })
   })
+  test('Throws Error on duplicate FrameTag.', () => {
+    const frameTags = [
+      {name: 'sceneryCloud', from: 0, to: 0, direction: 'forward'},
+      {name: 'palette-red', from: 1, to: 1, direction: 'forward'},
+      {name: 'sceneryCloud', from: 0, to: 0, direction: 'forward'}
+    ]
+    const frames = {
+      'sceneryCloud 0': {
+        frame: {x: 220, y: 18, w: 18, h: 18},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+        sourceSize: {w: 16, h: 16},
+        duration: 1
+      },
+      'palette-red 1': {
+        frame: {x: 90, y: 54, w: 18, h: 18},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 16, h: 16},
+        sourceSize: {w: 16, h: 16},
+        duration: 65535
+      }
+    }
+    expect(() =>
+      Parser.parseAnimationRecord({
+        meta: <Aseprite.Meta>(<unknown>{frameTags, slices: []}),
+        frames
+      })
+    ).toThrow()
+  })
 })
 
 describe('parseAnimation()', () => {
@@ -186,6 +243,94 @@ describe('parseAnimation()', () => {
       duration: Number.POSITIVE_INFINITY,
       direction: 'forward'
     })
+  })
+  test('Ping-pong total duration is correct.', () => {
+    const frameTag = {name: 'frog', from: 0, to: 3, direction: 'pingpong'}
+    const frames = {
+      'frog 0': {
+        frame: {x: 0, y: 0, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 1
+      },
+      'frog 1': {
+        frame: {x: 1, y: 1, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 12
+      },
+      'frog 2': {
+        frame: {x: 1, y: 1, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 130
+      },
+      'frog 3': {
+        frame: {x: 1, y: 1, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 1400
+      }
+    }
+    expect(Parser.parseAnimation(frameTag, frames, []).duration).toStrictEqual(
+      1 + 12 + 130 + 1400 + 12 + 130
+    )
+  })
+  test('Throws Error on Animation with no Cels.', () => {
+    const frameTag = {name: 'frog', from: 1, to: 0, direction: 'forward'}
+    const frames = {
+      'frog 0': {
+        frame: {x: 0, y: 0, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 0
+      },
+      'frog 1': {
+        frame: {x: 1, y: 1, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 0
+      }
+    }
+    expect(() => Parser.parseAnimation(frameTag, frames, [])).toThrow()
+  })
+  test('Throws Error on intermediate Cel with infinite duration.', () => {
+    const frameTag = {name: 'frog', from: 0, to: 1, direction: 'forward'}
+    const frames = {
+      'frog 0': {
+        frame: {x: 0, y: 0, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 65535
+      },
+      'frog 1': {
+        frame: {x: 1, y: 1, w: 0, h: 0},
+        rotated: false,
+        trimmed: false,
+        spriteSourceSize: {x: 0, y: 0, w: 0, h: 0},
+        sourceSize: {w: 0, h: 0},
+        duration: 65535
+      }
+    }
+    expect(() => Parser.parseAnimation(frameTag, frames, [])).toThrow()
+  })
+  test('Throws Error when no Frame is associated with Tag.', () => {
+    const frameTag = {name: 'frog', from: 0, to: 0, direction: 'forward'}
+    expect(() => Parser.parseAnimation(frameTag, {}, [])).toThrow()
   })
 })
 
@@ -303,6 +448,12 @@ describe('parseDuration()', () => {
 
   test('Parses infinite duration.', () =>
     expect(Parser.parseDuration(65535)).toStrictEqual(Number.POSITIVE_INFINITY))
+
+  test('Parses negative duration.', () =>
+    expect(() => Parser.parseDuration(-1)).toThrow())
+
+  test('Parses zero duration.', () =>
+    expect(() => Parser.parseDuration(0)).toThrow())
 })
 
 describe('parseSlices()', () => {
@@ -405,5 +556,17 @@ describe('parseSlices()', () => {
       {x: 0, y: 1, w: 2, h: 3},
       {x: 8, y: 9, w: 10, h: 11}
     ])
+  })
+
+  test('Parses no Slices when none are relevant for the Frame index.', () => {
+    const frameTag = {name: 'stem ', from: 0, to: 0, direction: 'forward'}
+    const slices = [
+      {
+        name: 'stem ',
+        color: '#00000000',
+        keys: [{frame: 1, bounds: {x: 0, y: 1, w: 2, h: 3}}]
+      }
+    ]
+    expect(Parser.parseSlices(frameTag, 0, slices)).toStrictEqual([])
   })
 })
