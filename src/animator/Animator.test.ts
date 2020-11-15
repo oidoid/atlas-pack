@@ -1,7 +1,7 @@
 import {Animator} from './Animator'
 import {Aseprite} from '../types/Aseprite'
 
-describe('step()', () => {
+describe('animate()', () => {
   test('time < duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
     const animation = {
@@ -31,6 +31,18 @@ describe('step()', () => {
     const animation = {
       size: {w: 0, h: 0},
       cels: [cel, cel],
+      duration: 2,
+      direction: Aseprite.AnimationDirection.Forward
+    }
+    const animator = Animator.animate(0, 1.5, animation)
+    expect(animator).toMatchObject({period: 1, exposure: 0.5})
+  })
+
+  test('one cel', () => {
+    const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
+    const animation = {
+      size: {w: 0, h: 0},
+      cels: [cel],
       duration: 2,
       direction: Aseprite.AnimationDirection.Forward
     }

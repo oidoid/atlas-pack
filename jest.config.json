@@ -6,6 +6,6 @@
   "coveragePathIgnorePatterns": ["/node_modules/", "/dist/", "/demo/"],
   "errorOnDeprecated": true,
   "coverageThreshold": {
-    "global": {"branches": 67, "functions": 92, "lines": 90}
+    "global": {"branches": 68, "functions": 92, "lines": 90}
   }
 }

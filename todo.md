@@ -1,4 +1,6 @@
 - Increase test coverage.
+- Consider bundling the demo and using NPM workspaces or a Webpack-based
+  solution for dependency management.
 - How can the typings be more general to allow any CLI options?
 - Given sufficiently generic typings, migrate upstream to either DefinitelyTyped
   or Aseprite itself.
