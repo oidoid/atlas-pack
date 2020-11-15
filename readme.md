@@ -226,7 +226,8 @@ Incomplete work is tracked under [todo](todo.md).
 ## Known Issues
 
 - [Sprite sheet dimensions are no longer powers of two](https://github.com/aseprite/aseprite/issues/2289)
-  when exported. This is observable by re-exporting the demo/ sheet from Aseprite.
+  when exported. This is observable by re-exporting the demo/ sheet from
+  Aseprite.
 
 ## License
 
