@@ -1,11 +1,3 @@
-- Consider bundling the demo and using NPM workspaces or a Webpack-based
-  solution for dependency management.
-- How can the typings be more general to allow any CLI options?
-- Elaborate on tradeoffs of class vs data-centric approach.
-  - For example, classes need to be inflated and data can just be used.
-  - Classes can provide encapsulation, manage their own data, and the API is a
-    little nicer, I think.
-  - Classes can use g/setters for data API compatibility.
 - Can a JSON format be supported? This would allow the parse step to happen at
   compilation instead of run time.
   - How should infinite be represented?
