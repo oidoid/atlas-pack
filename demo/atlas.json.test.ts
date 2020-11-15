@@ -1,5 +1,5 @@
 import {Aseprite} from 'aseprite-atlas'
-import * as atlasJSON from './atlas.json'
+import atlasJSON from './atlas.json'
 
 const file: Aseprite.File = Object.freeze(atlasJSON)
 const tags: readonly string[] = Object.freeze(

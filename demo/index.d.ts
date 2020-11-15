@@ -1,4 +1,4 @@
-import * as AsepriteAtlas from 'aseprite-atlas'
+import AsepriteAtlas from 'aseprite-atlas'
 
 // This takes the place of re-exporting each export:
 //
