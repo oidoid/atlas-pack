@@ -4,11 +4,11 @@ import {Aseprite} from '../types/Aseprite'
 describe('animate()', () => {
   test('time < duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
-    const animation = {
+    const animation = <const>{
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.Direction.Forward
+      direction: 'forward'
     }
     const animator = Animator.animate(0, 0.5, animation)
     expect(animator).toMatchObject({period: 0, exposure: 0.5})
@@ -16,11 +16,11 @@ describe('animate()', () => {
 
   test('time === duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
-    const animation = {
+    const animation = <const>{
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.Direction.Forward
+      direction: 'forward'
     }
     const animator = Animator.animate(0, 1, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0})
@@ -28,11 +28,11 @@ describe('animate()', () => {
 
   test('time > duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
-    const animation = {
+    const animation = <const>{
       size: {w: 0, h: 0},
       cels: [cel, cel],
       duration: 2,
-      direction: Aseprite.Direction.Forward
+      direction: 'forward'
     }
     const animator = Animator.animate(0, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
@@ -40,11 +40,11 @@ describe('animate()', () => {
 
   test('one cel', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
-    const animation = {
+    const animation = <const>{
       size: {w: 0, h: 0},
       cels: [cel],
       duration: 2,
-      direction: Aseprite.Direction.Forward
+      direction: 'forward'
     }
     const animator = Animator.animate(0, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
@@ -84,39 +84,39 @@ describe('index', () => {
     }
   )
 
-  test.each(<readonly [Aseprite.Direction, number, readonly number[]][]>[
+  test.each(<const>[
     [
-      Aseprite.Direction.Forward,
+      'forward',
       0,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      Aseprite.Direction.Forward,
+      'forward',
       Number.MAX_SAFE_INTEGER,
       [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0]
     ],
     [
-      Aseprite.Direction.Reverse,
+      'reverse',
       Number.MIN_SAFE_INTEGER,
       [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0]
     ],
     [
-      Aseprite.Direction.Reverse,
+      'reverse',
       3,
       [2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3]
     ],
     [
-      Aseprite.Direction.PingPong,
+      'pingpong',
       -2,
       [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2]
     ],
     [
-      Aseprite.Direction.PingPong,
+      'pingpong',
       0,
       [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2]
     ],
     [
-      Aseprite.Direction.PingPong,
+      'pingpong',
       3,
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
@@ -159,9 +159,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.Direction.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        [Aseprite.Direction.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        [Aseprite.Direction.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+        forward:  [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        reverse:  [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        pingpong: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
@@ -189,9 +189,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.Direction.Forward]:   [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        [Aseprite.Direction.Reverse]:   [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        [Aseprite.Direction.PingPong]: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
+        forward:  [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        reverse:  [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        pingpong: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
@@ -219,9 +219,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.Direction.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        [Aseprite.Direction.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        [Aseprite.Direction.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        pingpong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
@@ -249,9 +249,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.Direction.Forward]:   [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
-        [Aseprite.Direction.Reverse]:   [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
-        [Aseprite.Direction.PingPong]: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
+        forward:  [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
+        reverse:  [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
+        pingpong: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
@@ -279,9 +279,9 @@ describe('index', () => {
       }
       // prettier-ignore
       const expected = {
-        [Aseprite.Direction.Forward]:   [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        [Aseprite.Direction.Reverse]:   [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        [Aseprite.Direction.PingPong]: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        pingpong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
       }
       expect(playback).toStrictEqual(expected[direction])
     }
