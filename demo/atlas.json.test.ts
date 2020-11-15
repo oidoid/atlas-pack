@@ -1,4 +1,4 @@
-import {Aseprite} from 'aseprite-atlas'
+import {Aseprite, Parser} from 'aseprite-atlas'
 import atlasJSON from './atlas.json'
 
 const file: Aseprite.File = Object.freeze(atlasJSON)
@@ -8,6 +8,8 @@ const tags: readonly string[] = Object.freeze(
 
 // No orphan Slices. Each Slice has a Tag (and there may be multiple Slices with
 // the same Tag).
-test.each(file.meta.slices)('%# Slice name %p is a Tag', slice =>
+test.each(file.meta.slices)('%# Slice name %p is a Tag.', slice =>
   expect(tags).toContainEqual(slice.name)
 )
+
+test('Atlas is parsable.', () => expect(Parser.parse(atlasJSON)).toBeDefined())
