@@ -8,9 +8,10 @@ import {NumberUtil} from '../utils/NumberUtil'
 export interface Animator {
   /**
    * `Cel` index oscillation state. This integer may fall outside of animation
-   * bounds depending on the animation interval selected by direction. This
-   * value should be carried over from each call unless the `Cel` is manually
-   * set. Any integer in [0, `Animation.cels.length`) is always valid.
+   * bounds (even negative) depending on the animation interval selected by
+   * direction. This value should be carried over from each call unless the
+   * `Cel` is manually set. Any integer in [0, `Animation.cels.length`) is
+   * always valid. Aseprite indices are u16s but a period can be negative.
    *
    * Every `Animation` is expected to have at least one `Cel`.
    */
@@ -27,17 +28,17 @@ export interface Animator {
 
 export namespace Animator {
   /**
-   * Apply the time since last frame was shown, possibly advancing the animation
-   * period.
+   * Apply the time since last frame was shown, possibly advancing the
+   * `Animation` period.
    */
   export function animate(
     period: Integer,
     exposure: Milliseconds,
     animation: Atlas.Animation
   ): Animator {
-    // Avoid unnecessary iterations by skipping complete cycles.
+    // Avoid unnecessary iterations by skipping complete `Animation` cycles.
     // `animation.duration` may be infinite but the modulo of any number and
-    // infinity is that number.
+    // infinity is that number. Duration is positive.
     exposure = exposure % animation.duration
     while (
       exposure >= animation.cels[index(period, animation.cels)]!.duration
@@ -48,7 +49,7 @@ export namespace Animator {
     return {period, exposure}
   }
 
-  /** @return The animation cel index. */
+  /** @return The `Animation` `Cel` index. */
   export function index(period: Integer, cels: readonly Atlas.Cel[]): number {
     return Math.abs(period % cels.length)
   }

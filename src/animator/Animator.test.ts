@@ -2,7 +2,7 @@ import {Animator} from './Animator'
 import {Aseprite} from '../types/Aseprite'
 
 describe('animate()', () => {
-  test('time < duration', () => {
+  test('exposure < duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
     const animation = <const>{
       size: {w: 0, h: 0},
@@ -14,7 +14,7 @@ describe('animate()', () => {
     expect(animator).toMatchObject({period: 0, exposure: 0.5})
   })
 
-  test('time === duration', () => {
+  test('exposure === duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
     const animation = <const>{
       size: {w: 0, h: 0},
@@ -26,7 +26,7 @@ describe('animate()', () => {
     expect(animator).toMatchObject({period: 1, exposure: 0})
   })
 
-  test('time > duration', () => {
+  test('exposure > duration', () => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
     const animation = <const>{
       size: {w: 0, h: 0},
@@ -36,6 +36,26 @@ describe('animate()', () => {
     }
     const animator = Animator.animate(0, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
+  })
+
+  test('infinite duration', () => {
+    const animation = <const>{
+      size: {w: 0, h: 0},
+      cels: [
+        {position: {x: 0, y: 0}, duration: 1, slices: []},
+        {position: {x: 0, y: 0}, duration: Number.POSITIVE_INFINITY, slices: []}
+      ],
+      duration: Number.POSITIVE_INFINITY,
+      direction: 'forward'
+    }
+    let animator = Animator.animate(0, 0.5, animation)
+    expect(animator).toMatchObject({period: 0, exposure: 0.5})
+    animator = Animator.animate(
+      animator.period,
+      animator.exposure + 100,
+      animation
+    )
+    expect(animator).toMatchObject({period: 1, exposure: 99.5})
   })
 
   test('one cel', () => {
@@ -53,7 +73,7 @@ describe('animate()', () => {
 
 describe('index', () => {
   test.each(Object.values(Aseprite.Direction))(
-    '%# direction %p array start',
+    '%# Direction %s array start',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
@@ -69,7 +89,7 @@ describe('index', () => {
   )
 
   test.each(Object.values(Aseprite.Direction))(
-    '%# direction %p array end',
+    '%# Direction %s array end',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
@@ -120,7 +140,7 @@ describe('index', () => {
       3,
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
-  ])('%# direction %p bounds %p', (direction, period, expected) => {
+  ])('%# Direction %s bounds %p', (direction, period, expected) => {
     const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
     const animation = {
       size: {w: 0, h: 0},
@@ -138,7 +158,7 @@ describe('index', () => {
   })
 
   test.each(Object.values(Aseprite.Direction))(
-    '%# duration met direction %p cycles',
+    '%# exposure === duration, Direction %s cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
@@ -168,7 +188,7 @@ describe('index', () => {
   )
 
   test.each(Object.values(Aseprite.Direction))(
-    '%# duration exceeded direction %p cycles',
+    '%# exposure > duration, Direction %s cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
@@ -198,37 +218,7 @@ describe('index', () => {
   )
 
   test.each(Object.values(Aseprite.Direction))(
-    '%# fractional duration met direction %p cycles',
-    direction => {
-      const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
-      const animation = {
-        size: {w: 0, h: 0},
-        cels: [cel, cel, cel, cel, cel],
-        duration: 5,
-        direction
-      }
-      let {period, exposure} = {period: 0, exposure: 0}
-      const playback = []
-      for (let i = 0; i < animation.cels.length * 6; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 0.5,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
-      }
-      // prettier-ignore
-      const expected = {
-        forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        pingpong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
-      }
-      expect(playback).toStrictEqual(expected[direction])
-    }
-  )
-
-  test.each(Object.values(Aseprite.Direction))(
-    '%# duration not met direction %p cycles',
+    '%# fractional exposure < duration, not met Direction %s cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
@@ -258,7 +248,37 @@ describe('index', () => {
   )
 
   test.each(Object.values(Aseprite.Direction))(
-    '%# fractional duration exceeded direction %p cycles',
+    '%# fractional exposure === duration, Direction %s cycles',
+    direction => {
+      const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
+      const animation = {
+        size: {w: 0, h: 0},
+        cels: [cel, cel, cel, cel, cel],
+        duration: 5,
+        direction
+      }
+      let {period, exposure} = {period: 0, exposure: 0}
+      const playback = []
+      for (let i = 0; i < animation.cels.length * 6; ++i) {
+        ;({period, exposure} = Animator.animate(
+          period,
+          exposure + 0.5,
+          animation
+        ))
+        playback.push(Animator.index(period, animation.cels))
+      }
+      // prettier-ignore
+      const expected = {
+        forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+        reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
+        pingpong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+      }
+      expect(playback).toStrictEqual(expected[direction])
+    }
+  )
+
+  test.each(Object.values(Aseprite.Direction))(
+    '%# fractional exposure > duration, Direction %s cycles',
     direction => {
       const cel = {position: {x: 0, y: 0}, duration: 1, slices: []}
       const animation = {
