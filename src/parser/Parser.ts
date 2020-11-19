@@ -6,22 +6,19 @@ import {Rect} from '../types/Rect'
 import {WH} from '../types/WH'
 import {XY} from '../types/XY'
 
-export namespace Parser {
-  export function parse(file: Aseprite.File): Atlas {
+export const Parser = Object.freeze({
+  parse(file: Aseprite.File): Atlas {
     return Object.freeze({
       version: file.meta.version,
       filename: file.meta.image,
       format: file.meta.format,
       size: file.meta.size,
-      animations: parseAnimationRecord(file)
+      animations: this.parseAnimationRecord(file)
     })
-  }
+  },
 
   /** @internal */
-  export function parseAnimationRecord({
-    meta,
-    frames
-  }: Aseprite.File): Atlas.AnimationRecord {
+  parseAnimationRecord({meta, frames}: Aseprite.File): Atlas.AnimationRecord {
     const {frameTags, slices} = meta
     const record = Object.freeze(
       frameTags.reduce((atlas, frameTag) => {
@@ -31,21 +28,23 @@ export namespace Parser {
 
         return {
           ...atlas,
-          [frameTag.name]: parseAnimation(frameTag, frames, slices)
+          [frameTag.name]: this.parseAnimation(frameTag, frames, slices)
         }
       }, {})
     )
     return record
-  }
+  },
 
   /** @internal */
-  export function parseAnimation(
+  parseAnimation(
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
     slices: readonly Aseprite.Slice[]
   ): Atlas.Animation {
-    const frames = tagFrames(frameTag, frameMap)
-    const cels = frames.map((frame, i) => parseCel(frameTag, frame, i, slices))
+    const frames = this.tagFrames(frameTag, frameMap)
+    const cels = frames.map((frame, i) =>
+      this.parseCel(frameTag, frame, i, slices)
+    )
     let duration = cels.reduce((time, {duration}) => time + duration, 0)
     const pingPong = frameTag.direction === Aseprite.Direction.PingPong
     if (pingPong && cels.length > 2)
@@ -68,11 +67,12 @@ export namespace Parser {
       size: Object.freeze({w, h}),
       cels: Object.freeze(cels),
       duration,
-      direction: parseDirection(frameTag.direction)
+      direction: this.parseDirection(frameTag.direction)
     }
-  }
+  },
 
-  function tagFrames(
+  /** @internal */
+  tagFrames(
     {name, from, to}: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap
   ): readonly Aseprite.Frame[] {
@@ -83,64 +83,59 @@ export namespace Parser {
       frames.push(frame)
     }
     return frames
-  }
+  },
 
   /** @internal */
-  export function parseDirection(
-    direction: Aseprite.Direction | string
-  ): Aseprite.Direction {
-    if (isDirection(direction)) return direction
+  parseDirection(direction: Aseprite.Direction | string): Aseprite.Direction {
+    if (this.isDirection(direction)) return direction
     throw new Error(`"${direction}" is not a Direction.`)
-  }
+  },
 
   /** @internal */
-  export function isDirection(value: string): value is Aseprite.Direction {
+  isDirection(value: string): value is Aseprite.Direction {
     return Object.values(Aseprite.Direction).some(
       direction => value === direction
     )
-  }
+  },
 
   /** @internal */
-  export function parseCel(
+  parseCel(
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
     frameNumber: number,
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return Object.freeze({
-      position: parsePosition(frame),
-      duration: parseDuration(frame.duration),
-      slices: parseSlices(frameTag, frameNumber, slices)
+      position: this.parsePosition(frame),
+      duration: this.parseDuration(frame.duration),
+      slices: this.parseSlices(frameTag, frameNumber, slices)
     })
-  }
+  },
 
   /** @internal */
-  export function parsePosition(frame: Aseprite.Frame): Readonly<XY> {
-    const padding = parsePadding(frame)
+  parsePosition(frame: Aseprite.Frame): Readonly<XY> {
+    const padding = this.parsePadding(frame)
     return Object.freeze({
       x: frame.frame.x + padding.w / 2,
       y: frame.frame.y + padding.h / 2
     })
-  }
+  },
 
   /** @internal */
-  export function parsePadding({
-    frame,
-    sourceSize
-  }: Aseprite.Frame): Readonly<WH> {
+  parsePadding({frame, sourceSize}: Aseprite.Frame): Readonly<WH> {
     return Object.freeze({w: frame.w - sourceSize.w, h: frame.h - sourceSize.h})
-  }
+  },
 
   /** @internal */
-  export function parseDuration(
+  parseDuration(
     duration: Aseprite.Duration
   ): Milliseconds | typeof Number.POSITIVE_INFINITY {
     if (duration <= 0) throw new Error('Expected positive cel duration.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
-  }
+  },
 
   /** @internal */
-  export function parseSlices(
+  parseSlices(
     {name}: Aseprite.FrameTag,
     index: Integer,
     slices: readonly Aseprite.Slice[]
@@ -155,4 +150,4 @@ export namespace Parser {
     }
     return Object.freeze(bounds)
   }
-}
+})
