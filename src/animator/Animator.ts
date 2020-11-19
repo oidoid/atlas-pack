@@ -26,12 +26,13 @@ export interface Animator {
   exposure: Milliseconds
 }
 
-export namespace Animator {
+// Everything in Animator is public.
+export const Animator = Object.freeze({
   /**
    * Apply the time since last frame was shown, possibly advancing the
    * `Animation` period.
    */
-  export function animate(
+  animate(
     period: Integer,
     exposure: Milliseconds,
     animation: Atlas.Animation
@@ -41,19 +42,19 @@ export namespace Animator {
     // infinity is that number. Duration is positive.
     exposure = exposure % animation.duration
     while (
-      exposure >= animation.cels[index(period, animation.cels)]!.duration
+      exposure >= animation.cels[this.index(period, animation.cels)]!.duration
     ) {
-      exposure -= animation.cels[index(period, animation.cels)]!.duration
+      exposure -= animation.cels[this.index(period, animation.cels)]!.duration
       period = Period[animation.direction](period, animation.cels.length)
     }
     return {period, exposure}
-  }
+  },
 
   /** @return The `Animation` `Cel` index. */
-  export function index(period: Integer, cels: readonly Atlas.Cel[]): Integer {
+  index(period: Integer, cels: readonly Atlas.Cel[]): Integer {
     return Math.abs(period % cels.length)
   }
-}
+})
 
 const Period: Readonly<Record<
   Aseprite.Direction,
