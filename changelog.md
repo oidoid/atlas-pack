@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[build\] Upgrade to Webpack v5.5.1
 - \[build\] Upgrade to Webpack v5.5.0
 - \[Direction\] Rename AnimationDirection to Direction
 - \[Animator\] Assume all Animations have at least one Cel
