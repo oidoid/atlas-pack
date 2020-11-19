@@ -50,14 +50,14 @@ export namespace Animator {
   }
 
   /** @return The `Animation` `Cel` index. */
-  export function index(period: Integer, cels: readonly Atlas.Cel[]): number {
+  export function index(period: Integer, cels: readonly Atlas.Cel[]): Integer {
     return Math.abs(period % cels.length)
   }
 }
 
 const Period: Readonly<Record<
   Aseprite.Direction,
-  (period: Integer, len: number) => number
+  (period: Integer, len: number) => Integer
 >> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Aseprite.Direction.Forward](period) {
