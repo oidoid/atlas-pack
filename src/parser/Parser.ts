@@ -1,5 +1,7 @@
 import {Aseprite} from '../types/Aseprite'
 import {Atlas} from '../types/Atlas'
+import {Integer} from '../types/Integer'
+import {Milliseconds} from '../types/Milliseconds'
 import {Rect} from '../types/Rect'
 import {WH} from '../types/WH'
 import {XY} from '../types/XY'
@@ -92,11 +94,10 @@ export namespace Parser {
   }
 
   /** @internal */
-  export function isDirection(
-    direction: string
-  ): direction is Aseprite.Direction {
-    const directions = Object.values(Aseprite.Direction)
-    return directions.includes(<Aseprite.Direction>direction)
+  export function isDirection(value: string): value is Aseprite.Direction {
+    return Object.values(Aseprite.Direction).some(
+      direction => value === direction
+    )
   }
 
   /** @internal */
@@ -131,7 +132,9 @@ export namespace Parser {
   }
 
   /** @internal */
-  export function parseDuration(duration: Aseprite.Duration): number {
+  export function parseDuration(
+    duration: Aseprite.Duration
+  ): Milliseconds | typeof Number.POSITIVE_INFINITY {
     if (duration <= 0) throw new Error('Expected positive cel duration.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
@@ -139,17 +142,17 @@ export namespace Parser {
   /** @internal */
   export function parseSlices(
     {name}: Aseprite.FrameTag,
-    index: number,
+    index: Integer,
     slices: readonly Aseprite.Slice[]
   ): readonly Readonly<Rect>[] {
-    const tagBounds = []
+    const bounds = []
     for (const slice of slices) {
       // Ignore Slices not for this Tag.
       if (slice.name !== name) continue
       // Get the greatest relevant Key.
       const key = slice.keys.filter(key => key.frame <= index).slice(-1)[0]
-      if (key) tagBounds.push(key.bounds)
+      if (key) bounds.push(key.bounds)
     }
-    return Object.freeze(tagBounds)
+    return Object.freeze(bounds)
   }
 }

@@ -54,7 +54,7 @@ export namespace Atlas {
      */
     readonly position: Readonly<XY>
     /** Positive cel exposure in integral milliseconds, possibly infinite. */
-    readonly duration: Milliseconds
+    readonly duration: Milliseconds | typeof Number.POSITIVE_INFINITY
     /** Slices within the cel in local pixels. */
     readonly slices: readonly Readonly<Rect>[]
   }
