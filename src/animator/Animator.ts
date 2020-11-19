@@ -5,42 +5,77 @@ import {Milliseconds} from '../types/Milliseconds'
 import {NumberUtil} from '../utils/NumberUtil'
 
 /** Record and update an Atlas.Animation's state. */
-export interface Animator {
+export class Animator {
+  /** The animation to animate. */
+  private _animation: Atlas.Animation
+
   /** Cel index oscillation state. This integer may fall outside of animation
       bounds depending on the animation interval selected by direction. This
       value should be carried over from each call unless the cel is manually
       set. Any integer in [0, length - 1] is always valid. */
-  period: Integer
+  private _period: Integer
 
   /** Current cel exposure in milliseconds. When the fractional value meets or
       exceeds the cel's exposure duration, the cel is advanced according to
       direction. This value should be carried over from each call with the
       current time step added, and zeroed on manual cel change. */
-  exposure: Milliseconds
-}
+  private _exposure: Milliseconds
 
-export namespace Animator {
-  /** Apply the time since last frame was shown, possibly advancing the
-      animation period. */
-  export function animate(
-    period: Integer,
-    exposure: Milliseconds,
-    animation: Atlas.Animation
-  ): Animator {
-    // Avoid unnecessary iterations by skipping complete cycles.
-    // animation.duration may be infinite but the modulo of any number and
-    // infinity is that number.
-    exposure = exposure % animation.duration
-    while (exposure >= animation.cels[index(period, animation.cels)].duration) {
-      exposure -= animation.cels[index(period, animation.cels)].duration
-      period = Period[animation.direction](period, animation.cels.length)
-    }
-    return {period, exposure}
+  constructor(
+    animation: Atlas.Animation,
+    period: Integer = 0,
+    exposure: Milliseconds = 0
+  ) {
+    this._animation = animation
+    this._period = period
+    this._exposure = exposure
+  }
+
+  get animation(): Atlas.Animation {
+    return this._animation
+  }
+
+  get period(): Integer {
+    return this._period
   }
 
   /** @return The animation cel index. */
-  export function index(period: Integer, cels: readonly Atlas.Cel[]): number {
-    return Math.abs(period % cels.length)
+  index(): number {
+    return Math.abs(this.period % this.animation.cels.length)
+  }
+
+  /** The cel being exposed. */
+  cel(): Atlas.Cel {
+    return this.animation.cels[this.index()]
+  }
+
+  /** The exposure duration in milliseconds of the current cel. */
+  get exposure(): Milliseconds {
+    return this._exposure
+  }
+
+  /** Apply the time since last frame was shown, possibly advancing the
+      animation period. */
+  animate(time: Milliseconds): void {
+    // Avoid unnecessary iterations by skipping complete cycles.
+    // animation.duration may be infinite but the modulo of any number and
+    // infinity is that number.
+    this._exposure = (this.exposure + time) % this.animation.duration
+    while (this.exposure >= this.cel().duration) this.advance()
+  }
+
+  /** @return The animation cel index. */
+  reset(): void {
+    this._period = 0
+    this._exposure = 0
+  }
+
+  private advance(): void {
+    this._exposure = Math.max(this._exposure - this.cel().duration, 0)
+    this._period = Period[this.animation.direction](
+      this.period,
+      this.animation.cels.length
+    )
   }
 }
 
