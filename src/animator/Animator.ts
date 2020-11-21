@@ -55,10 +55,9 @@ export namespace Animator {
   }
 }
 
-const Period: Readonly<Record<
-  Aseprite.Direction,
-  (period: Integer, len: number) => Integer
->> = Object.freeze({
+const Period: Readonly<
+  Record<Aseprite.Direction, (period: Integer, len: number) => Integer>
+> = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Aseprite.Direction.Forward](period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
