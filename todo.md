@@ -1,3 +1,5 @@
+# To-do
+
 - Can a JSON format be supported? This would allow the parse step to happen at
   compilation instead of run time.
   - How should infinite be represented?
