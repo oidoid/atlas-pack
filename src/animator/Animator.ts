@@ -29,7 +29,10 @@ export interface Animator {
 export namespace Animator {
   /**
    * Apply the time since last frame was shown, possibly advancing the
-   * `Animation` period.
+   * `Animation` period. The worst case scenario is when `exposure` is
+   * `animation.duration - 1` which would iterate over every `Cel` in the
+   * `Animation`. Since `Animation`s are usually animated every frame, this
+   * scenario is expected to be rare.
    */
   export function animate(
     period: Integer,

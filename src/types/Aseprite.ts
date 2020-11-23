@@ -19,7 +19,7 @@ export namespace Aseprite {
    * The topmost data type for JSON exported from Aseprite. This format contains
    * all the image and animation information for every file packed in the atlas.
    * **By convention**, every file has one or more animations. Every animation
-   * has a Frame sequence, a Tag, and zero or more Slices.
+   * has a `Frame` sequence, a Tag, and zero or more Slices.
    */
   export interface File {
     readonly meta: Meta
@@ -58,11 +58,11 @@ export namespace Aseprite {
 
   /**
    * A single animation frame and most primitive unit. Each file packed always
-   * has at least one Frame.
+   * has at least one `Frame`.
    */
   export interface Frame {
     /**
-     * The Frame's bounds within the atlas, including a any border padding
+     * The `Frame`'s bounds within the atlas, including a any border padding
      * **via CLI** `--inner-padding n`. The padding dimensions may also be
      * calculated by subtracting member's WH dimensions from sourceSize and
      * dividing by two.
@@ -70,7 +70,7 @@ export namespace Aseprite {
     readonly frame: Readonly<Rect>
     readonly rotated: boolean
     readonly trimmed: boolean
-    /** The Frame's bounds within the file packed, not including padding. */
+    /** The `Frame`'s bounds within the file packed, not including padding. */
     readonly spriteSourceSize: Readonly<Rect>
     /** The width and height components of spriteSourceSize. */
     readonly sourceSize: Readonly<WH>
@@ -78,16 +78,16 @@ export namespace Aseprite {
   }
 
   /**
-   * A label and animation behavior for one or more Frames. When combined with
-   * the referenced Frames, an animation is represented.
+   * A label and animation behavior for one or more `Frame`s. When combined with
+   * the referenced `Frame`s, an animation is represented.
    */
   export interface FrameTag {
-    /** **By convention**, the associated Frame's Tag. */
+    /** **By convention**, the associated `Frame`'s `Tag`. */
     readonly name: Tag
     /** The inclusive starting Frame index. */
     readonly from: Integer
     /**
-     * The inclusive ending Frame index, possibly identical to the starting
+     * The inclusive ending `Frame` index, possibly identical to the starting
      * frame index.
      */
     readonly to: Integer
@@ -111,6 +111,10 @@ export namespace Aseprite {
   export type Infinite = typeof Infinite
   export const Infinite = <const>0xffff
 
+  /**
+   * The `Animation` playback orientation: forward, backward, or forward then
+   * backward.
+   */
   export type Direction = typeof Direction[keyof typeof Direction]
   export const Direction = <const>{
     /** Animate from start to end; when looping, return to start. */
@@ -128,20 +132,21 @@ export namespace Aseprite {
 
   export interface Slice {
     readonly name: Tag
-    /** Color in #rrggbbaa format. E.g., blue is '#0000ffff'. */
+    /** Color in `#rrggbbaa` format. E.g., blue is '#0000ffff'. */
     readonly color: string
     readonly keys: readonly Key[]
   }
 
   export interface Key {
     /**
-     * The inclusive associated Frame's start offset, the exclusive previous
-     * Frame's end offset. **By convention,** the exclusive end offset is the
-     * next higher Key.frame if it exists or the animation's end if not. A Key's
-     * Frame index may be calculated from FrameTag.index + Key.frame.
+     * The inclusive associated `Frame`'s start offset, the exclusive previous
+     * `Frame`'s end offset. **By convention,** the exclusive end offset is the
+     * next higher `Key.frame` if it exists or the animation's end if not. A
+     * `Key`'s `Frame` index may be calculated from
+     * `FrameTag.index + Key.frame`.
      */
     readonly frame: Integer
-    /** The slice dimensions. */
+    /** The `Slice` dimensions. */
     readonly bounds: Readonly<Rect>
   }
 }
