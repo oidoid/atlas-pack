@@ -1,5 +1,8 @@
 # To-do
 
+- Add API documentation for at least the primary exports: `Aseprite`, `Parser`,
+  `Animator`, `Atlas`, and `Animation`. The `Animator` documentation should
+  probably include a usage example in a game loop-like scenario.
 - Can a JSON format be supported? This would allow the parse step to happen at
   compilation instead of run time.
   - How should infinite be represented?
