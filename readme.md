@@ -1,9 +1,9 @@
 # 🗺️ [aseprite-atlas](https://git.io/aseprite-atlas)
 
-[![](backpacker.gif)](https://aseprite-atlas.netlify.com/demo)
+Aseprite sprite sheet parser and animator for browser and Node.js. See the
+**[demo](https://aseprite-atlas.netlify.com/demo)**.
 
-Aseprite sprite atlas (or sprite sheet) parser and animator for browser and
-Node.js. See the **[demo](https://aseprite-atlas.netlify.com/demo)**.
+![The design, pack, and run workflow.](workflow.png)
 
 ## Table of Contents
 
