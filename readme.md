@@ -187,7 +187,8 @@ responsibilities with a simple API, it will be easy to use (or not use) this
 library.
 
 Cel durations are allowed to be infinite. This means they are incompatible with
-JSON (JSON5 supports infinite values).
+JSON (JSON5 supports infinite values). As an alternative, the parser can output
+a JavaScript file instead.
 
 ## Assumptions and Conventions
 
