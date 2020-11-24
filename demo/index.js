@@ -37,7 +37,7 @@ const loop = (atlas, atlasImage, then, now) => {
   )
   const index = AsepriteAtlas.Animator.index(animator.period, animation.cels)
   const cel = /** @type {AsepriteAtlas.Atlas.Cel} */ (animation.cels[index])
-  const scaledSize = {w: animation.size.w * 10, h: animation.size.h * 10}
+  const scaledSize = {w: animation.size.w * 4, h: animation.size.h * 4}
 
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.drawImage(
@@ -78,3 +78,11 @@ Promise.all([
   loadJSON('/demo/atlas.json'),
   loadImage('/demo/atlas.png')
 ]).then(([json, image]) => onLoaded(json, image))
+
+console.log(
+  `
+aseprite-atlas ┌>°┐
+            by │  │ddoid
+               └──┘
+  `.trim()
+)
