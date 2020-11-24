@@ -23,12 +23,12 @@ Aseprite sprite sheet parser and animator for browser and Node.js. See the
       - [Render the Animation](#render-the-animation)
 - [Features](#features)
 - [Functionality Not Provided](#functionality-not-provided)
+- [Known Issues](#known-issues)
 - [Assumptions and Conventions](#assumptions-and-conventions)
   - [Assumptions](#assumptions)
   - [Conventions](#conventions)
 - [Development](#development)
   - [Publishing a New Version](#publishing-a-new-version)
-- [Known Issues](#known-issues)
 - [License](#license)
   - [GPL-3.0-only](#gpl-30-only)
 
@@ -190,6 +190,12 @@ Cel durations are allowed to be infinite. This means they are incompatible with
 JSON (JSON5 supports infinite values). As an alternative, the parser can output
 a JavaScript file instead.
 
+## Known Issues
+
+- [Sprite sheet dimensions are no longer powers of two](https://github.com/aseprite/aseprite/issues/2289)
+  when exported. This is observable by re-exporting the demo/ sheet from
+  Aseprite.
+
 ## Assumptions and Conventions
 
 ### Assumptions
@@ -223,12 +229,6 @@ Incomplete work is tracked under [todo](todo.md).
 
 1. Update the [changelog](changelog.md).
 1. Execute `npm version <patch|minor|major>`.
-
-## Known Issues
-
-- [Sprite sheet dimensions are no longer powers of two](https://github.com/aseprite/aseprite/issues/2289)
-  when exported. This is observable by re-exporting the demo/ sheet from
-  Aseprite.
 
 ## License
 
