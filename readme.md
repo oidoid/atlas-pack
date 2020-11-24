@@ -1,20 +1,20 @@
 # 🗺️ [aseprite-atlas](https://git.io/aseprite-atlas)
 
-Aseprite sprite sheet parser and animator for browser and Node.js. See the
-**[demo](https://aseprite-atlas.netlify.com/demo)**.
-
-![The design, pack, and run workflow.](workflow.png)
+aseprite-atlas is an Aseprite sprite sheet parser, animator, and tools for the
+browser and Node.js. See [installation](#installation) and the
+**[minimal example](#minimal-example)** to get started.
 
 ## Table of Contents
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
-
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2} -->
 <!-- code_chunk_output -->
 
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
+- [Sprite Sheets and Atlases](#sprite-sheets-and-atlases)
 - [Usage](#usage)
-  - [Generate the Atlas (CLI)](#generate-the-atlas-cli)
+  - [Overview](#overview)
+  - [Pack the Sprite Sheet (CLI)](#pack-the-sprite-sheet-cli)
   - [Parse and Render (JavaScript)](#parse-and-render-javascript)
     - [Minimal Example](#minimal-example)
       - [Parsing](#parsing)
@@ -36,17 +36,102 @@ Aseprite sprite sheet parser and animator for browser and Node.js. See the
 
 ## Installation
 
-`npm i --save-prefix= aseprite-atlas`. See the [changelog](changelog.md) for release notes.
+Execute `npm i --save-prefix= aseprite-atlas` to install aseprite-atlas. See the
+[changelog](changelog.md) for release notes.
+
+## Sprite Sheets and Atlases
+
+Sprite sheets, also known as atlases, maximize GPU texture mapping unit and bus
+bandwidth performance by packing logical individual textures together into
+larger texture compositions. These necessary efficiency gains increase
+complexity as textures no longer map directly to distinct files but instead must
+be looked up by coordinates.
+
+The following example sprite sheet was generated from two files,
+[frog.aseprite](demo/frog.aseprite) and
+[backpacker.aseprite](demo/backpacker.aseprite), using
+[`aseprite-atlas-pack`](#generate-the-atlas-cli). The frog has a single
+eight-frame animation and the backpacker has three animations, one nine-frame
+and two eight-frames. All frames are embedded in a single, static sprite sheet
+PNG file. Any animation can be rendered programmatically from this file, such as
+this one of the backpacker walking right.
+
+<div align="center">
+  <img
+    src="demo/atlas.png"
+    width="320"
+    style="border: 1px dotted; image-rendering: pixelated"
+    alt="An example sprite sheet generated from two separate .aseprite files."
+  ><img
+    src="right-arrow.png"
+    width="126"
+    style="image-rendering: pixelated"
+    alt="The left sprite sheet can be used to render the right animation."
+  ><img
+    src="backpacker.gif"
+    width="32"
+    style="image-rendering: pixelated"
+    alt="Animations such as this can be rendered using the sprite sheet."
+  >
+</div>
+
+_Above left: All animation frames are embedded into a single PNG. Above right:
+Any sub-textures from the sheet can then be efficiently rendered._
+
+Although this readme is constrained to use GIFs for animation, an aseprite-atlas
+consumer would instead render all animations from the static sprite sheet PNG
+file as shown in the
+[API demo](https://aseprite-atlas.netlify.com/demo).
+
+Some or all embedded sprites may not be animated. For example, a common use case
+for sprite sheets is drawing text:
+
+<div align="center">
+  <img
+    src="https://raw.githubusercontent.com/oddoid/mem/master/dist/mem-prop-5x6-sheet.png"
+    width="336"
+    style="border: 1px dotted; image-rendering: pixelated"
+    alt="mem font sprite sheet."
+  >
+</div>
+
+_Above: A complete font embedded in a single sprite sheet._
 
 ## Usage
 
-There are two steps: 1) generate the output sprite sheet image and JSON from the
-Aseprite input files 2) parse and render animations from the sprite sheet
-outputs.
+### Overview
 
-See the [demo source](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
+![The design, pack, and run workflow.](workflow.png)
 
-### Generate the Atlas (CLI)
+There are three steps in the workflow:
+
+- **Design**: Aseprite pixeling as per usual. Draw, tag, and slice sprites
+  across `*.aseprite` files as wanted.
+- **Pack**: Concatenate all Aseprite rendered outputs using
+  `aseprite-atlas-pack` as part of a project's build process. A single, big PNG
+  sprite sheet containing all frames of animation from all input files as well
+  as an associated JSON texture lookup file are output.
+- **Run**: Parse the sprite sheet JSON and generate an immutable sprite `Atlas`
+  optimized for lookup and sharing. Every distinct renderable object should then
+  create its own `Animator` state. Finally, `Animator` is used to update and
+  render the `Animation` state sub-textures each frame.
+
+Aseprite itself provides everything needed. However, the latter two steps
+benefit from the tooling provided by aseprite-atlas:
+
+- `aseprite-atlas-pack`: A thin wrapper around the Aseprite executable with the
+  defaults expected by the `Parser`.
+- `Parser`: Accepts a sprite sheet JSON file and outputs an immutable `Atlas`
+  for efficient `Animation` sub-texture lookup. A program has one `Atlas` object
+  per sprite sheet.
+- `Animator`: The current playback state for a given `Animation`. There are
+  often multiple distinct `Animator`s associated with the same `Animation`. A
+  renderer should consult `Animator` states to determine the appropriate
+  sub-texture regions to blit from the `Atlas` each loop.
+
+See the [API demo source](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
+
+### Pack the Sprite Sheet (CLI)
 
 Given a list of Aseprite files, pack all images and animations into a single
 sprite sheet:
@@ -92,10 +177,11 @@ const {w, h} = animation.size
 console.log(x, y, w, h)
 ```
 
-[See the demo](https://aseprite-atlas.netlify.com/demo) for a running example
-rendered to a canvas.
+`Animator.animate()` usually occurs within a loop.
+[See the API demo](https://aseprite-atlas.netlify.com/demo) for a running
+example rendered to a canvas.
 
-The following sections only detail this example.
+The following sections only detail the above example.
 
 ##### Parsing
 
@@ -211,7 +297,8 @@ Some wanted functionality is not modeled in the stock Aseprite format. This
 section lists conventions used by aseprite-atlas. It's possible to forget to
 apply these conventions, which can lead to bugs that aseprite-atlas cannot
 detect. To the extent possible, consumers should add tests for conventions to
-their code.
+their code. Some examples are shown in the
+[API demo tests](demo/AtlasID.test.ts).
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
   aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`. This value is only

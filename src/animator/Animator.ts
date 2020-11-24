@@ -4,7 +4,7 @@ import {Integer} from '../types/Integer'
 import {Milliseconds} from '../types/Milliseconds'
 import {NumberUtil} from '../utils/NumberUtil'
 
-/** Record and update an `Animation`'s state. */
+/** Record and update playback state for an `Animation`. */
 export interface Animator {
   /**
    * `Cel` index oscillation state. This integer may fall outside of animation

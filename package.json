@@ -3,7 +3,7 @@
   "author": "oddoid",
   "version": "3.0.0",
   "license": "GPL-3.0-only",
-  "description": "Aseprite sprite atlas parser and animator for browser and Node.js.",
+  "description": "Aseprite sprite sheet parser, animator, and tools for the browser and Node.js.",
   "keywords": [
     "aseprite",
     "game",

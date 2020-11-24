@@ -25,7 +25,7 @@ export namespace Atlas {
   export interface AnimationRecord
     extends Readonly<Record<Aseprite.Tag, Animation>> {}
 
-  /** A sequence of animation cels. */
+  /** A sequence of animation `Cel`s. */
   export interface Animation {
     /**
      * Width and height within the source atlas image in integral pixels.
