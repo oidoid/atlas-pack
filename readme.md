@@ -36,7 +36,7 @@ Aseprite sprite sheet parser and animator for browser and Node.js. See the
 
 ## Installation
 
-`npm i aseprite-atlas`. See the [changelog](changelog.md) for release notes.
+`npm i --save-prefix= aseprite-atlas`. See the [changelog](changelog.md) for release notes.
 
 ## Usage
 
