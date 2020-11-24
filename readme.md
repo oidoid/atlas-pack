@@ -58,20 +58,10 @@ this one of the backpacker walking right.
 
 <div align="center">
   <img
-    src="demo/atlas.png"
-    width="320"
-    style="border: 1px dotted; image-rendering: pixelated"
-    alt="An example sprite sheet generated from two separate .aseprite files."
-  ><img
-    src="right-arrow.png"
-    width="126"
+    src="sheet-to-render.gif"
+    width="665"
     style="image-rendering: pixelated"
-    alt="The left sprite sheet can be used to render the right animation."
-  ><img
-    src="backpacker.gif"
-    width="32"
-    style="image-rendering: pixelated"
-    alt="Animations such as this can be rendered using the sprite sheet."
+    alt="An example sprite sheet generated from two separate .aseprite files (left) can be used to render any animation cycle or image it contains (right)."
   >
 </div>
 
@@ -88,8 +78,8 @@ for sprite sheets is drawing text:
 
 <div align="center">
   <img
-    src="https://raw.githubusercontent.com/oddoid/mem/master/dist/mem-prop-5x6-sheet.png"
-    width="336"
+    src="https://raw.githubusercontent.com/oddoid/mem/master/dist/mem-prop-5x6-10x-sheet.png"
+    width="280"
     style="border: 1px dotted; image-rendering: pixelated"
     alt="mem font sprite sheet."
   >
@@ -101,7 +91,14 @@ _Above: A complete font embedded in a single sprite sheet._
 
 ### Overview
 
-![The design, pack, and run workflow.](workflow.png)
+<div align="center">
+  <img
+    src="workflow.png"
+    width="920"
+    style="border: 1px dotted; image-rendering: pixelated"
+    alt="The design, pack, and run workflow."
+  >
+</div>
 
 There are three steps in the workflow:
 
