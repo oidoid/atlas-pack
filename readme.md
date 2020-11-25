@@ -1,6 +1,6 @@
 # 🗺️ [aseprite-atlas](https://git.io/aseprite-atlas)
 
-aseprite-atlas is an Aseprite sprite sheet parser, animator, and tools for the
+aseprite-atlas is an Aseprite sprite sheet parser, animator, and toolset for the
 browser and Node.js. See [installation](#installation) and the
 **[minimal example](#minimal-example)** to get started.
 
@@ -79,7 +79,7 @@ for sprite sheets is drawing text:
 <div align="center">
   <img
     src="https://raw.githubusercontent.com/oddoid/mem/master/dist/mem-prop-5x6-10x-sheet.png"
-    width="280"
+    width="560"
     style="border: 1px dotted; image-rendering: pixelated"
     alt="mem font sprite sheet."
   >
