@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json",
+    "build:atlas": "aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json",
     "test": "tsc"
   },
   "dependencies": {
