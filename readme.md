@@ -37,7 +37,7 @@ browser and Node.js. See [installation](#installation) and the
 ## Installation
 
 Execute `npm i --save-prefix= aseprite-atlas` to install aseprite-atlas. See the
-[changelog](changelog.md) for release notes.
+[changelog](docs/changelog.md) for release notes.
 
 ## Sprite Sheets and Atlases
 
@@ -58,7 +58,7 @@ this one of the backpacker walking right.
 
 <div align="center">
   <img
-    src="sheet-to-render.gif"
+    src="docs/sheet-to-render.gif"
     width="665"
     style="image-rendering: pixelated"
     alt="An example sprite sheet generated from two separate .aseprite files (left) can be used to render any animation cycle or image it contains (right)."
@@ -93,7 +93,7 @@ _Above: A complete font embedded in a single sprite sheet._
 
 <div align="center">
   <img
-    src="workflow.png"
+    src="docs/workflow.png"
     width="920"
     style="border: 1px dotted; image-rendering: pixelated"
     alt="The design, pack, and run workflow."
@@ -307,11 +307,11 @@ their code. Some examples are shown in the
 
 ## Development
 
-Incomplete work is tracked under [todo](todo.md).
+Incomplete work is tracked under [todo](docs/todo.md).
 
 ### Publishing a New Version
 
-1. Update the [changelog](changelog.md).
+1. Update the [changelog](docs/changelog.md).
 1. Execute `npm version <patch|minor|major>`.
 
 ## License
