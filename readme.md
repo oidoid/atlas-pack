@@ -71,7 +71,7 @@ Any sub-textures from the sheet can then be efficiently rendered._
 Although this readme is constrained to use GIFs for animation, an aseprite-atlas
 consumer would instead render all animations from the static sprite sheet PNG
 file as shown in the
-[API demo](https://aseprite-atlas.netlify.com/demo).
+[API demo](https://aseprite-atlas.netlify.com/demo/dist).
 
 Some or all embedded sprites may not be animated. For example, a common use case
 for sprite sheets is drawing text:
@@ -176,7 +176,7 @@ console.log(x, y, w, h)
 ```
 
 `Animator.animate()` usually occurs within a loop.
-[See the API demo](https://aseprite-atlas.netlify.com/demo) for a running
+[See the API demo](https://aseprite-atlas.netlify.com/demo/dist) for a running
 example rendered to a canvas.
 
 The following sections only detail the above example.
