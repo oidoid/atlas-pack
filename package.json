@@ -1,42 +1,16 @@
 {
-  "name": "aseprite-atlas",
-  "author": "oddoid",
-  "version": "3.0.0",
-  "license": "GPL-3.0-only",
-  "description": "Aseprite sprite sheet parser, animator, and toolset for the browser and Node.js.",
-  "keywords": [
-    "aseprite",
-    "game",
-    "animation",
-    "pixel-art",
-    "animated-sprites",
-    "spritesheet",
-    "sprites",
-    "sprite-atlas",
-    "sprite-parser",
-    "8-bit",
-    "retro"
-  ],
-  "homepage": "https://git.io/aseprite-atlas",
-  "repository": "github:oddoid/aseprite-atlas",
-  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
-  },
   "scripts": {
-    "start": "webpack -w --mode development",
     "test:unit": "jest",
-    "test": "npm -s run formatter -- -l && npm -s run build && npm -s run test:unit && cd demo && npm -s t",
-    "build": "webpack",
+    "test": "npm -s run formatter -- -l && npm -s run build:demo && npm -s run build:lib && npm -s run test:unit",
+    "build:demo": "cd demo && npm -s run build",
+    "build:lib": "cd lib && npm -s run build",
     "format": "npm -s run formatter -- -w",
-    "formatter": "prettier './**/*.{js,json,html,md,ts}'",
-    "preversion": "[ -z \"$(git status -z)\" ]",
-    "version": "npm t",
-    "postversion": "npm publish",
-    "prepublishOnly": "git push origin \"$(git rev-parse --abbrev-ref @)\" \"$(git tag --points-at @)\""
+    "formatter": "prettier './**/*.{js,json,html,md,ts}'"
   },
+  "workspaces": [
+    "lib",
+    "demo"
+  ],
   "engines": {
     "node": "15.2.1",
     "npm": "7.0.8"

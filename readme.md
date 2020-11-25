@@ -138,7 +138,7 @@ npx aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
-[`Aseprite.File`](src/types/Aseprite.ts) (`atlas.json`) which is ready for
+[`Aseprite.File`](lib/src/types/Aseprite.ts) (`atlas.json`) which is ready for
 parsing.
 
 These outputs should be regenerated any time assets (Aseprite files) change,

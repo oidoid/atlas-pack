@@ -1,0 +1,35 @@
+{
+  "name": "aseprite-atlas",
+  "author": "oddoid",
+  "version": "3.0.0",
+  "license": "GPL-3.0-only",
+  "description": "Aseprite sprite sheet parser, animator, and toolset for the browser and Node.js.",
+  "keywords": [
+    "aseprite",
+    "game",
+    "animation",
+    "pixel-art",
+    "animated-sprites",
+    "spritesheet",
+    "sprites",
+    "sprite-atlas",
+    "sprite-parser",
+    "8-bit",
+    "retro"
+  ],
+  "homepage": "https://git.io/aseprite-atlas",
+  "repository": "github:oddoid/aseprite-atlas",
+  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
+  },
+  "scripts": {
+    "build": "webpack",
+    "preversion": "[ -z \"$(git status -z)\" ]",
+    "version": "cd .. && npm t",
+    "postversion": "npm publish",
+    "prepublishOnly": "git push origin \"$(git rev-parse --abbrev-ref @)\" \"$(git tag --points-at @)\""
+  }
+}

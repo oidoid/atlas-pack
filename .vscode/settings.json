@@ -2,8 +2,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": {
     "node_modules": true,
-    "dist": true,
-    "demo/node_modules": true
+    "lib/dist": true,
+    "demo/dist": true
   },
   "cSpell.words": ["aseprite", "rrggbbaa"]
 }

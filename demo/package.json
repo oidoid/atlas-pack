@@ -1,9 +1,12 @@
 {
   "scripts": {
-    "build:atlas": "aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json",
-    "test": "tsc"
+    "start": "webpack-cli s --mode development",
+    "build": "webpack",
+    "build:atlas": "cd src && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
   },
-  "dependencies": {
-    "aseprite-atlas": ".."
+  "devDependencies": {
+    "@webpack-cli/init": "1.0.3",
+    "copy-webpack-plugin": "6.3.2",
+    "webpack-dev-server": "3.11.0"
   }
 }

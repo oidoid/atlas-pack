@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[build\] Enable NPM workspaces and composite projects
 - \[build\] Upgrade all dependencies
 - \[build\] Upgrade to Webpack v5.5.1
 - \[build\] Upgrade to Webpack v5.5.0

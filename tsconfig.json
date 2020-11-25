@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": true,
+
     //  Needed by `resolveJsonModule`.
     "moduleResolution": "Node",
 
@@ -19,16 +21,11 @@
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
 
-    "outDir": "dist",
     "target": "ES6",
 
     // Emit type definitions (.d.ts) for clients.
-    "declarationDir": "dist",
-    "declaration": true,
+    "declarationMap": true,
 
-    "sourceMap": true,
-
-    "incremental": true
-  },
-  "exclude": ["demo"]
+    "sourceMap": true
+  }
 }

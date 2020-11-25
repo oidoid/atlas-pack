@@ -1,9 +1,9 @@
 {
-  "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
+  "testPathIgnorePatterns": ["/node_modules/", "/lib/dist/", "/demo/dist/"],
   "transform": {".+\\.ts$": "ts-jest"},
   "collectCoverage": true,
-  "coverageDirectory": "dist/coverage",
-  "coveragePathIgnorePatterns": ["/node_modules/", "/dist/", "/demo/"],
+  "coverageDirectory": "lib/dist/coverage",
+  "coveragePathIgnorePatterns": ["/node_modules/", "/lib/dist/", "/demo/"],
   "errorOnDeprecated": true,
   "coverageThreshold": {
     "global": {
