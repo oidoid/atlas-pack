@@ -48,8 +48,8 @@ complexity as textures no longer map directly to distinct files but instead must
 be looked up by coordinates.
 
 The following example sprite sheet was generated from two files,
-[frog.aseprite](demo/frog.aseprite) and
-[backpacker.aseprite](demo/backpacker.aseprite), using
+[frog.aseprite](demo/src/frog.aseprite) and
+[backpacker.aseprite](demo/src/backpacker.aseprite), using
 [`aseprite-atlas-pack`](#generate-the-atlas-cli). The frog has a single
 eight-frame animation and the backpacker has three animations, one nine-frame
 and two eight-frames. All frames are embedded in a single, static sprite sheet
@@ -126,7 +126,8 @@ benefit from the tooling provided by aseprite-atlas:
   renderer should consult `Animator` states to determine the appropriate
   sub-texture regions to blit from the `Atlas` each loop.
 
-See the [API demo source](demo/index.js) and [demo tests](demo/AtlasID.test.ts)!
+See the [API demo source](demo/src/index.ts) and
+[demo tests](demo/src/AtlasID.test.ts)!
 
 ### Pack the Sprite Sheet (CLI)
 
@@ -295,7 +296,7 @@ section lists conventions used by aseprite-atlas. It's possible to forget to
 apply these conventions, which can lead to bugs that aseprite-atlas cannot
 detect. To the extent possible, consumers should add tests for conventions to
 their code. Some examples are shown in the
-[API demo tests](demo/AtlasID.test.ts).
+[API demo tests](demo/src/AtlasID.test.ts).
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
   aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`. This value is only
