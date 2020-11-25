@@ -10,3 +10,6 @@
   things: different collisioning (including Aseprite GUI screenshots of slices),
   tiling, different animations, parsing and image loading, a mini sprite
   / entity system.
+- Improve the demo build system. It doesn't automatically rebuild its
+  dependencies. Maybe switch demo to Webpack and use webpack-dev-server. Related
+  work in the npm-workspaces branch.
