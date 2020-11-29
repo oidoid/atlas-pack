@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Publish a development release. If master is v0.0.0, `bin/release-dev` will
-# publish v0.0.1-next.202001020304.
+# publish v0.0.1-next.202001020304.0.
 set -euo pipefail
 
 PRE_ID="${PRE_ID:-next.$(TZ=utc date +%+4Y%m%d%H%M)}"
@@ -10,8 +10,9 @@ git fetch origin master
 git checkout origin/master
 
 # Create a new version commit on the detached `HEAD` like
-# `[release] v0.0.1-next.202001020304`.
-npm version prerelease --message='[release] %s' --preid="$PRE_ID"
+# `[release] v0.0.1-next.202001020304.0`. The .0 suffix isn't wanted but
+# eliminating it would require manually generating the version.
+npm version prerelease --preid="$PRE_ID" -m '[release] %s'
 
 # Point the next tag to this release.
 npm publish --tag next
