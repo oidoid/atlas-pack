@@ -28,8 +28,7 @@
   "scripts": {
     "build": "webpack",
     "preversion": "[ -z \"$(git status -z)\" ]",
-    "version": "cd .. && npm t",
-    "postversion": "npm publish",
+    "version": "cd .. && npm ci && npm t",
     "prepublishOnly": "git push origin \"$(git rev-parse --abbrev-ref @)\" \"$(git tag --points-at @)\""
   }
 }

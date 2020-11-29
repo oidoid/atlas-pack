@@ -310,11 +310,6 @@ their code. Some examples are shown in the
 
 Incomplete work is tracked under [todo](docs/todo.md).
 
-### Publishing a New Version
-
-1. Update the [changelog](docs/changelog.md).
-1. Execute `npm version <patch|minor|major>`.
-
 ## License
 
 © Stephen Niedzielski.

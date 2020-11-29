@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Publish a development release. If master is v0.0.0, `bin/release-dev` will
+# publish v0.0.1-next.202001020304.
+set -euo pipefail
+
+PRE_ID="${PRE_ID:-next.$(TZ=utc date +%+4Y%m%d%H%M)}"
+
+# Development tags are not wanted on the master branch.
+git fetch origin master
+git checkout origin/master
+
+# Create a new version commit on the detached `HEAD` like
+# `[release] v0.0.1-next.202001020304`.
+npm version prerelease --message='[release] %s' --preid="$PRE_ID"
+
+# Point the next tag to this release.
+npm publish --tag next
