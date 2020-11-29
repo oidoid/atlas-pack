@@ -36,7 +36,7 @@ browser and Node.js. See [installation](#installation) and the
 
 ## Installation
 
-Execute `npm i --save-prefix= aseprite-atlas` to install aseprite-atlas. See the
+Execute `npm i -E aseprite-atlas` to install aseprite-atlas. See the
 [changelog](docs/changelog.md) for release notes.
 
 ## Sprite Sheets and Atlases
