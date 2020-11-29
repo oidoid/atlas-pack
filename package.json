@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test:unit": "jest",
-    "test": "npm -s run formatter -- -l && npm -s run build:demo && npm -s run build:lib && npm -s run test:unit",
+    "test": "npm -s run formatter -- -l && npm -s run build:lib && npm -s run build:demo && npm -s run test:unit",
     "build:demo": "cd demo && npm -s run build",
     "build:lib": "cd lib && npm -s run build",
     "format": "npm -s run formatter -- -w",
