@@ -1,5 +1,5 @@
-import {Aseprite} from '../types/Aseprite'
-import {Parser} from './Parser'
+import {Aseprite} from '../types/aseprite'
+import {Parser} from './parser'
 
 describe('parse()', () => {
   test('Parses Meta.', () => {

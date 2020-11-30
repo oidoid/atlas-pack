@@ -1,8 +1,8 @@
-import {Aseprite} from '../types/Aseprite'
-import {Atlas} from '../types/Atlas'
-import {Integer} from '../types/Integer'
-import {Milliseconds} from '../types/Milliseconds'
-import {NumberUtil} from '../utils/NumberUtil'
+import {Aseprite} from '../types/aseprite'
+import {Atlas} from '../types/atlas'
+import {Integer} from '../types/integer'
+import {Milliseconds} from '../types/milliseconds'
+import {NumberUtil} from '../utils/number-util'
 
 /** Record and update playback state for an `Animation`. */
 export interface Animator {

@@ -1,8 +1,8 @@
-import {Aseprite} from './Aseprite'
-import {Milliseconds} from './Milliseconds'
-import {Rect} from './Rect'
-import {WH} from './WH'
-import {XY} from './XY'
+import {Aseprite} from './aseprite'
+import {Milliseconds} from './milliseconds'
+import {Rect} from './rect'
+import {WH} from './wh'
+import {XY} from './xy'
 
 /**
  * All types are immutably frozen by their parsers. The reason is that this

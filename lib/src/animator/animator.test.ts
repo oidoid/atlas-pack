@@ -1,5 +1,5 @@
-import {Animator} from './Animator'
-import {Aseprite} from '../types/Aseprite'
+import {Animator} from './animator'
+import {Aseprite} from '../types/aseprite'
 
 describe('animate()', () => {
   test('exposure < duration', () => {

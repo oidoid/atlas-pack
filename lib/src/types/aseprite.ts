@@ -1,7 +1,7 @@
-import {Integer} from './Integer'
-import {Milliseconds} from './Milliseconds'
-import {Rect} from './Rect'
-import {WH} from './WH'
+import {Integer} from './integer'
+import {Milliseconds} from './milliseconds'
+import {Rect} from './rect'
+import {WH} from './wh'
 
 /**
  * This typing assumes the options specified in aseprite-atlas-pack and

@@ -1,4 +1,4 @@
-import {Integer} from './Integer'
+import {Integer} from './integer'
 
 /** Width and height in pixels. */
 export interface WH {

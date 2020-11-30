@@ -1,5 +1,5 @@
 import {Aseprite, Animator, Atlas, Parser} from 'aseprite-atlas'
-import {AtlasID} from './AtlasID'
+import {AtlasID} from './atlas-id'
 
 interface Game {
   readonly window: Window

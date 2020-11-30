@@ -1,10 +1,10 @@
-import {Aseprite} from '../types/Aseprite'
-import {Atlas} from '../types/Atlas'
-import {Integer} from '../types/Integer'
-import {Milliseconds} from '../types/Milliseconds'
-import {Rect} from '../types/Rect'
-import {WH} from '../types/WH'
-import {XY} from '../types/XY'
+import {Aseprite} from '../types/aseprite'
+import {Atlas} from '../types/atlas'
+import {Integer} from '../types/integer'
+import {Milliseconds} from '../types/milliseconds'
+import {Rect} from '../types/rect'
+import {WH} from '../types/wh'
+import {XY} from '../types/xy'
 
 export namespace Parser {
   export function parse(file: Aseprite.File): Atlas {

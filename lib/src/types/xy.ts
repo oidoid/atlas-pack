@@ -1,4 +1,4 @@
-import {Integer} from './Integer'
+import {Integer} from './integer'
 
 /** Cartesian coordinates in pixels with a top-left origin. */
 export interface XY {

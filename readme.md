@@ -127,7 +127,7 @@ benefit from the tooling provided by aseprite-atlas:
   sub-texture regions to blit from the `Atlas` each loop.
 
 See the [API demo source](demo/src/index.ts) and
-[demo tests](demo/src/AtlasID.test.ts)!
+[demo tests](demo/src/atlas-id.test.ts)!
 
 ### Pack the Sprite Sheet (CLI)
 
@@ -139,7 +139,7 @@ npx aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
-[`Aseprite.File`](lib/src/types/Aseprite.ts) (`atlas.json`) which is ready for
+[`Aseprite.File`](lib/src/types/aseprite.ts) (`atlas.json`) which is ready for
 parsing.
 
 These outputs should be regenerated any time assets (Aseprite files) change,
@@ -296,7 +296,7 @@ section lists conventions used by aseprite-atlas. It's possible to forget to
 apply these conventions, which can lead to bugs that aseprite-atlas cannot
 detect. To the extent possible, consumers should add tests for conventions to
 their code. Some examples are shown in the
-[API demo tests](demo/src/AtlasID.test.ts).
+[API demo tests](demo/src/atlas-id.test.ts).
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
   aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`. This value is only
