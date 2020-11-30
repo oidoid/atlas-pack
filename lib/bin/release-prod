@@ -13,4 +13,6 @@ git pull
 # Create a new version commit on the current branch like `[release] v0.0.1`.
 npm version -m '[release] %s' "$TYPE"
 
+git push "$(git rev-parse --abbrev-ref @)"
+
 npm publish

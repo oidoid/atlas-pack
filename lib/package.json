@@ -29,6 +29,6 @@
     "build": "webpack",
     "preversion": "[ -z \"$(git status -z)\" ]",
     "version": "cd .. && npm ci && npm t",
-    "prepublishOnly": "git push origin \"$(git rev-parse --abbrev-ref @)\" \"$(git tag --points-at @)\""
+    "prepublishOnly": "git push origin \"$(git tag --points-at @)\""
   }
 }
