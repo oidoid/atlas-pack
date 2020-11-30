@@ -14,5 +14,11 @@ git checkout origin/master
 # eliminating it would require manually generating the version.
 npm version prerelease --preid="$PRE_ID" -m '[release] %s'
 
+# https://github.com/npm/cli/issues/2010
+version="$(sed -rn '/"version"/ { s%.*"([^"]+)".*%\1%p; q }' package.json)"
+git add package.json
+git commit -m "[release] v${version}"
+git tag "v$version"
+
 # Point the next tag to this release.
 npm publish --tag next
