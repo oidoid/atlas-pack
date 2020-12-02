@@ -1,2 +1,2 @@
 /** A fractional measure of duration in millseconds. */
-export type Milliseconds = number
+export type Millis = number

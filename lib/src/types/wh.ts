@@ -1,7 +1,7 @@
-import {Integer} from './integer'
+import {Int} from './int'
 
 /** Width and height in pixels. */
 export interface WH {
-  w: Integer
-  h: Integer
+  w: Int
+  h: Int
 }

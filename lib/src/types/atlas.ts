@@ -1,5 +1,5 @@
 import {Aseprite} from './aseprite'
-import {Milliseconds} from './milliseconds'
+import {Millis} from './millis'
 import {Rect} from './rect'
 import {WH} from './wh'
 import {XY} from './xy'
@@ -45,7 +45,7 @@ export namespace Atlas {
      * individual durations for the initial five frames and the middle three
      * frames.
      */
-    readonly duration: Milliseconds
+    readonly duration: Millis
     readonly direction: Aseprite.Direction
   }
 
@@ -57,7 +57,7 @@ export namespace Atlas {
      */
     readonly position: Readonly<XY>
     /** Positive cel exposure in integral milliseconds, possibly infinite. */
-    readonly duration: Milliseconds | typeof Number.POSITIVE_INFINITY
+    readonly duration: Millis | typeof Number.POSITIVE_INFINITY
     /** Slices within the cel in local pixels. */
     readonly slices: readonly Readonly<Rect>[]
   }

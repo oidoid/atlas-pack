@@ -1,7 +1,7 @@
-import {Integer} from './integer'
+import {Int} from './int'
 
 /** Cartesian coordinates in pixels with a top-left origin. */
 export interface XY {
-  x: Integer
-  y: Integer
+  x: Int
+  y: Int
 }

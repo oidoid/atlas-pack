@@ -1,7 +1,7 @@
 import {Aseprite} from '../types/aseprite'
 import {Atlas} from '../types/atlas'
-import {Integer} from '../types/integer'
-import {Milliseconds} from '../types/milliseconds'
+import {Int} from '../types/int'
+import {Millis} from '../types/millis'
 import {Rect} from '../types/rect'
 import {WH} from '../types/wh'
 import {XY} from '../types/xy'
@@ -129,7 +129,7 @@ export namespace Parser {
   /** @internal */
   export function parseDuration(
     duration: Aseprite.Duration
-  ): Milliseconds | typeof Number.POSITIVE_INFINITY {
+  ): Millis | typeof Number.POSITIVE_INFINITY {
     if (duration <= 0) throw new Error('Expected positive cel duration.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
@@ -137,7 +137,7 @@ export namespace Parser {
   /** @internal */
   export function parseSlices(
     {name}: Aseprite.FrameTag,
-    index: Integer,
+    index: Int,
     slices: readonly Aseprite.Slice[]
   ): readonly Readonly<Rect>[] {
     const bounds = []

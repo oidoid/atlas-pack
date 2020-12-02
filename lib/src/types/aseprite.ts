@@ -1,5 +1,5 @@
-import {Integer} from './integer'
-import {Milliseconds} from './milliseconds'
+import {Int} from './int'
+import {Millis} from './millis'
 import {Rect} from './rect'
 import {WH} from './wh'
 
@@ -85,12 +85,12 @@ export namespace Aseprite {
     /** **By convention**, the associated `Frame`'s `Tag`. */
     readonly name: Tag
     /** The inclusive starting Frame index. */
-    readonly from: Integer
+    readonly from: Int
     /**
      * The inclusive ending `Frame` index, possibly identical to the starting
      * frame index.
      */
-    readonly to: Integer
+    readonly to: Int
     /**
      * Loosened typing to a string so a cast isn't needed when parsing the
      * Aseprite JSON.
@@ -102,7 +102,7 @@ export namespace Aseprite {
    * Positive animation length in milliseconds. **By convention**, animations
    * that should pause use the special Infinite value.
    */
-  export type Duration = Milliseconds | Infinite
+  export type Duration = Millis | Infinite
 
   /**
    * **By convention**, a reserved value to indicate a value without
@@ -145,7 +145,7 @@ export namespace Aseprite {
      * `Key`'s `Frame` index may be calculated from
      * `FrameTag.index + Key.frame`.
      */
-    readonly frame: Integer
+    readonly frame: Int
     /** The `Slice` dimensions. */
     readonly bounds: Readonly<Rect>
   }

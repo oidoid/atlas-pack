@@ -1,7 +1,7 @@
 import {Aseprite} from '../types/aseprite'
 import {Atlas} from '../types/atlas'
-import {Integer} from '../types/integer'
-import {Milliseconds} from '../types/milliseconds'
+import {Int} from '../types/int'
+import {Millis} from '../types/millis'
 import {NumberUtil} from '../utils/number-util'
 
 /** Record and update playback state for an `Animation`. */
@@ -15,7 +15,7 @@ export interface Animator {
    *
    * Every `Animation` is expected to have at least one `Cel`.
    */
-  period: Integer
+  period: Int
 
   /**
    * Current `Cel` exposure in milliseconds. When the fractional value meets or
@@ -24,7 +24,7 @@ export interface Animator {
    * current time step added, and zeroed on manual `Cel` change. Any number in
    * [0, ∞) is valid.
    */
-  exposure: Milliseconds
+  exposure: Millis
 }
 
 export namespace Animator {
@@ -43,8 +43,8 @@ export namespace Animator {
    *  current `Animation` `Cel` and supplied to the next call to `animate()`.
    */
   export function animate(
-    period: Integer,
-    exposure: Milliseconds,
+    period: Int,
+    exposure: Millis,
     animation: Atlas.Animation
   ): Animator {
     // Avoid unnecessary iterations by skipping complete `Animation` cycles.
@@ -62,14 +62,14 @@ export namespace Animator {
   }
 
   /** @return The `Animation` `Cel` index. */
-  export function index(period: Integer, cels: readonly Atlas.Cel[]): Integer {
+  export function index(period: Int, cels: readonly Atlas.Cel[]): Int {
     return Math.abs(period % cels.length)
   }
 }
 
 /** Given a period and `Animation` size, advance to the next period. */
 const nextPeriod: Readonly<
-  Record<Aseprite.Direction, (period: Integer, len: number) => Integer>
+  Record<Aseprite.Direction, (period: Int, len: number) => Int>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
   [Aseprite.Direction.Forward](period) {
