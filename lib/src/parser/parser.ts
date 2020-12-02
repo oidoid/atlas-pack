@@ -23,19 +23,14 @@ export namespace Parser {
     frames
   }: Aseprite.File): Atlas.AnimationRecord {
     const {frameTags, slices} = meta
-    const record = Object.freeze(
-      frameTags.reduce((atlas, frameTag) => {
-        // Every tag should be unique within the sheet.
-        if (frameTag.name in atlas)
-          throw new Error(`Duplicate tag "${frameTag.name}".`)
-
-        return {
-          ...atlas,
-          [frameTag.name]: parseAnimation(frameTag, frames, slices)
-        }
-      }, {})
-    )
-    return record
+    const record: Record<Aseprite.Tag, Atlas.Animation> = {}
+    for (const frameTag of frameTags) {
+      // Every tag should be unique within the sheet.
+      if (frameTag.name in record)
+        throw new Error(`Duplicate tag "${frameTag.name}".`)
+      record[frameTag.name] = parseAnimation(frameTag, frames, slices)
+    }
+    return Object.freeze(record)
   }
 
   /** @internal */

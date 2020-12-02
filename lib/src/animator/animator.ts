@@ -21,7 +21,8 @@ export interface Animator {
    * Current `Cel` exposure in milliseconds. When the fractional value meets or
    * exceeds the `Cel` exposure duration, the `Cel` is advanced according to
    * direction. This value should be carried over from each call with the
-   * current time step added, and zeroed on manual `Cel` change.
+   * current time step added, and zeroed on manual `Cel` change. Any number in
+   * [0, ∞) is valid.
    */
   exposure: Milliseconds
 }
@@ -33,6 +34,13 @@ export namespace Animator {
    * `animation.duration - 1` which would iterate over every `Cel` in the
    * `Animation`. Since `Animation`s are usually animated every frame, this
    * scenario is expected to be rare.
+   *
+   * @arg period The current period.
+   * @arg exposure The previous exposure in addition to the time delta since
+   *  last animation. For example, in a 60 frames per second animation, this is
+   *  usually the previous exposure + 16.667 milliseconds.
+   * @return The new period and exposure. This state is used to derive the
+   *  current `Animation` `Cel` and supplied to the next call to `animate()`.
    */
   export function animate(
     period: Integer,
@@ -43,11 +51,12 @@ export namespace Animator {
     // `animation.duration` may be infinite but the modulo of any number and
     // infinity is that number. Duration is positive.
     exposure = exposure % animation.duration
-    while (
-      exposure >= animation.cels[index(period, animation.cels)]!.duration
-    ) {
-      exposure -= animation.cels[index(period, animation.cels)]!.duration
-      period = Period[animation.direction](period, animation.cels.length)
+    for (;;) {
+      const {duration} = animation.cels[index(period, animation.cels)]!
+      if (exposure < duration) break
+
+      exposure -= duration
+      period = nextPeriod[animation.direction](period, animation.cels.length)
     }
     return {period, exposure}
   }
@@ -58,7 +67,8 @@ export namespace Animator {
   }
 }
 
-const Period: Readonly<
+/** Given a period and `Animation` size, advance to the next period. */
+const nextPeriod: Readonly<
   Record<Aseprite.Direction, (period: Integer, len: number) => Integer>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */

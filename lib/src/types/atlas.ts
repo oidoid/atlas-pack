@@ -5,6 +5,8 @@ import {WH} from './wh'
 import {XY} from './xy'
 
 /**
+ * All `Animations` and metadata for a sprite sheet.
+ *
  * All types are immutably frozen by their parsers. The reason is that this
  * data comes from the sprite sheet and is expected to be unchanging. If you
  * need a mutable copy, create a duplicate instance of the parts that change.
@@ -22,6 +24,7 @@ export interface Atlas {
 }
 
 export namespace Atlas {
+  /** `Animation` look up table. */
   export interface AnimationRecord
     extends Readonly<Record<Aseprite.Tag, Animation>> {}
 
