@@ -12,4 +12,5 @@ test.each(file.meta.slices)('%# Slice name %p is a Tag.', slice =>
   expect(tags).toContainEqual(slice.name)
 )
 
-test('Atlas is parsable.', () => expect(Parser.parse(atlasJSON)).toBeDefined())
+test('Atlas is parsable.', () =>
+  expect(Parser.parse(atlasJSON)).toMatchSnapshot())
