@@ -4,5 +4,6 @@
   "bracketSpacing": false,
   "endOfLine": "lf",
   "trailingComma": "none",
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "proseWrap": "always"
 }
