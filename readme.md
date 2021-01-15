@@ -138,10 +138,39 @@ npx aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
 
 The output is a big image of sprites (`atlas.png`) and an
 [`Aseprite.File`](lib/src/types/aseprite.ts) (`atlas.json`) which is ready for
-parsing.
+parsing. These outputs should be regenerated any time assets (Aseprite files)
+change, usually as part of a build step.
 
-These outputs should be regenerated any time assets (Aseprite files) change,
-usually as part of a build step.
+<details markdown>
+<summary>💡 Troubleshooting…</summary>
+
+The tool expects Aseprite and Node.js executables to be installed and in the
+system environment `PATH`. If you get a command not found error, you probably
+need to revise your `PATH` before running the tool. _Something_ like:
+
+```bash
+# Add the Aseprite and Node.js binary executable folders to the command path
+# lookup environment variable. Linux, macOS, and Windows operating systems all
+# have the notion of system paths that are searched whenever executing a command
+# in the command line terminal, although the program locations and syntaxes may
+# vary.
+#
+# In this example for Bash on Linux, any previously set locations are searched
+# first. It's usually a good idea to preserve these locations. A delimiter, `:`
+# separates the second path to search,
+# `/Applications/Aseprite.app/Contents/MacOS` where we hope to find an
+# executable named `aseprite`. A second delimiter follows, and finally a made up
+# location to Node.js binaries like `npx` for purposes of example.
+export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/node/bin"
+
+# Execute the tool (same as noted above).
+npx aseprite-atlas-pack --sheet atlas.png --data atlas.json *.aseprite
+```
+
+If the tool executes without any errors, no need to worry about changing the
+`PATH`.
+
+</details>
 
 ### Parse and Render (JavaScript)
 
