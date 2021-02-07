@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[docs\] Rename from oddoid to oidoid
 - \[build\] Upgrade all dependencies
 - \[int\]\[millis\] Rename Integer to Int and Milliseconds to Millis
 - \[build\] Use shish-kebab-case for filenames

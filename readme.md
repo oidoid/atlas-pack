@@ -76,7 +76,7 @@ for sprite sheets is drawing text:
 
 <div align="center">
   <img
-    src="https://raw.githubusercontent.com/oddoid/mem/master/dist/mem-prop-5x6-10x-sheet.png"
+    src="https://raw.githubusercontent.com/oidoid/mem/master/dist/mem-prop-5x6-10x-sheet.png"
     width="560"
     style="border: 1px dotted; image-rendering: pixelated"
     alt="mem font sprite sheet."
@@ -355,7 +355,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 
 ```
-╭>°╮┌─╮┌─╮╭─╮┬┌─╮
-│  ││ ││ ││ │││ │
-╰──╯└─╯└─╯╰─╯┴└─╯
+╭>°╮┬┌─╮╭─╮┬┌─╮
+│  │││ ││ │││ │
+╰──╯┴└─╯╰─╯┴└─╯
 ```

@@ -1,6 +1,6 @@
 {
   "name": "aseprite-atlas",
-  "author": "oddoid",
+  "author": "oidoid",
   "version": "3.0.0",
   "license": "GPL-3.0-only",
   "description": "🗺️ Aseprite sprite sheet parser, animator, and toolset for the browser and Node.js.",
@@ -18,8 +18,8 @@
     "retro"
   ],
   "homepage": "https://git.io/aseprite-atlas",
-  "repository": "github:oddoid/aseprite-atlas",
-  "bugs": "https://github.com/oddoid/aseprite-atlas/issues",
+  "repository": "github:oidoid/aseprite-atlas",
+  "bugs": "https://github.com/oidoid/aseprite-atlas/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
