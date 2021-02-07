@@ -12,5 +12,6 @@
       "functions": 100,
       "lines": 100
     }
-  }
+  },
+  "roots": ["<rootDir>/lib", "<rootDir>/demo"]
 }

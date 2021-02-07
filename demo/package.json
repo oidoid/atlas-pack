@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "webpack-cli s --mode development",
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "build:atlas": "cd src && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
   },
   "devDependencies": {
