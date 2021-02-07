@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[build\] Fix Jest config statement type
 - \[docs\] Rename from oddoid to oidoid
 - \[build\] Upgrade all dependencies
 - \[int\]\[millis\] Rename Integer to Int and Milliseconds to Millis
