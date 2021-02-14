@@ -14,7 +14,7 @@ function main(window: Window): void {
   console.log(
     `
 aseprite-atlas ┌>°┐
-            by │  │ddoid
+            by │  │idoid
                └──┘
     `.trim()
   )
