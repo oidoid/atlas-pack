@@ -5,8 +5,8 @@
     "build:atlas": "cd src && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
   },
   "devDependencies": {
-    "@webpack-cli/init": "1.0.3",
-    "copy-webpack-plugin": "6.3.2",
-    "webpack-dev-server": "3.11.0"
+    "@webpack-cli/init": "1.1.3",
+    "copy-webpack-plugin": "8.0.0",
+    "webpack-dev-server": "3.11.2"
   }
 }
