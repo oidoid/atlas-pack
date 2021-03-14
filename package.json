@@ -1,31 +1,54 @@
 {
-  "scripts": {
-    "test:unit": "jest",
-    "test": "npm -s run formatter -- -l && npm -s run build:lib && npm -s run build:demo && npm -s run test:unit",
-    "build:demo": "cd demo && npm -s run build",
-    "build:lib": "cd lib && npm -s run build",
-    "format": "npm -s run formatter -- -w",
-    "formatter": "prettier './**/*.{js,json,html,md,ts}'"
-  },
-  "workspaces": [
-    "lib",
-    "demo"
+  "name": "aseprite-atlas",
+  "author": "oidoid",
+  "version": "3.0.0",
+  "license": "GPL-3.0-only",
+  "description": "🗺️ Aseprite sprite sheet parser, animator, and toolset for the browser and Node.js.",
+  "keywords": [
+    "aseprite",
+    "game",
+    "animation",
+    "pixel-art",
+    "animated-sprites",
+    "spritesheet",
+    "sprites",
+    "sprite-atlas",
+    "sprite-parser",
+    "8-bit",
+    "retro"
   ],
+  "homepage": "https://git.io/aseprite-atlas",
+  "repository": "github:oidoid/aseprite-atlas",
+  "bugs": "https://github.com/oidoid/aseprite-atlas/issues",
+  "main": "dist/lib/index.js",
+  "type": "module",
+  "types": "dist/lib/index.d.ts",
+  "bin": {
+    "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
+  },
+  "scripts": {
+    "test": "npm -s run formatter -- -l && npm -s run rebuild && npm -s run test:unit",
+    "test:unit": "jest",
+    "build": "tsc -b",
+    "rebuild": "npm -s run clean && npm -s run build",
+    "clean": "tsc -b --clean",
+    "preversion": "[ -z \"$(git status -z)\" ]",
+    "version": "cd .. && npm ci && npm t",
+    "prepublishOnly": "git push origin \"$(git tag --points-at @)\"",
+    "format": "npm -s run formatter -- -w",
+    "formatter": "prettier './**/*.{js,json,html,md,ts}'",
+    "build:demo:atlas": "cd src/demo && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
+  },
   "engines": {
     "node": "15.10.0",
     "npm": "7.5.3"
   },
   "devDependencies": {
     "@types/jest": "26.0.20",
-    "clean-webpack-plugin": "3.0.0",
     "jest": "26.6.3",
     "pre-commit": "1.2.2",
     "prettier": "2.2.1",
     "ts-jest": "26.5.3",
-    "ts-loader": "8.0.17",
-    "typescript": "4.2.3",
-    "webpack": "5.24.3",
-    "webpack-cli": "4.5.0"
-  },
-  "name": "aseprite-atlas"
+    "typescript": "4.2.3"
+  }
 }

@@ -1,8 +1,8 @@
-import {Aseprite} from '../types/aseprite'
-import {Atlas} from '../types/atlas'
-import {Int} from '../types/int'
-import {Millis} from '../types/millis'
-import {NumberUtil} from '../utils/number-util'
+import {Aseprite} from '../types/aseprite.js'
+import type {Atlas} from '../types/atlas.js'
+import type {Int} from '../types/int.js'
+import type {Millis} from '../types/millis.js'
+import {NumberUtil} from '../utils/number-util.js'
 
 /** Record and update playback state for an `Animation`. */
 export interface Animator {

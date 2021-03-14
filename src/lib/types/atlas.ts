@@ -1,8 +1,8 @@
-import {Aseprite} from './aseprite'
-import {Millis} from './millis'
-import {Rect} from './rect'
-import {WH} from './wh'
-import {XY} from './xy'
+import type {Aseprite} from './aseprite.js'
+import type {Millis} from './millis.js'
+import type {Rect} from './rect.js'
+import type {WH} from './wh.js'
+import type {XY} from './xy.js'
 
 /**
  * All `Animations` and metadata for a sprite sheet.

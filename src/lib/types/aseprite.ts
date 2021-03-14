@@ -1,7 +1,7 @@
-import {Int} from './int'
-import {Millis} from './millis'
-import {Rect} from './rect'
-import {WH} from './wh'
+import type {Int} from './int.js'
+import type {Millis} from './millis.js'
+import type {Rect} from './rect.js'
+import type {WH} from './wh.js'
 
 /**
  * This typing assumes the options specified in aseprite-atlas-pack and

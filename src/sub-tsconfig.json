@@ -1,0 +1,37 @@
+// Configuration template for sub-projects.
+{
+  "compilerOptions": {
+    // Enable division by sub-project.
+    "composite": true,
+
+    // Improve compatibility with compilers that aren't type system aware.
+    "isolatedModules": true,
+
+    "esModuleInterop": true,
+
+    // Output to dist/<sub-project>.
+    "outDir": "../dist",
+    "rootDir": ".",
+
+    //  Needed by `resolveJsonModule`.
+    "moduleResolution": "Node",
+
+    // Maximize type checking.
+    "resolveJsonModule": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowUnreachableCode": false,
+    "importsNotUsedAsValues": "error",
+
+    "target": "ES6",
+
+    // Emit type definitions (.d.ts) for clients.
+    "declarationMap": true,
+
+    "sourceMap": true
+  }
+}

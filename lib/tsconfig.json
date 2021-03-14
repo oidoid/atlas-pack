@@ -1,9 +1,0 @@
-{
-  "extends": "..",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "tsBuildInfoFile": "dist/index.tsbuildinfo",
-    "declarationDir": "dist"
-  }
-}

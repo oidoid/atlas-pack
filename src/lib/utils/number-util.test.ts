@@ -1,4 +1,4 @@
-import {NumberUtil} from './number-util'
+import {NumberUtil} from './number-util.js'
 
 describe('wrap()', () => {
   test.each(

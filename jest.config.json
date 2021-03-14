@@ -1,9 +1,17 @@
 {
-  "testPathIgnorePatterns": ["/node_modules/", "/lib/dist/", "/demo/dist/"],
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
   "transform": {".+\\.ts$": "ts-jest"},
+  "moduleNameMapper": {
+    "^\\.\\./\\.\\./dist(/lib/.+)\\.js$": "..$1",
+    "^(\\.?\\./.+)\\.js$": "$1"
+  },
   "collectCoverage": true,
-  "coverageDirectory": "lib/dist/coverage",
-  "coveragePathIgnorePatterns": ["/node_modules/", "/lib/dist/", "/demo/"],
+  "coverageDirectory": "dist/coverage",
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/dist/",
+    "src/lib/index.ts"
+  ],
   "errorOnDeprecated": true,
   "coverageThreshold": {
     "global": {
@@ -13,5 +21,5 @@
       "lines": 100
     }
   },
-  "roots": ["<rootDir>/lib", "<rootDir>/demo"]
+  "globals": {"ts-jest": {"tsconfig": "src/sub-tsconfig.json"}}
 }

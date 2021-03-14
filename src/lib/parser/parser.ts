@@ -1,10 +1,10 @@
-import {Aseprite} from '../types/aseprite'
-import {Atlas} from '../types/atlas'
-import {Int} from '../types/int'
-import {Millis} from '../types/millis'
-import {Rect} from '../types/rect'
-import {WH} from '../types/wh'
-import {XY} from '../types/xy'
+import {Aseprite} from '../types/aseprite.js'
+import type {Atlas} from '../types/atlas.js'
+import type {Int} from '../types/int.js'
+import type {Millis} from '../types/millis.js'
+import type {Rect} from '../types/rect.js'
+import type {WH} from '../types/wh.js'
+import type {XY} from '../types/xy.js'
 
 export namespace Parser {
   export function parse(file: Aseprite.File): Atlas {

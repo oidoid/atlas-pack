@@ -1,5 +1,5 @@
-import {Aseprite, Animator, Atlas, Parser} from 'aseprite-atlas'
-import {AtlasID} from './atlas-id'
+import {Aseprite, Animator, Atlas, Parser} from '../../dist/lib/index.js'
+import {AtlasID} from './atlas-id.js'
 
 interface Game {
   readonly window: Window
