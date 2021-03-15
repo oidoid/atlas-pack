@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[build\] Drop explicit NPM silencing
 - \[build\] Colocate tests
 - \[build\] Remove Webpack and NPM workspaces
 - \[build\] Upgrade all dependencies

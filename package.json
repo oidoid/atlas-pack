@@ -27,15 +27,15 @@
     "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
   },
   "scripts": {
-    "test": "npm -s run formatter -- -l && npm -s run rebuild && npm -s run test:unit",
+    "test": "npm run formatter -- -l && npm run rebuild && npm run test:unit",
     "test:unit": "jest -c .jest/jest.config.json",
     "build": "tsc -b",
-    "rebuild": "npm -s run clean && npm -s run build",
+    "rebuild": "npm run clean && npm run build",
     "clean": "tsc -b --clean",
     "preversion": "[ -z \"$(git status -z)\" ]",
     "version": "cd .. && npm ci && npm t",
     "prepublishOnly": "git push origin \"$(git tag --points-at @)\"",
-    "format": "npm -s run formatter -- -w",
+    "format": "npm run formatter -- -w",
     "formatter": "prettier './**/*.{js,json,html,md,ts}'",
     "build:demo:atlas": "cd src/demo && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json"
   },
