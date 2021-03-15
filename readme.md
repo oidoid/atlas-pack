@@ -190,7 +190,7 @@ import * as asepriteJSON from './atlas.json'
 const atlas = Parser.parse(asepriteJSON)
 
 const animation = atlas.animations['frog-idle']
-let animator = {period: 0, exposure: 0}
+let animator = Animator()
 
 animator = Animator.animate(
   animator.period,
@@ -243,7 +243,7 @@ import {Animator} from 'aseprite-atlas'
 // oscillation period (which is used to derive the active index for the cels
 // array) and its exposure timer (which is used to determine when the period
 // should be advanced). Animators are just plain data.
-let animator = {period: 0, exposure: 0}
+let animator = Animator()
 
 // Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
 // duration specified in Aseprite, this may or may not advance the active cel.

@@ -20,10 +20,10 @@ aseprite-atlas ┌>°┐
   )
 
   const [canvas] = window.document.getElementsByTagName('canvas')
-  if (!canvas) throw new Error('Missing canvas.')
+  if (!canvas) throw Error('Missing canvas.')
 
   const context = canvas.getContext('2d')
-  if (!context) throw new Error('Missing context')
+  if (!context) throw Error('Missing context.')
 
   // Use nearest neighbor scaling.
   context.imageSmoothingEnabled = false
@@ -36,7 +36,7 @@ aseprite-atlas ┌>°┐
       window,
       canvas,
       context,
-      animator: {period: 0, exposure: 0},
+      animator: Animator(),
       atlas,
       atlasImage
     }
@@ -75,7 +75,7 @@ function loop(game: Game, then: number, now: number): void {
     scaledSize.h
   )
 
-  window.requestAnimationFrame(then => loop(game, now, then))
+  game.window.requestAnimationFrame(then => loop(game, now, then))
 }
 
 function loadImage(uri: string): Promise<HTMLImageElement> {

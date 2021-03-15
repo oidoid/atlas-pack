@@ -5,3 +5,7 @@ export interface WH {
   w: Int
   h: Int
 }
+
+export function WH(w: Int, h: Int): WH {
+  return {w, h}
+}

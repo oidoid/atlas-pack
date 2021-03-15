@@ -27,7 +27,7 @@ export namespace Parser {
     for (const frameTag of frameTags) {
       // Every tag should be unique within the sheet.
       if (frameTag.name in record)
-        throw new Error(`Duplicate tag "${frameTag.name}".`)
+        throw Error(`Duplicate tag "${frameTag.name}".`)
       record[frameTag.name] = parseAnimation(frameTag, frames, slices)
     }
     return Object.freeze(record)
@@ -47,14 +47,13 @@ export namespace Parser {
       duration +=
         duration - (cels[0]!.duration + cels[cels.length - 1]!.duration)
 
-    if (!cels.length)
-      throw new Error(`"${frameTag.name}" animation missing cels.`)
+    if (!cels.length) throw Error(`"${frameTag.name}" animation missing cels.`)
     if (
       cels
         .slice(0, -1)
         .some(({duration}) => duration === Number.POSITIVE_INFINITY)
     )
-      throw new Error(
+      throw Error(
         `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
       )
 
@@ -74,7 +73,7 @@ export namespace Parser {
     const frames = []
     for (; from <= to; ++from) {
       const frame = frameMap[`${name} ${from}`]
-      if (!frame) throw new Error(`Missing Frame "${name} ${from}".`)
+      if (!frame) throw Error(`Missing Frame "${name} ${from}".`)
       frames.push(frame)
     }
     return frames
@@ -85,7 +84,7 @@ export namespace Parser {
     direction: Aseprite.Direction | string
   ): Aseprite.Direction {
     if (isDirection(direction)) return direction
-    throw new Error(`"${direction}" is not a Direction.`)
+    throw Error(`"${direction}" is not a Direction.`)
   }
 
   /** @internal */
@@ -99,7 +98,7 @@ export namespace Parser {
   export function parseCel(
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
-    frameNumber: number,
+    frameNumber: Int,
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return Object.freeze({
@@ -130,7 +129,7 @@ export namespace Parser {
   export function parseDuration(
     duration: Aseprite.Duration
   ): Millis | typeof Number.POSITIVE_INFINITY {
-    if (duration <= 0) throw new Error('Expected positive cel duration.')
+    if (duration <= 0) throw Error('Expected positive cel duration.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
 
