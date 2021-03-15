@@ -1,5 +1,5 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "files.exclude": {"node_modules": true},
+  "files.exclude": {"node_modules": true, "dist": true},
   "cSpell.words": ["aseprite", "millis", "rrggbbaa"]
 }
