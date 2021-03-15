@@ -59,7 +59,8 @@ function loop(game: Game, then: number, now: number): void {
   )
   const index = Animator.index(game.animator.period, animation.cels)
   const cel = animation.cels[index]!
-  const scaledSize = {w: animation.size.w * 16, h: animation.size.h * 16}
+  const scale = 16
+  const scaledSize = {w: animation.size.w * scale, h: animation.size.h * scale}
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
   game.context.drawImage(
