@@ -1,0 +1,37 @@
+{
+  "rootDir": "..",
+
+  "//": "Don't look for tests in dependencies or build products.",
+  "testPathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/dist/"],
+
+  "transform": {".+\\.ts$": "ts-jest"},
+  "moduleNameMapper": {
+    "//": "Remap project reference to sources.",
+    "^\\.\\./\\.\\./dist(/lib/.+)\\.js$": "..$1",
+    "//": "Strip .js suffixes on imports.",
+    "^(\\.?\\./.+)\\.js$": "$1"
+  },
+  "//": "Colocate tests and snapshots.",
+  "snapshotResolver": "./.jest/snapshot-resolver.cjs",
+
+  "errorOnDeprecated": true,
+
+  "collectCoverage": true,
+  "coverageDirectory": "<rootDir>/dist/coverage",
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/node_modules/",
+    "<rootDir>/dist/",
+    "<rootDir>/src/lib/index.ts"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+
+  "//": "ts-jest doesn't correctly unravel project references so use the common config.",
+  "globals": {"ts-jest": {"tsconfig": "<rootDir>/src/sub-tsconfig.json"}}
+}

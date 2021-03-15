@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "npm -s run formatter -- -l && npm -s run rebuild && npm -s run test:unit",
-    "test:unit": "jest",
+    "test:unit": "jest -c .jest/jest.config.json",
     "build": "tsc -b",
     "rebuild": "npm -s run clean && npm -s run build",
     "clean": "tsc -b --clean",

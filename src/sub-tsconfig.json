@@ -33,5 +33,6 @@
     "declarationMap": true,
 
     "sourceMap": true
-  }
+  },
+  "exclude": ["**/*.snap.ts"]
 }
