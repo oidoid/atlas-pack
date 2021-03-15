@@ -23,14 +23,6 @@
     "<rootDir>/dist/",
     "<rootDir>/src/lib/index.ts"
   ],
-  "coverageThreshold": {
-    "global": {
-      "statements": 100,
-      "branches": 100,
-      "functions": 100,
-      "lines": 100
-    }
-  },
 
   "//": "ts-jest doesn't correctly unravel project references so use the common config.",
   "globals": {"ts-jest": {"tsconfig": "<rootDir>/src/sub-tsconfig.json"}}
