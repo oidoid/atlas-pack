@@ -57,8 +57,7 @@ function loop(game: Game, then: number, now: number): void {
     game.animator.exposure + milliseconds,
     animation
   )
-  const index = Animator.index(game.animator.period, animation.cels)
-  const cel = animation.cels[index]!
+  const cel = Animator.cel(game.animator.period, animation)
   const scale = 16
   const scaledSize = {w: animation.size.w * scale, h: animation.size.h * scale}
 

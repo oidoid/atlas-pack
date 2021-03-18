@@ -1,4 +1,4 @@
-import {Aseprite} from '../types/aseprite.js'
+import type {Aseprite} from '../types/aseprite.js'
 import type {Atlas} from '../types/atlas.js'
 import type {Int} from '../types/int.js'
 import type {Millis} from '../types/millis.js'
@@ -56,7 +56,7 @@ export namespace Animator {
     // infinity is that number. Duration is positive.
     exposure = exposure % animation.duration
     for (;;) {
-      const {duration} = animation.cels[index(period, animation.cels)]!
+      const {duration} = cel(period, animation)
       if (exposure < duration) break
 
       exposure -= duration
@@ -65,7 +65,12 @@ export namespace Animator {
     return {period, exposure}
   }
 
-  /** @return The `Animation` `Cel` index. */
+  /** @return The `Animation` `Cel` for period. */
+  export function cel(period: Int, {cels}: Atlas.Animation): Atlas.Cel {
+    return cels[index(period, cels)]!
+  }
+
+  /** @return The `Animation` `Cel` index for period. */
   export function index(period: Int, cels: readonly Atlas.Cel[]): Int {
     return Math.abs(period % cels.length)
   }
@@ -76,17 +81,17 @@ const nextPeriod: Readonly<
   Record<Aseprite.Direction, (period: Int, len: number) => Int>
 > = Object.freeze({
   /** @arg period An integer in the domain [0, +∞). */
-  [Aseprite.Direction.Forward](period) {
+  forward(period) {
     return (period % Number.MAX_SAFE_INTEGER) + 1
   },
 
   /** @arg period An integer in the domain (-∞, len - 1]. */
-  [Aseprite.Direction.Reverse](period, len) {
+  reverse(period, len) {
     return (period % Number.MIN_SAFE_INTEGER) - 1 + len
   },
 
   /** @arg period An integer in the domain [2 - len, len - 1]. */
-  [Aseprite.Direction.PingPong](period, len) {
+  pingpong(period, len) {
     return NumberUtil.wrap(period - 1, 2 - len, len)
   }
 })
