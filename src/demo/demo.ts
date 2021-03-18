@@ -62,17 +62,14 @@ function loop(game: Game, then: number, now: number): void {
   const scaledSize = {w: animation.size.w * scale, h: animation.size.h * scale}
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
-  game.context.drawImage(
-    game.atlasImage,
+  const src = <const>[
     cel.position.x,
     cel.position.y,
     animation.size.w,
-    animation.size.h,
-    0,
-    0,
-    scaledSize.w,
-    scaledSize.h
-  )
+    animation.size.h
+  ]
+  const dst = <const>[0, 0, scaledSize.w, scaledSize.h]
+  game.context.drawImage(game.atlasImage, ...src, ...dst)
 
   game.window.requestAnimationFrame(then => loop(game, now, then))
 }
