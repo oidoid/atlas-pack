@@ -12,7 +12,8 @@ describe('animate()', () => {
       duration: 2,
       direction: 'forward'
     }
-    const animator = Animator.animate(0, 0.5, animation)
+    const animator = Animator()
+    Animator.animate(animator, 0.5, animation)
     expect(animator).toMatchObject({period: 0, exposure: 0.5})
   })
 
@@ -24,7 +25,8 @@ describe('animate()', () => {
       duration: 2,
       direction: 'forward'
     }
-    const animator = Animator.animate(0, 1, animation)
+    const animator = Animator()
+    Animator.animate(animator, 1, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0})
   })
 
@@ -36,7 +38,8 @@ describe('animate()', () => {
       duration: 2,
       direction: 'forward'
     }
-    const animator = Animator.animate(0, 1.5, animation)
+    const animator = Animator()
+    Animator.animate(animator, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
   })
 
@@ -45,22 +48,15 @@ describe('animate()', () => {
       size: WH(0, 0),
       cels: [
         {position: XY(0, 0), duration: 1, slices: []},
-        {
-          position: XY(0, 0),
-          duration: Number.POSITIVE_INFINITY,
-          slices: []
-        }
+        {position: XY(0, 0), duration: Number.POSITIVE_INFINITY, slices: []}
       ],
       duration: Number.POSITIVE_INFINITY,
       direction: 'forward'
     }
-    let animator = Animator.animate(0, 0.5, animation)
+    const animator = Animator()
+    Animator.animate(animator, 0.5, animation)
     expect(animator).toMatchObject({period: 0, exposure: 0.5})
-    animator = Animator.animate(
-      animator.period,
-      animator.exposure + 100,
-      animation
-    )
+    Animator.animate(animator, 100, animation)
     expect(animator).toMatchObject({period: 1, exposure: 99.5})
   })
 
@@ -72,12 +68,13 @@ describe('animate()', () => {
       duration: 2,
       direction: 'forward'
     }
-    const animator = Animator.animate(0, 1.5, animation)
+    const animator = Animator()
+    Animator.animate(animator, 1.5, animation)
     expect(animator).toMatchObject({period: 1, exposure: 0.5})
   })
 })
 
-describe('index', () => {
+describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# Direction %s array start',
     direction => {
@@ -88,9 +85,10 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const {period} = Animator.animate(0, 1, animation)
-      const animator = Animator.index(period, animation.cels)
-      expect(animator).toStrictEqual(1)
+      const animator = Animator()
+      Animator.animate(animator, 1, animation)
+      const index = Animator.index(animator, animation)
+      expect(index).toStrictEqual(1)
     }
   )
 
@@ -104,9 +102,10 @@ describe('index', () => {
         duration: 2,
         direction
       }
-      const {period} = Animator.animate(1, 1, animation)
-      const animator = Animator.index(period, animation.cels)
-      expect(animator).toStrictEqual(0)
+      const animator = Animator(1)
+      Animator.animate(animator, 1, animation)
+      const index = Animator.index(animator, animation)
+      expect(index).toStrictEqual(0)
     }
   )
 
@@ -154,11 +153,11 @@ describe('index', () => {
       duration: 4,
       direction
     }
-    let exposure = 0
+    const animator = Animator(period)
     const playback = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
-      ;({period, exposure} = Animator.animate(period, exposure + 1, animation))
-      playback.push(Animator.index(period, animation.cels))
+      Animator.animate(animator, 1, animation)
+      playback.push(Animator.index(animator, animation))
     }
     expect(playback).toStrictEqual(expected)
   })
@@ -173,15 +172,11 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      let {period, exposure} = Animator()
+      const animator = Animator()
       const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 1,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
+        Animator.animate(animator, 1, animation)
+        playback.push(Animator.index(animator, animation))
       }
       // prettier-ignore
       const expected = {
@@ -203,15 +198,11 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      let {period, exposure} = Animator()
+      const animator = Animator()
       const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 6,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
+        Animator.animate(animator, 6, animation)
+        playback.push(Animator.index(animator, animation))
       }
       // prettier-ignore
       const expected = {
@@ -233,15 +224,11 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      let {period, exposure} = Animator()
+      const animator = Animator()
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 0.9,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
+        Animator.animate(animator, 0.9, animation)
+        playback.push(Animator.index(animator, animation))
       }
       // prettier-ignore
       const expected = {
@@ -263,15 +250,11 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      let {period, exposure} = Animator()
+      const animator = Animator()
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 0.5,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
+        Animator.animate(animator, 0.5, animation)
+        playback.push(Animator.index(animator, animation))
       }
       // prettier-ignore
       const expected = {
@@ -293,15 +276,11 @@ describe('index', () => {
         duration: 5,
         direction
       }
-      let {period, exposure} = Animator()
+      const animator = Animator()
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        ;({period, exposure} = Animator.animate(
-          period,
-          exposure + 5.5,
-          animation
-        ))
-        playback.push(Animator.index(period, animation.cels))
+        Animator.animate(animator, 5.5, animation)
+        playback.push(Animator.index(animator, animation))
       }
       // prettier-ignore
       const expected = {

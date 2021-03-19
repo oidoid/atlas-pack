@@ -51,25 +51,22 @@ aseprite-atlas ┌>°┐
 }
 
 function loop(game: Game, then: Millis, now: Millis): void {
-  const milliseconds = now - then
-
-  const animation = game.atlas.animations[AtlasID.BackpackerWalkRight]!
-  game.animator = Animator.animate(
-    game.animator.period,
-    game.animator.exposure + milliseconds,
-    animation
-  )
-  const cel = Animator.cel(game.animator.period, animation)
-  const scale = 16
-  const scaledSize = {w: animation.size.w * scale, h: animation.size.h * scale}
+  const millis = now - then
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
+
+  const animation = game.atlas.animations[AtlasID.BackpackerWalkRight]!
+  Animator.animate(game.animator, millis, animation)
+
+  const cel = Animator.cel(game.animator, animation)
   const src = <const>[
     cel.position.x,
     cel.position.y,
     animation.size.w,
     animation.size.h
   ]
+  const scale = 16
+  const scaledSize = {w: animation.size.w * scale, h: animation.size.h * scale}
   const dst = <const>[0, 0, scaledSize.w, scaledSize.h]
   game.context.drawImage(game.atlasImage, ...src, ...dst)
 

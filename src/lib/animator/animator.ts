@@ -32,46 +32,56 @@ export type Animator = {
 }
 
 export namespace Animator {
+  /** Clear the exposure time and set the animation to the starting cel. */
+  export function reset(animator: Animator): void {
+    animator.period = 0
+    animator.exposure = 0
+  }
+
   /**
    * Apply the time since last frame was shown, possibly advancing the
    * `Animation` period. The worst case scenario is when `exposure` is
    * `animation.duration - 1` which would iterate over every `Cel` in the
    * `Animation`. Since `Animation`s are usually animated every frame, this
-   * scenario is expected to be rare.
+   * is expected to be a rarity.
    *
-   * @arg period The current period.
-   * @arg exposure The previous exposure in addition to the time delta since
-   *  last animation. For example, in a 60 frames per second animation, this is
-   *  usually the previous exposure + 16.667 milliseconds.
-   * @return The new period and exposure. This state is used to derive the
-   *  current `Animation` `Cel` and supplied to the next call to `animate()`.
+   * @arg exposure The time delta since the last call to animate(). For example,
+   *  in a 60 frames per second animation, this is often ~16.667 milliseconds.
    */
   export function animate(
-    period: Int,
+    animator: Animator,
     exposure: Millis,
     animation: Atlas.Animation
-  ): Animator {
+  ): void {
     // Avoid unnecessary iterations by skipping complete `Animation` cycles.
     // `animation.duration` may be infinite but the modulo of any number and
     // infinity is that number. Duration is positive.
-    exposure = exposure % animation.duration
+    animator.exposure = (animator.exposure + exposure) % animation.duration
     for (;;) {
-      const {duration} = cel(period, animation)
-      if (exposure < duration) break
+      const {duration} = cel(animator, animation)
+      if (animator.exposure < duration) break
 
-      exposure -= duration
-      period = nextPeriod[animation.direction](period, animation.cels.length)
+      animator.exposure -= duration
+      animator.period = nextPeriod[animation.direction](
+        animator.period,
+        animation.cels.length
+      )
     }
-    return {period, exposure}
   }
 
   /** @return The `Animation` `Cel` for period. */
-  export function cel(period: Int, {cels}: Atlas.Animation): Atlas.Cel {
-    return cels[index(period, cels)]!
+  export function cel(
+    animator: Readonly<Animator>,
+    animation: Atlas.Animation
+  ): Atlas.Cel {
+    return animation.cels[index(animator, animation)]!
   }
 
   /** @return The `Animation` `Cel` index for period. */
-  export function index(period: Int, cels: readonly Atlas.Cel[]): Int {
+  export function index(
+    {period}: Readonly<Animator>,
+    {cels}: Atlas.Animation
+  ): Int {
     return Math.abs(period % cels.length)
   }
 }
