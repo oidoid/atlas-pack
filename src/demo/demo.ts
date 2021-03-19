@@ -1,4 +1,10 @@
-import {Aseprite, Animator, Atlas, Parser} from '../../dist/lib/index.js'
+import {
+  Aseprite,
+  Animator,
+  Atlas,
+  Millis,
+  Parser
+} from '../../dist/lib/index.js'
 import {AtlasID} from './atlas-id.js'
 
 type Game = {
@@ -44,11 +50,7 @@ aseprite-atlas ┌>°┐
   })
 }
 
-/**
- * @arg then Fractional milliseconds.
- * @arg now Fractional milliseconds.
- */
-function loop(game: Game, then: number, now: number): void {
+function loop(game: Game, then: Millis, now: Millis): void {
   const milliseconds = now - then
 
   const animation = game.atlas.animations[AtlasID.BackpackerWalkRight]!
