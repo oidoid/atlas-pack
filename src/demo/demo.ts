@@ -1,7 +1,7 @@
 import {Aseprite, Animator, Atlas, Parser} from '../../dist/lib/index.js'
 import {AtlasID} from './atlas-id.js'
 
-interface Game {
+type Game = {
   readonly window: Window
   readonly canvas: HTMLCanvasElement
   readonly context: CanvasRenderingContext2D

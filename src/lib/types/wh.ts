@@ -1,7 +1,7 @@
 import type {Int} from './int.js'
 
 /** Width and height in pixels. */
-export interface WH {
+export type WH = {
   w: Int
   h: Int
 }

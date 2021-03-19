@@ -9,7 +9,7 @@ export function Animator(period: Int = 0, exposure: Millis = 0): Animator {
 }
 
 /** Record and update playback state for an `Animation`. */
-export interface Animator {
+export type Animator = {
   /**
    * `Cel` index oscillation state. This integer may fall outside of animation
    * bounds (even negative) depending on the animation interval selected by

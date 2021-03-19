@@ -21,32 +21,32 @@ export namespace Aseprite {
    * **By convention**, every file has one or more animations. Every animation
    * has a `Frame` sequence, a Tag, and zero or more Slices.
    */
-  export interface File {
-    readonly meta: Meta
+  export type File = Readonly<{
+    meta: Meta
     /** All Frames for all files packed. */
-    readonly frames: FrameMap
-  }
+    frames: FrameMap
+  }>
 
-  export interface FrameMap extends Readonly<Record<TagFrameNumber, Frame>> {}
+  export type FrameMap = Readonly<Record<TagFrameNumber, Frame>>
 
-  export interface Meta {
+  export type Meta = Readonly<{
     /** E.g., 'http://www.aseprite.org/'. */
-    readonly app: string
+    app: string
     /** E.g., '1.2.8.1'. */
-    readonly version: string
+    version: string
     /** The associated output basename. E.g., 'atlas.png'. */
-    readonly image: string
+    image: string
     /** E.g., 'RGBA8888' or 'I8'. */
-    readonly format: string
+    format: string
     /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
-    readonly size: Readonly<WH>
+    size: Readonly<WH>
     /** E.g., '1'. */
-    readonly scale: string
+    scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
-    readonly frameTags: readonly FrameTag[]
+    frameTags: readonly FrameTag[]
     /** All slices for all files packed **via CLI** `--list-slices`. */
-    readonly slices: readonly Slice[]
-  }
+    slices: readonly Slice[]
+  }>
 
   /**
    * A Tag followed by a space followed by a frame number **via CLI**
@@ -60,43 +60,43 @@ export namespace Aseprite {
    * A single animation frame and most primitive unit. Each file packed always
    * has at least one `Frame`.
    */
-  export interface Frame {
+  export type Frame = Readonly<{
     /**
      * The `Frame`'s bounds within the atlas, including a any border padding
      * **via CLI** `--inner-padding n`. The padding dimensions may also be
      * calculated by subtracting member's WH dimensions from sourceSize and
      * dividing by two.
      */
-    readonly frame: Readonly<Rect>
-    readonly rotated: boolean
-    readonly trimmed: boolean
+    frame: Readonly<Rect>
+    rotated: boolean
+    trimmed: boolean
     /** The `Frame`'s bounds within the file packed, not including padding. */
-    readonly spriteSourceSize: Readonly<Rect>
+    spriteSourceSize: Readonly<Rect>
     /** The width and height components of spriteSourceSize. */
-    readonly sourceSize: Readonly<WH>
-    readonly duration: Duration
-  }
+    sourceSize: Readonly<WH>
+    duration: Duration
+  }>
 
   /**
    * A label and animation behavior for one or more `Frame`s. When combined with
    * the referenced `Frame`s, an animation is represented.
    */
-  export interface FrameTag {
+  export type FrameTag = Readonly<{
     /** **By convention**, the associated `Frame`'s `Tag`. */
-    readonly name: Tag
+    name: Tag
     /** The inclusive starting Frame index. */
-    readonly from: Int
+    from: Int
     /**
      * The inclusive ending `Frame` index, possibly identical to the starting
      * frame index.
      */
-    readonly to: Int
+    to: Int
     /**
      * Loosened typing to a string so a cast isn't needed when parsing the
      * Aseprite JSON.
      */
-    readonly direction: Direction | string
-  }
+    direction: Direction | string
+  }>
 
   /**
    * Positive animation length in milliseconds. **By convention**, animations
@@ -130,14 +130,14 @@ export namespace Aseprite {
     PingPong: 'pingpong'
   }
 
-  export interface Slice {
-    readonly name: Tag
+  export type Slice = Readonly<{
+    name: Tag
     /** Color in `#rrggbbaa` format. E.g., blue is '#0000ffff'. */
-    readonly color: string
-    readonly keys: readonly Key[]
-  }
+    color: string
+    keys: readonly Key[]
+  }>
 
-  export interface Key {
+  export type Key = Readonly<{
     /**
      * The inclusive associated `Frame`'s start offset, the exclusive previous
      * `Frame`'s end offset. **By convention,** the exclusive end offset is the
@@ -145,8 +145,8 @@ export namespace Aseprite {
      * `Key`'s `Frame` index may be calculated from
      * `FrameTag.index + Key.frame`.
      */
-    readonly frame: Int
+    frame: Int
     /** The `Slice` dimensions. */
-    readonly bounds: Readonly<Rect>
-  }
+    bounds: Readonly<Rect>
+  }>
 }
