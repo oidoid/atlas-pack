@@ -12,6 +12,7 @@
   tiling, different animations, parsing and image loading, a mini sprite /
   entity system.
 - Look at other examples of invariant libraries.
+- Promote NPM skeleton to oidoid repo template.
 - Consider parameterizing XY<T> and the other types. For example:
 
 ```ts
