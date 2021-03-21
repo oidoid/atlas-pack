@@ -1,4 +1,4 @@
-import {Aseprite, Parser} from '../../dist/aseprite-atlas/index.js'
+import {Aseprite, Parser} from '../aseprite-atlas/index.js'
 import atlasJSON from './atlas.json'
 
 const file: Aseprite.File = Object.freeze(atlasJSON)

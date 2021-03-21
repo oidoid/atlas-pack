@@ -1,4 +1,4 @@
-import {Aseprite, Atlas, Parser} from '../../dist/aseprite-atlas/index.js'
+import {Aseprite, Atlas, Parser} from '../aseprite-atlas/index.js'
 import {AtlasID} from './atlas-id.js'
 import atlasJSON from './atlas.json'
 

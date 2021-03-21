@@ -6,8 +6,6 @@
 
   "transform": {".+\\.ts$": "ts-jest"},
   "moduleNameMapper": {
-    "//": "Remap project reference to sources.",
-    "^\\.\\./\\.\\./dist(/aseprite-atlas/.+)\\.js$": "..$1",
     "//": "Strip .js suffixes on imports.",
     "^(\\.?\\./.+)\\.js$": "$1"
   },

@@ -1,9 +1,4 @@
-import {
-  Aseprite,
-  Animator,
-  Atlas,
-  Parser
-} from '../../dist/aseprite-atlas/index.js'
+import {Animator, Aseprite, Atlas, Parser} from '../aseprite-atlas/index.js'
 import {AtlasID} from './atlas-id.js'
 
 type Game = {
