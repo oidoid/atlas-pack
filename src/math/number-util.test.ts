@@ -300,7 +300,7 @@ describe('wrap()', () => {
       [ 19.5, -3,  3,  1.5],
       [ 20  , -3,  3,  2  ]
     ]
-  )('%#) %p wrap [%p,%p]', (x, min, max, expected) =>
+  )('%#) %p wrap to [%p, %p]', (x, min, max, expected) =>
     expect(NumberUtil.wrap(x, min, max)).toStrictEqual(expected)
   )
 })
