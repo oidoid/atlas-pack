@@ -20,9 +20,9 @@
   "homepage": "https://git.io/aseprite-atlas",
   "repository": "github:oidoid/aseprite-atlas",
   "bugs": "https://github.com/oidoid/aseprite-atlas/issues",
-  "main": "dist/aseprite-atlas/index.js",
+  "main": "dist/aseprite-atlas/aseprite-atlas.js",
   "type": "module",
-  "types": "dist/aseprite-atlas/index.d.ts",
+  "types": "dist/aseprite-atlas/aseprite-atlas.d.ts",
   "bin": {
     "aseprite-atlas-pack": "bin/aseprite-atlas-pack"
   },
