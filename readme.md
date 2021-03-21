@@ -125,8 +125,7 @@ benefit from the tooling provided by aseprite-atlas:
   renderer should consult `Animator` states to determine the appropriate
   sub-texture regions to blit from the `Atlas` each loop.
 
-See the [API demo source](src/demo/demo.ts) and
-[demo tests](src/demo/atlas-id.test.ts)!
+See the [API demo source](src/demo/demo.ts)!
 
 ### Pack the Sprite Sheet (CLI)
 
@@ -313,15 +312,15 @@ Aseprite, v1.2.25-x64, is tested.
 Some wanted functionality is not modeled in the stock Aseprite format. This
 section lists conventions used by aseprite-atlas. It's possible to forget to
 apply these conventions, which can lead to bugs that aseprite-atlas cannot
-detect. To the extent possible, consumers should add tests for conventions to
-their code. Some examples are shown in the
-[API demo tests](src/demo/atlas-id.test.ts).
+detect. To the extent possible, consumers should add tests for conventions
+unique to their code. Some examples are shown in the
+[API demo tests](src/demo/atlas.json.test.ts).
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
   aseprite-atlas and parsed as `Number.POSITIVE_INFINITY`. This value is only
   permitted in the last cel of a tagged animation but can appear in multiple
   tagged animations within the same Aseprite file.
-- Slices are associated to cels by tag name. This is error-prone for artists so
+- Slices are associated to cels by AtlasID. This is error-prone for artists so
   consumers may wish to add tests to assure that all slices are associated to a
   cel tag.
 

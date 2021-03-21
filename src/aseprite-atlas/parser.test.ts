@@ -4,19 +4,22 @@ import {Parser} from './parser.js'
 describe('parse()', () => {
   test('Parses Meta.', () => {
     expect(
-      Parser.parse({
-        meta: {
-          app: 'http://www.aseprite.org/',
-          version: '1.2.8.1',
-          image: 'atlas.png',
-          format: 'I8',
-          size: {w: 1, h: 2},
-          scale: '1',
-          frameTags: [],
-          slices: []
+      Parser.parse(
+        {
+          meta: {
+            app: 'http://www.aseprite.org/',
+            version: '1.2.8.1',
+            image: 'atlas.png',
+            format: 'I8',
+            size: {w: 1, h: 2},
+            scale: '1',
+            frameTags: [],
+            slices: []
+          },
+          frames: {}
         },
-        frames: {}
-      })
+        new Set([])
+      )
     ).toStrictEqual({
       version: '1.2.8.1',
       filename: 'atlas.png',
@@ -92,10 +95,18 @@ describe('parseAnimationRecord()', () => {
       }
     ]
     expect(
-      Parser.parseAnimationRecord({
-        meta: <Aseprite.Meta>(<unknown>{frameTags, slices}),
-        frames
-      })
+      Parser.parseAnimationRecord(
+        {
+          meta: <Aseprite.Meta>(<unknown>{frameTags, slices}),
+          frames
+        },
+        new Set([
+          'sceneryCloud',
+          'palette-red',
+          'sceneryConifer',
+          'sceneryConifer-shadow'
+        ])
+      )
     ).toStrictEqual({
       sceneryCloud: {
         size: {w: 16, h: 16},
@@ -172,10 +183,13 @@ describe('parseAnimationRecord()', () => {
       }
     }
     expect(() =>
-      Parser.parseAnimationRecord({
-        meta: <Aseprite.Meta>(<unknown>{frameTags, slices: []}),
-        frames
-      })
+      Parser.parseAnimationRecord(
+        {
+          meta: <Aseprite.Meta>(<unknown>{frameTags, slices: []}),
+          frames
+        },
+        new Set(['sceneryCloud', 'palette-red'])
+      )
     ).toThrow()
   })
 })

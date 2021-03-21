@@ -27,7 +27,7 @@
     "allowUnreachableCode": false,
     "importsNotUsedAsValues": "error",
 
-    "target": "ES6",
+    "target": "ES2019",
 
     // Emit type definitions (.d.ts) for clients.
     "declarationMap": true,

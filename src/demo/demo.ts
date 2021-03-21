@@ -11,7 +11,7 @@ type Game = {
   readonly canvas: HTMLCanvasElement
   readonly context: CanvasRenderingContext2D
   animator: Animator
-  readonly atlas: Atlas
+  readonly atlas: Atlas<AtlasID>
   readonly atlasImage: HTMLImageElement
 }
 
@@ -34,7 +34,7 @@ aseprite-atlas ┌>°┐
   context.imageSmoothingEnabled = false
 
   Promise.all([
-    loadJSON('atlas.json').then(Parser.parse),
+    loadJSON('atlas.json').then(json => Parser.parse(json, AtlasID.values)),
     loadImage('atlas.png')
   ]).then(([atlas, atlasImage]) => {
     const game = {
@@ -54,7 +54,7 @@ function loop(game: Game, then: number, now: number): void {
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
 
-  const animation = game.atlas.animations[AtlasID.BackpackerWalkRight]!
+  const animation = game.atlas.animations['backpacker-walkRight']!
   Animator.animate(game.animator, millis, animation)
 
   const cel = Animator.cel(game.animator, animation)

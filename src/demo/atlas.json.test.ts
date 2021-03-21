@@ -1,4 +1,5 @@
 import {Aseprite, Parser} from '../aseprite-atlas/aseprite-atlas.js'
+import {AtlasID} from './atlas-id.js'
 import atlasJSON from './atlas.json'
 
 const file: Aseprite.File = Object.freeze(atlasJSON)
@@ -13,4 +14,4 @@ test.each(file.meta.slices)('%# Slice name %p is a Tag.', slice =>
 )
 
 test('Atlas is parsable.', () =>
-  expect(Parser.parse(atlasJSON)).toMatchSnapshot())
+  expect(Parser.parse(atlasJSON, AtlasID.values)).toMatchSnapshot())

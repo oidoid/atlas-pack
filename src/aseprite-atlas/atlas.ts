@@ -11,7 +11,7 @@ import type {XY} from '../math/xy.js'
  * data comes from the sprite sheet and is expected to be unchanging. If you
  * need a mutable copy, create a duplicate instance of the parts that change.
  */
-export type Atlas = Readonly<{
+export type Atlas<AtlasID extends Aseprite.Tag> = Readonly<{
   /** The Aseprite version of the parsed file. E.g., '1.2.8.1'. */
   version: string
   /** The atlas image basename. E.g., 'atlas.png'. */
@@ -20,12 +20,14 @@ export type Atlas = Readonly<{
   format: string
   /** Atlas image dimensions (power of 2). */
   size: Readonly<WH>
-  animations: Atlas.AnimationRecord
+  animations: Atlas.AnimationRecord<AtlasID>
 }>
 
 export namespace Atlas {
   /** `Animation` look up table. */
-  export type AnimationRecord = Readonly<Record<Aseprite.Tag, Animation>>
+  export type AnimationRecord<AtlasID extends Aseprite.Tag> = Readonly<
+    Record<AtlasID, Animation>
+  >
 
   /** A sequence of animation `Cel`s. */
   export type Animation = Readonly<{

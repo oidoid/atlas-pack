@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[API\]\[Parser\]\[Atlas\] Validate Atlas ID members
 - \[build\]\[API\] Extract math to sub-project and rename lib to aseprite-atlas
 - \[API\]\[Animator\] Revise API; add reset()
 - \[API\]\[Animator\] Add cel() helper

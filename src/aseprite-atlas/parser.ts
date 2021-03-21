@@ -7,30 +7,56 @@ import type {WH} from '../math/wh.js'
 import type {XY} from '../math/xy.js'
 
 export namespace Parser {
-  export function parse(file: Aseprite.File): Atlas {
+  /**
+   * @arg ids If defined, the returned Atlas is validated to have the same
+   *  membership as the AtlasID set. If undefined, the caller may wish to use a
+   *  string type for AtlasID and perform their own Atlas.animations look-up
+   *  checks.
+   */
+  export function parse<AtlasID extends Aseprite.Tag>(
+    file: Aseprite.File,
+    ids: Readonly<Set<AtlasID>> | undefined
+  ): Atlas<AtlasID> {
     return Object.freeze({
       version: file.meta.version,
       filename: file.meta.image,
       format: file.meta.format,
       size: file.meta.size,
-      animations: parseAnimationRecord(file)
+      animations: parseAnimationRecord(file, ids)
     })
   }
 
   /** @internal */
-  export function parseAnimationRecord({
-    meta,
-    frames
-  }: Aseprite.File): Atlas.AnimationRecord {
+  export function parseAnimationRecord<AtlasID extends Aseprite.Tag>(
+    {meta, frames}: Aseprite.File,
+    ids: Readonly<Set<AtlasID>> | undefined
+  ): Atlas.AnimationRecord<AtlasID> {
     const {frameTags, slices} = meta
-    const record: Record<Aseprite.Tag, Atlas.Animation> = {}
+    const map: Map<AtlasID, Atlas.Animation> = new Map()
     for (const frameTag of frameTags) {
-      // Every tag should be unique within the sheet.
-      if (frameTag.name in record)
-        throw Error(`Duplicate tag "${frameTag.name}".`)
-      record[frameTag.name] = parseAnimation(frameTag, frames, slices)
+      const id = frameTag.name
+      if (!isAtlasID(id, ids)) throw Error(`Invalid AtlasID "${id}".`)
+      if (map.has(id)) throw Error(`Duplicate AtlasID "${id}".`)
+      map.set(id, parseAnimation(frameTag, frames, slices))
     }
-    return Object.freeze(record)
+    if (ids && map.size !== ids.size) {
+      const missing = Array.from(ids.keys())
+        .filter(id => !map.has(id))
+        .map(id => `"${id}"`)
+        .join(', ')
+      throw Error(`Missing AtlasID(s): ${missing}.`)
+    }
+    return <Atlas.AnimationRecord<AtlasID>>(
+      Object.freeze(Object.fromEntries(map))
+    )
+  }
+
+  /** @internal */
+  export function isAtlasID<AtlasID extends Aseprite.Tag>(
+    id: Aseprite.Tag,
+    ids: Readonly<Set<AtlasID>> | undefined
+  ): id is AtlasID {
+    return ids === undefined || ids.has(<AtlasID>id)
   }
 
   /** @internal */

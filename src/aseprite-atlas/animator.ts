@@ -17,7 +17,8 @@ export type Animator = {
    * `Cel` is manually set. Any integer in [0, `Animation.cels.length`) is
    * always valid. Aseprite indices are u16s but a period can be negative.
    *
-   * Every `Animation` is expected to have at least one `Cel`.
+   * Every `Animation` is expected to have at least one `Cel` as validated by
+   * the parser.
    */
   period: Int
 
