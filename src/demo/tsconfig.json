@@ -2,7 +2,7 @@
   "extends": "../sub-tsconfig.json",
   // Specify dependencies. Unfortunately, `paths` aliases do not seem to unpack
   // in the output.
-  "references": [{"path": "../lib"}],
+  "references": [{"path": "../aseprite-atlas"}],
   // https://github.com/Microsoft/TypeScript/issues/25636
   "include": ["**/*", "**/*.json"]
 }

@@ -7,7 +7,7 @@
   "transform": {".+\\.ts$": "ts-jest"},
   "moduleNameMapper": {
     "//": "Remap project reference to sources.",
-    "^\\.\\./\\.\\./dist(/lib/.+)\\.js$": "..$1",
+    "^\\.\\./\\.\\./dist(/aseprite-atlas/.+)\\.js$": "..$1",
     "//": "Strip .js suffixes on imports.",
     "^(\\.?\\./.+)\\.js$": "$1"
   },
@@ -18,11 +18,7 @@
 
   "collectCoverage": true,
   "coverageDirectory": "<rootDir>/dist/coverage",
-  "coveragePathIgnorePatterns": [
-    "<rootDir>/node_modules/",
-    "<rootDir>/dist/",
-    "<rootDir>/src/lib/index.ts"
-  ],
+  "coveragePathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/dist/"],
 
   "//": "ts-jest doesn't correctly unravel project references so use the common config.",
   "globals": {"ts-jest": {"tsconfig": "<rootDir>/src/sub-tsconfig.json"}}

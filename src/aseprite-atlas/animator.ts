@@ -1,8 +1,8 @@
-import type {Aseprite} from '../types/aseprite.js'
-import type {Atlas} from '../types/atlas.js'
-import type {Int} from '../types/int.js'
-import type {Millis} from '../types/millis.js'
-import {NumberUtil} from '../utils/number-util.js'
+import type {Aseprite} from './aseprite.js'
+import type {Atlas} from './atlas.js'
+import type {Int} from '../math/int.js'
+import type {Millis} from '../math/millis.js'
+import {NumberUtil} from '../math/number-util.js'
 
 export function Animator(period: Int = 0, exposure: Millis = 0): Animator {
   return {period, exposure}

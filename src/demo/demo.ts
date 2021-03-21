@@ -2,9 +2,8 @@ import {
   Aseprite,
   Animator,
   Atlas,
-  Millis,
   Parser
-} from '../../dist/lib/index.js'
+} from '../../dist/aseprite-atlas/index.js'
 import {AtlasID} from './atlas-id.js'
 
 type Game = {
@@ -50,7 +49,7 @@ aseprite-atlas ┌>°┐
   })
 }
 
-function loop(game: Game, then: Millis, now: Millis): void {
+function loop(game: Game, then: number, now: number): void {
   const millis = now - then
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)

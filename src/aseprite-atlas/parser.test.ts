@@ -1,4 +1,4 @@
-import {Aseprite} from '../types/aseprite.js'
+import {Aseprite} from './aseprite.js'
 import {Parser} from './parser.js'
 
 describe('parse()', () => {

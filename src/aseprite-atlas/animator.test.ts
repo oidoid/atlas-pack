@@ -1,7 +1,7 @@
 import {Animator} from './animator.js'
-import {Aseprite} from '../types/aseprite.js'
-import {WH} from '../types/wh.js'
-import {XY} from '../types/xy.js'
+import {Aseprite} from './aseprite.js'
+import {WH} from '../math/wh.js'
+import {XY} from '../math/xy.js'
 
 describe('animate()', () => {
   test('exposure < duration', () => {
