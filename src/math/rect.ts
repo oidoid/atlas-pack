@@ -1,6 +1,6 @@
 import {Int} from './int.js'
-import type {WH, WHInt} from './wh.js'
-import type {XY, XYInt} from './xy.js'
+import {WH, WHInt} from './wh.js'
+import {XY, XYInt} from './xy.js'
 
 /** Width and height at position x and y. */
 export type Rect<T> = XY<T> & WH<T>
@@ -24,11 +24,6 @@ export namespace Rect {
     left: T,
     right: T
   ): boolean {
-    return (
-      left.x === right.x &&
-      left.y === right.y &&
-      left.w === right.w &&
-      left.h === right.h
-    )
+    return XY.equals(left, right) && WH.equals(left, right)
   }
 }

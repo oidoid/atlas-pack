@@ -22,7 +22,8 @@ export namespace Int {
     min = Number.MIN_SAFE_INTEGER,
     max = Number.MAX_SAFE_INTEGER
   ): Int | undefined {
-    return <Int | undefined>NumberUtil.tryClamp(Math.trunc(val), min, max)
+    const clamped = NumberUtil.tryClamp(val, min, max)
+    return clamped === undefined ? undefined : <Int>Math.trunc(clamped)
   }
 
   export function is(val: Int | number): val is Int {

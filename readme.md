@@ -189,11 +189,10 @@ import * as asepriteJSON from './atlas.json'
 const atlas = Parser.parse(asepriteJSON)
 
 const animation = atlas.animations['frog-idle']
-const animator = Animator()
+const animator = Animator(animation)
 
-Animator.animate(animator, 16.667, animation)
-const {x, y} = Animator.cel(animator, animation).position
-const {w, h} = animation.size
+Animator.animate(animator, 16.667)
+const {x, y, w, h} = Animator.cel(animator).bounds
 console.log(x, y, w, h)
 ```
 
@@ -237,13 +236,13 @@ import {Animator} from 'aseprite-atlas'
 // oscillation period (which is used to derive the active index for the cels
 // array) and its exposure timer (which is used to determine when the period
 // should be advanced). Animators are just plain data.
-const animator = Animator()
+const animator = Animator(animation)
 
 // Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
 // duration specified in Aseprite, this may or may not advance the active cel.
 // For a multi-cel forward animation where the first cel has a 10 millisecond
-// duration, animator's state would be {period: 1, exposure: 6.667}.
-Animator.animate(animator, 16.667, animation)
+// duration, animator's state would be {animation, period: 1, exposure: 6.667}.
+Animator.animate(animator, 16.667)
 ```
 
 ##### Render the Animation
@@ -253,9 +252,8 @@ render loop:
 
 ```js
 // Print the location of the active cel within the sprite sheet PNG.
-const cel = Animator.cel(animator, animation)
-const {x, y} = cel.position
-const {w, h} = animation.size
+const cel = Animator.cel(animator)
+const {x, y, w, h} = cel.bounds
 console.log(x, y, w, h)
 ```
 
