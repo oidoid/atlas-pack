@@ -57,9 +57,9 @@ function loop(game: Game, then: number, now: number): void {
 
   Animator.animate(game.animator, millis)
 
-  const cel = Animator.cel(game.animator)
-  const src = <const>[cel.bounds.x, cel.bounds.y, cel.bounds.w, cel.bounds.h]
-  const dst = <const>[0, 0, cel.bounds.w * 16, cel.bounds.h * 16]
+  const {bounds} = Animator.cel(game.animator)
+  const src = <const>[bounds.x, bounds.y, bounds.w, bounds.h]
+  const dst = <const>[0, 0, bounds.w * 16, bounds.h * 16]
   game.context.drawImage(game.atlasImage, ...src, ...dst)
 
   game.window.requestAnimationFrame(then => loop(game, now, then))
