@@ -2,7 +2,6 @@ import type {Aseprite} from './aseprite.js'
 import type {Millis} from '../math/millis.js'
 import type {RInt} from '../math/rect.js'
 import type {WHInt} from '../math/wh.js'
-import type {XYInt} from '../math/xy.js'
 
 /**
  * All `Animations` and metadata for a sprite sheet.
@@ -53,10 +52,11 @@ export namespace Atlas {
   /** A single frame of an animation sequence. */
   export type Cel = Readonly<{
     /**
-     * Location within the source atlas image in integral pixels from the
-     * top-left.
+     * Location and area within the source atlas image in integral pixels from
+     * the top-left. The width and height match the owning Animation's `size`
+     * and are for convenience only.
      */
-    position: Readonly<XYInt>
+    bounds: Readonly<RInt>
     /** Positive cel exposure in integral milliseconds, possibly infinite. */
     duration: Millis | typeof Number.POSITIVE_INFINITY
     /** Slices within the cel in local pixels. */

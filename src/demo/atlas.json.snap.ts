@@ -6,11 +6,13 @@ Object {
     "backpacker-walkDown": Object {
       "cels": Array [
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 32,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -21,11 +23,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 24,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -36,11 +40,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 16,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -51,11 +57,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 8,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -66,11 +74,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 32,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -81,11 +91,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 0,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -96,11 +108,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 72,
             "y": 29,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -111,11 +125,13 @@ Object {
           ],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 48,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [
             Object {
               "h": 4,
@@ -136,75 +152,93 @@ Object {
     "backpacker-walkRight": Object {
       "cels": Array [
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 64,
             "y": 29,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 8,
             "y": 45,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 0,
             "y": 45,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 72,
             "y": 42,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 64,
             "y": 42,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 56,
             "y": 42,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 48,
             "y": 42,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 40,
             "y": 32,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 72,
             "y": 42,
           },
+          "duration": 100,
           "slices": Array [],
         },
       ],
@@ -218,67 +252,83 @@ Object {
     "backpacker-walkUp": Object {
       "cels": Array [
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 56,
             "y": 29,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 48,
             "y": 29,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 72,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 72,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 56,
             "y": 29,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 64,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 56,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [],
         },
         Object {
-          "duration": 100,
-          "position": Object {
+          "bounds": Object {
+            "h": 13,
+            "w": 8,
             "x": 56,
             "y": 16,
           },
+          "duration": 100,
           "slices": Array [],
         },
       ],
@@ -292,67 +342,83 @@ Object {
     "frog-eat": Object {
       "cels": Array [
         Object {
-          "duration": 800,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 32,
             "y": 16,
           },
+          "duration": 800,
           "slices": Array [],
         },
         Object {
-          "duration": 1200,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 16,
             "y": 16,
           },
+          "duration": 1200,
           "slices": Array [],
         },
         Object {
-          "duration": 64,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 0,
             "y": 16,
           },
+          "duration": 64,
           "slices": Array [],
         },
         Object {
-          "duration": 64,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 64,
             "y": 0,
           },
+          "duration": 64,
           "slices": Array [],
         },
         Object {
-          "duration": 64,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 48,
             "y": 0,
           },
+          "duration": 64,
           "slices": Array [],
         },
         Object {
-          "duration": 64,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 64,
             "y": 0,
           },
+          "duration": 64,
           "slices": Array [],
         },
         Object {
-          "duration": 64,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 0,
             "y": 16,
           },
+          "duration": 64,
           "slices": Array [],
         },
         Object {
-          "duration": Infinity,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 32,
             "y": 16,
           },
+          "duration": Infinity,
           "slices": Array [],
         },
       ],
@@ -366,35 +432,43 @@ Object {
     "frog-idle": Object {
       "cels": Array [
         Object {
-          "duration": 7000,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 32,
             "y": 0,
           },
+          "duration": 7000,
           "slices": Array [],
         },
         Object {
-          "duration": 2000,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 16,
             "y": 0,
           },
+          "duration": 2000,
           "slices": Array [],
         },
         Object {
-          "duration": 4000,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 32,
             "y": 0,
           },
+          "duration": 4000,
           "slices": Array [],
         },
         Object {
-          "duration": 200,
-          "position": Object {
+          "bounds": Object {
+            "h": 16,
+            "w": 16,
             "x": 0,
             "y": 0,
           },
+          "duration": 200,
           "slices": Array [],
         },
       ],

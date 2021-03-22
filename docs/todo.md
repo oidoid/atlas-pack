@@ -27,3 +27,11 @@ export function XYInt(x: number, y: number): XYInt {
   return {x: Int(x), y: Int(y)}
 }
 ```
+
+- Should I use `!= null` shorthand?
+- Consolidate XY and WH types with old NE implementations and extract to new
+  library.
+- WH and XY are essentially the same thing. Maybe some differing methods. Can I
+  use those new type string literal properties to map new property names from a
+  single implementation?
+- Be more consistent on naming: value / values to val / vals, XYI16, R16, etc.

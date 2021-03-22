@@ -4,12 +4,14 @@ import {Int} from '../math/int.js'
 import type {Millis} from '../math/millis.js'
 import {NumberUtil} from '../math/number-util.js'
 
-export function Animator(period: Int = Int(0), exposure: Millis = 0): Animator {
-  return {period, exposure}
+export function Animator(animation: Atlas.Animation): Animator {
+  return {animation, period: Int(0), exposure: 0}
 }
 
 /** Record and update playback state for an `Animation`. */
 export type Animator = {
+  animation: Atlas.Animation
+
   /**
    * `Cel` index oscillation state. This integer may fall outside of animation
    * bounds (even negative) depending on the animation interval selected by
@@ -33,8 +35,15 @@ export type Animator = {
 }
 
 export namespace Animator {
-  /** Clear the exposure time and set the animation to the starting cel. */
-  export function reset(animator: Animator): void {
+  /**
+   * Clear the exposure time and set the animation to the starting cel. This is
+   * useful when changing animations.
+   */
+  export function reset(
+    animator: Animator,
+    animation: Atlas.Animation = animator.animation
+  ): void {
+    animator.animation = animation
     animator.period = Int(0)
     animator.exposure = 0
   }
@@ -49,41 +58,32 @@ export namespace Animator {
    * @arg exposure The time delta since the last call to animate(). For example,
    *  in a 60 frames per second animation, this is often ~16.667 milliseconds.
    */
-  export function animate(
-    animator: Animator,
-    exposure: Millis,
-    animation: Atlas.Animation
-  ): void {
+  export function animate(animator: Animator, exposure: Millis): void {
     // Avoid unnecessary iterations by skipping complete `Animation` cycles.
     // `animation.duration` may be infinite but the modulo of any number and
     // infinity is that number. Duration is positive.
-    animator.exposure = (animator.exposure + exposure) % animation.duration
+    animator.exposure =
+      (animator.exposure + exposure) % animator.animation.duration
     for (;;) {
-      const {duration} = cel(animator, animation)
+      const {duration} = cel(animator)
       if (animator.exposure < duration) break
 
       animator.exposure -= duration
-      animator.period = nextPeriod[animation.direction](
+      animator.period = nextPeriod[animator.animation.direction](
         animator.period,
-        animation.cels.length
+        animator.animation.cels.length
       )
     }
   }
 
   /** @return The `Animation` `Cel` for period. */
-  export function cel(
-    animator: Readonly<Animator>,
-    animation: Atlas.Animation
-  ): Atlas.Cel {
-    return animation.cels[index(animator, animation)]!
+  export function cel(animator: Readonly<Animator>): Atlas.Cel {
+    return animator.animation.cels[index(animator)]!
   }
 
   /** @return The `Animation` `Cel` index for period. */
-  export function index(
-    {period}: Readonly<Animator>,
-    {cels}: Atlas.Animation
-  ): number {
-    return Math.abs(period % cels.length)
+  export function index({animation, period}: Readonly<Animator>): number {
+    return Math.abs(period % animation.cels.length)
   }
 }
 

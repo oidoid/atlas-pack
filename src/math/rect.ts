@@ -18,3 +18,17 @@ export function RInt(
 ): RInt {
   return Rect(Int(x), Int(y), Int(w), Int(h))
 }
+
+export namespace Rect {
+  export function equals<T extends Readonly<Rect<T>>>(
+    left: T,
+    right: T
+  ): boolean {
+    return (
+      left.x === right.x &&
+      left.y === right.y &&
+      left.w === right.w &&
+      left.h === right.h
+    )
+  }
+}

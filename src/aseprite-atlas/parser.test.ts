@@ -112,7 +112,7 @@ describe('parseAnimationRecord()', () => {
         size: {w: 16, h: 16},
         cels: [
           {
-            position: {x: 221, y: 19},
+            bounds: {x: 221, y: 19, w: 16, h: 16},
             duration: 1,
             slices: [{x: 8, y: 12, w: 2, h: 3}]
           }
@@ -124,7 +124,7 @@ describe('parseAnimationRecord()', () => {
         size: {w: 16, h: 16},
         cels: [
           {
-            position: {x: 91, y: 55},
+            bounds: {x: 91, y: 55, w: 16, h: 16},
             duration: Number.POSITIVE_INFINITY,
             slices: [{x: 7, y: 11, w: 3, h: 4}]
           }
@@ -136,7 +136,7 @@ describe('parseAnimationRecord()', () => {
         size: {w: 16, h: 16},
         cels: [
           {
-            position: {x: 73, y: 55},
+            bounds: {x: 73, y: 55, w: 16, h: 16},
             duration: Number.POSITIVE_INFINITY,
             slices: [{x: 7, y: 10, w: 3, h: 5}]
           }
@@ -148,7 +148,7 @@ describe('parseAnimationRecord()', () => {
         size: {w: 16, h: 16},
         cels: [
           {
-            position: {x: 55, y: 55},
+            bounds: {x: 55, y: 55, w: 16, h: 16},
             duration: Number.POSITIVE_INFINITY,
             slices: [{x: 7, y: 9, w: 3, h: 6}]
           }
@@ -184,10 +184,7 @@ describe('parseAnimationRecord()', () => {
     }
     expect(() =>
       Parser.parseAnimationRecord(
-        {
-          meta: <Aseprite.Meta>(<unknown>{frameTags, slices: []}),
-          frames
-        },
+        {meta: <Aseprite.Meta>(<unknown>{frameTags, slices: []}), frames},
         new Set(['sceneryCloud', 'palette-red'])
       )
     ).toThrow()
@@ -196,12 +193,7 @@ describe('parseAnimationRecord()', () => {
 
 describe('parseAnimation()', () => {
   test('Parses FrameTag, Frame from Frame[], and Slice.', () => {
-    const frameTag = {
-      name: 'cloud s',
-      from: 1,
-      to: 1,
-      direction: 'forward'
-    }
+    const frameTag = {name: 'cloud s', from: 1, to: 1, direction: 'forward'}
     const frames = {
       'cloud xs 0': {
         frame: {x: 202, y: 36, w: 18, h: 18},
@@ -249,7 +241,7 @@ describe('parseAnimation()', () => {
       size: {w: 16, h: 16},
       cels: [
         {
-          position: {x: 185, y: 37},
+          bounds: {x: 185, y: 37, w: 16, h: 16},
           duration: Number.POSITIVE_INFINITY,
           slices: [{x: 4, y: 11, w: 9, h: 4}]
         }
@@ -385,14 +377,14 @@ describe('parseCel()', () => {
       }
     ]
     expect(Parser.parseCel(frameTag, frame, 0, slices)).toStrictEqual({
-      position: {x: 131, y: 19},
+      bounds: {x: 131, y: 19, w: 16, h: 16},
       duration: Number.POSITIVE_INFINITY,
       slices: [{x: 4, y: 4, w: 8, h: 12}]
     })
   })
 })
 
-describe('parsePosition()', () => {
+describe('parseBounds()', () => {
   test('Parses 1:1 texture mapping.', () => {
     const frame = {
       frame: {x: 1, y: 2, w: 3, h: 4},
@@ -402,7 +394,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(Parser.parsePosition(frame)).toStrictEqual({x: 1, y: 2})
+    expect(Parser.parseBounds(frame)).toStrictEqual({x: 1, y: 2, w: 3, h: 4})
   })
 
   test('Parses texture mapping with padding.', () => {
@@ -414,7 +406,7 @@ describe('parsePosition()', () => {
       sourceSize: {w: 3, h: 4},
       duration: 1
     }
-    expect(Parser.parsePosition(frame)).toStrictEqual({x: 2, y: 3})
+    expect(Parser.parseBounds(frame)).toStrictEqual({x: 2, y: 3, w: 3, h: 4})
   })
 })
 

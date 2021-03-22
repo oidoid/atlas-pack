@@ -5,7 +5,6 @@ import type {Int} from '../math/int.js'
 import type {Millis} from '../math/millis.js'
 import {Rect, RInt} from '../math/rect.js'
 import {WH, WHInt} from '../math/wh.js'
-import {XYInt} from '../math/xy.js'
 
 export namespace Parser {
   /**
@@ -76,14 +75,20 @@ export namespace Parser {
 
     assert(cels.length > 0, `"${frameTag.name}" animation has no cels.`)
     assert(
-      cels
+      !cels
         .slice(0, -1)
-        .every(({duration}) => duration !== Number.POSITIVE_INFINITY),
+        .some(({duration}) => duration === Number.POSITIVE_INFINITY),
       `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
     )
 
+    const size = parseWHInt(frames[0]!.sourceSize)
+    assert(
+      cels.every(({bounds}) => WH.equals(bounds, size)),
+      `Cel areas for "${frameTag.name}" animation differ.`
+    )
+
     return {
-      size: parseWHInt(frames[0]!.sourceSize),
+      size,
       cels: Object.freeze(cels),
       duration,
       direction: parseDirection(frameTag.direction)
@@ -126,17 +131,22 @@ export namespace Parser {
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return Object.freeze({
-      position: parsePosition(frame),
+      bounds: parseBounds(frame),
       duration: parseDuration(frame.duration),
       slices: parseSlices(frameTag, frameNumber, slices)
     })
   }
 
   /** @internal */
-  export function parsePosition(frame: Aseprite.Frame): Readonly<XYInt> {
+  export function parseBounds(frame: Aseprite.Frame): Readonly<RInt> {
     const padding = parsePadding(frame)
     return Object.freeze(
-      XYInt(frame.frame.x + padding.w / 2, frame.frame.y + padding.h / 2)
+      RInt(
+        frame.frame.x + padding.w / 2,
+        frame.frame.y + padding.h / 2,
+        frame.sourceSize.w,
+        frame.sourceSize.h
+      )
     )
   }
 

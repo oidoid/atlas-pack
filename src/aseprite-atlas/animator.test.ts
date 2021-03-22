@@ -1,81 +1,80 @@
 import {Animator} from './animator.js'
 import {Aseprite} from './aseprite.js'
 import {Int} from '../math/int.js'
+import {RInt} from '../math/rect.js'
 import {WHInt} from '../math/wh.js'
-import {XYInt} from '../math/xy.js'
 
 describe('animate()', () => {
   test('exposure < duration', () => {
-    const cel = {position: XYInt(0, 0), duration: 1, slices: []}
-    const animation = <const>{
+    const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
+    const animation = {
       size: WHInt(0, 0),
       cels: [cel, cel],
       duration: 2,
-      direction: 'forward'
+      direction: <const>'forward'
     }
-    const animator = Animator()
-    Animator.animate(animator, 0.5, animation)
-    expect(animator).toMatchObject({period: 0, exposure: 0.5})
+    const animator = Animator(animation)
+    Animator.animate(animator, 0.5)
+    expect(animator).toMatchObject({animation, period: 0, exposure: 0.5})
   })
 
   test('exposure === duration', () => {
-    const cel = {position: XYInt(0, 0), duration: 1, slices: []}
-    const animation = <const>{
+    const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
+    const animation = {
       size: WHInt(0, 0),
       cels: [cel, cel],
       duration: 2,
-      direction: 'forward'
+      direction: <const>'forward'
     }
-    const animator = Animator()
-    Animator.animate(animator, 1, animation)
-    expect(animator).toMatchObject({period: 1, exposure: 0})
+    const animator = Animator(animation)
+    Animator.animate(animator, 1)
+    expect(animator).toMatchObject({animation, period: 1, exposure: 0})
   })
 
   test('exposure > duration', () => {
-    const cel = {position: XYInt(0, 0), duration: 1, slices: []}
-    const animation = <const>{
+    const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
+    const animation = {
       size: WHInt(0, 0),
       cels: [cel, cel],
       duration: 2,
-      direction: 'forward'
+      direction: <const>'forward'
     }
-    const animator = Animator()
-    Animator.animate(animator, 1.5, animation)
-    expect(animator).toMatchObject({period: 1, exposure: 0.5})
+    const animator = Animator(animation)
+    Animator.animate(animator, 1.5)
+    expect(animator).toMatchObject({animation, period: 1, exposure: 0.5})
   })
 
   test('infinite duration', () => {
-    const animation = <const>{
+    const animation = {
       size: WHInt(0, 0),
       cels: [
-        {position: XYInt(0, 0), duration: 1, slices: []},
+        {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []},
         {
-          position: XYInt(0, 0),
+          bounds: RInt(1, 2, 3, 4),
           duration: Number.POSITIVE_INFINITY,
           slices: []
         }
       ],
       duration: Number.POSITIVE_INFINITY,
-      direction: 'forward'
+      direction: <const>'forward'
     }
-    const animator = Animator()
-    Animator.animate(animator, 0.5, animation)
-    expect(animator).toMatchObject({period: 0, exposure: 0.5})
-    Animator.animate(animator, 100, animation)
-    expect(animator).toMatchObject({period: 1, exposure: 99.5})
+    const animator = Animator(animation)
+    Animator.animate(animator, 0.5)
+    expect(animator).toMatchObject({animation, period: 0, exposure: 0.5})
+    Animator.animate(animator, 100)
+    expect(animator).toMatchObject({animation, period: 1, exposure: 99.5})
   })
 
   test('one cel', () => {
-    const cel = {position: XYInt(0, 0), duration: 1, slices: []}
-    const animation = <const>{
+    const animation = {
       size: WHInt(0, 0),
-      cels: [cel],
+      cels: [{bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}],
       duration: 2,
-      direction: 'forward'
+      direction: <const>'forward'
     }
-    const animator = Animator()
-    Animator.animate(animator, 1.5, animation)
-    expect(animator).toMatchObject({period: 1, exposure: 0.5})
+    const animator = Animator(animation)
+    Animator.animate(animator, 1.5)
+    expect(animator).toMatchObject({animation, period: 1, exposure: 0.5})
   })
 })
 
@@ -83,16 +82,16 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# Direction %s array start',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel],
         duration: 2,
         direction
       }
-      const animator = Animator()
-      Animator.animate(animator, 1, animation)
-      const index = Animator.index(animator, animation)
+      const animator = Animator(animation)
+      Animator.animate(animator, 1)
+      const index = Animator.index(animator)
       expect(index).toStrictEqual(1)
     }
   )
@@ -100,16 +99,16 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# Direction %s array end',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel],
         duration: 2,
         direction
       }
-      const animator = Animator(Int(1))
-      Animator.animate(animator, 1, animation)
-      const index = Animator.index(animator, animation)
+      const animator = {animation, period: Int(1), exposure: 0}
+      Animator.animate(animator, 1)
+      const index = Animator.index(animator)
       expect(index).toStrictEqual(0)
     }
   )
@@ -151,18 +150,18 @@ describe('index()', () => {
       [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1]
     ]
   ])('%# Direction %s bounds %p', (direction, period, expected) => {
-    const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+    const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
     const animation = {
       size: WHInt(0, 0),
       cels: [cel, cel, cel, cel],
       duration: 4,
       direction
     }
-    const animator = Animator(Int(period))
+    const animator = {animation, period: Int(period), exposure: 0}
     const playback = []
     for (let i = 0; i < animation.cels.length * 5; ++i) {
-      Animator.animate(animator, 1, animation)
-      playback.push(Animator.index(animator, animation))
+      Animator.animate(animator, 1)
+      playback.push(Animator.index(animator))
     }
     expect(playback).toStrictEqual(expected)
   })
@@ -170,18 +169,18 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# exposure === duration, Direction %s cycles',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
       }
-      const animator = Animator()
+      const animator = Animator(animation)
       const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        Animator.animate(animator, 1, animation)
-        playback.push(Animator.index(animator, animation))
+        Animator.animate(animator, 1)
+        playback.push(Animator.index(animator))
       }
       // prettier-ignore
       const expected = {
@@ -196,18 +195,18 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# exposure > duration, Direction %s cycles',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
       }
-      const animator = Animator()
+      const animator = Animator(animation)
       const playback = []
       for (let i = 0; i < animation.cels.length * 3; ++i) {
-        Animator.animate(animator, 6, animation)
-        playback.push(Animator.index(animator, animation))
+        Animator.animate(animator, 6)
+        playback.push(Animator.index(animator))
       }
       // prettier-ignore
       const expected = {
@@ -222,18 +221,18 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# fractional exposure < duration, not met Direction %s cycles',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
       }
-      const animator = Animator()
+      const animator = Animator(animation)
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        Animator.animate(animator, 0.9, animation)
-        playback.push(Animator.index(animator, animation))
+        Animator.animate(animator, 0.9)
+        playback.push(Animator.index(animator))
       }
       // prettier-ignore
       const expected = {
@@ -248,18 +247,18 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# fractional exposure === duration, Direction %s cycles',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
       }
-      const animator = Animator()
+      const animator = Animator(animation)
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        Animator.animate(animator, 0.5, animation)
-        playback.push(Animator.index(animator, animation))
+        Animator.animate(animator, 0.5)
+        playback.push(Animator.index(animator))
       }
       // prettier-ignore
       const expected = {
@@ -274,18 +273,18 @@ describe('index()', () => {
   test.each(Object.values(Aseprite.Direction))(
     '%# fractional exposure > duration, Direction %s cycles',
     direction => {
-      const cel = {position: XYInt(0, 0), duration: 1, slices: []}
+      const cel = {bounds: RInt(1, 2, 3, 4), duration: 1, slices: []}
       const animation = {
         size: WHInt(0, 0),
         cels: [cel, cel, cel, cel, cel],
         duration: 5,
         direction
       }
-      const animator = Animator()
+      const animator = Animator(animation)
       const playback = []
       for (let i = 0; i < animation.cels.length * 6; ++i) {
-        Animator.animate(animator, 5.5, animation)
-        playback.push(Animator.index(animator, animation))
+        Animator.animate(animator, 5.5)
+        playback.push(Animator.index(animator))
       }
       // prettier-ignore
       const expected = {

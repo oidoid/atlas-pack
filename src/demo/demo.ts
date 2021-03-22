@@ -37,11 +37,12 @@ aseprite-atlas ┌>°┐
     loadJSON('atlas.json').then(json => Parser.parse(json, AtlasID.values)),
     loadImage('atlas.png')
   ]).then(([atlas, atlasImage]) => {
+    const animation = atlas.animations['backpacker-walkRight']!
     const game = {
       window,
       canvas,
       context,
-      animator: Animator(),
+      animator: Animator(animation),
       atlas,
       atlasImage
     }
@@ -54,17 +55,11 @@ function loop(game: Game, then: number, now: number): void {
 
   game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
 
-  const animation = game.atlas.animations['backpacker-walkRight']!
-  Animator.animate(game.animator, millis, animation)
+  Animator.animate(game.animator, millis)
 
-  const cel = Animator.cel(game.animator, animation)
-  const src = <const>[
-    cel.position.x,
-    cel.position.y,
-    animation.size.w,
-    animation.size.h
-  ]
-  const dst = <const>[0, 0, animation.size.w * 16, animation.size.h * 16]
+  const cel = Animator.cel(game.animator)
+  const src = <const>[cel.bounds.x, cel.bounds.y, cel.bounds.w, cel.bounds.h]
+  const dst = <const>[0, 0, cel.bounds.w * 16, cel.bounds.h * 16]
   game.context.drawImage(game.atlasImage, ...src, ...dst)
 
   game.window.requestAnimationFrame(then => loop(game, now, then))
