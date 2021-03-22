@@ -1,8 +1,12 @@
-import type {Int} from './int.js'
+import {Int} from './int.js'
 
-/** Cartesian coordinates in pixels with a top-left origin. */
-export type XY = {x: Int; y: Int}
+export type XY<T> = {x: T; y: T}
+export type XYInt = XY<Int>
 
-export function XY(x: Int, y: Int): XY {
+export function XY<T>(x: T, y: T): XY<T> {
   return {x, y}
+}
+
+export function XYInt(x: Int | number, y: Int | number): XYInt {
+  return XY(Int(x), Int(y))
 }

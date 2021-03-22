@@ -1,10 +1,11 @@
 import {Aseprite} from './aseprite.js'
+import {assert} from '../math/assert.js'
 import type {Atlas} from './atlas.js'
 import type {Int} from '../math/int.js'
 import type {Millis} from '../math/millis.js'
-import type {Rect} from '../math/rect.js'
-import type {WH} from '../math/wh.js'
-import type {XY} from '../math/xy.js'
+import {Rect, RInt} from '../math/rect.js'
+import {WH, WHInt} from '../math/wh.js'
+import {XYInt} from '../math/xy.js'
 
 export namespace Parser {
   /**
@@ -21,7 +22,7 @@ export namespace Parser {
       version: file.meta.version,
       filename: file.meta.image,
       format: file.meta.format,
-      size: file.meta.size,
+      size: parseWHInt(file.meta.size),
       animations: parseAnimationRecord(file, ids)
     })
   }
@@ -35,8 +36,8 @@ export namespace Parser {
     const map: Map<AtlasID, Atlas.Animation> = new Map()
     for (const frameTag of frameTags) {
       const id = frameTag.name
-      if (!isAtlasID(id, ids)) throw Error(`Invalid AtlasID "${id}".`)
-      if (map.has(id)) throw Error(`Duplicate AtlasID "${id}".`)
+      assert(isAtlasID(id, ids), `Invalid AtlasID "${id}".`)
+      assert(!map.has(id), `Duplicate AtlasID "${id}".`)
       map.set(id, parseAnimation(frameTag, frames, slices))
     }
     if (ids && map.size !== ids.size) {
@@ -73,19 +74,16 @@ export namespace Parser {
       duration +=
         duration - (cels[0]!.duration + cels[cels.length - 1]!.duration)
 
-    if (!cels.length) throw Error(`"${frameTag.name}" animation missing cels.`)
-    if (
+    assert(cels.length > 0, `"${frameTag.name}" animation has no cels.`)
+    assert(
       cels
         .slice(0, -1)
-        .some(({duration}) => duration === Number.POSITIVE_INFINITY)
+        .every(({duration}) => duration !== Number.POSITIVE_INFINITY),
+      `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
     )
-      throw Error(
-        `Intermediate cel has infinite duration for "${frameTag.name}" animation.`
-      )
 
-    const {w, h} = frames[0]!.sourceSize
     return {
-      size: Object.freeze({w, h}),
+      size: parseWHInt(frames[0]!.sourceSize),
       cels: Object.freeze(cels),
       duration,
       direction: parseDirection(frameTag.direction)
@@ -99,7 +97,7 @@ export namespace Parser {
     const frames = []
     for (; from <= to; ++from) {
       const frame = frameMap[`${name} ${from}`]
-      if (!frame) throw Error(`Missing Frame "${name} ${from}".`)
+      assert(frame !== undefined, `Missing Frame "${name} ${from}".`)
       frames.push(frame)
     }
     return frames
@@ -109,8 +107,8 @@ export namespace Parser {
   export function parseDirection(
     direction: Aseprite.Direction | string
   ): Aseprite.Direction {
-    if (isDirection(direction)) return direction
-    throw Error(`"${direction}" is not a Direction.`)
+    assert(isDirection(direction), `"${direction}" is not a Direction.`)
+    return direction
   }
 
   /** @internal */
@@ -124,7 +122,7 @@ export namespace Parser {
   export function parseCel(
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
-    frameNumber: Int,
+    frameNumber: number,
     slices: readonly Aseprite.Slice[]
   ): Atlas.Cel {
     return Object.freeze({
@@ -135,44 +133,53 @@ export namespace Parser {
   }
 
   /** @internal */
-  export function parsePosition(frame: Aseprite.Frame): Readonly<XY> {
+  export function parsePosition(frame: Aseprite.Frame): Readonly<XYInt> {
     const padding = parsePadding(frame)
-    return Object.freeze({
-      x: frame.frame.x + padding.w / 2,
-      y: frame.frame.y + padding.h / 2
-    })
+    return Object.freeze(
+      XYInt(frame.frame.x + padding.w / 2, frame.frame.y + padding.h / 2)
+    )
   }
 
   /** @internal */
   export function parsePadding({
     frame,
     sourceSize
-  }: Aseprite.Frame): Readonly<WH> {
-    return Object.freeze({w: frame.w - sourceSize.w, h: frame.h - sourceSize.h})
+  }: Aseprite.Frame): Readonly<WHInt> {
+    return Object.freeze(WHInt(frame.w - sourceSize.w, frame.h - sourceSize.h))
   }
 
   /** @internal */
   export function parseDuration(
     duration: Aseprite.Duration
   ): Millis | typeof Number.POSITIVE_INFINITY {
-    if (duration <= 0) throw Error('Expected positive cel duration.')
+    assert(duration > 0, 'Cel duration is not positive.')
     return duration === Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration
   }
 
   /** @internal */
   export function parseSlices(
     {name}: Aseprite.FrameTag,
-    index: Int,
+    index: number,
     slices: readonly Aseprite.Slice[]
-  ): readonly Readonly<Rect>[] {
+  ): readonly Readonly<RInt>[] {
     const bounds = []
     for (const slice of slices) {
       // Ignore Slices not for this Tag.
       if (slice.name !== name) continue
-      // Get the greatest relevant Key.
+      // Get the greatest relevant Key, if any.
       const key = slice.keys.filter(key => key.frame <= index).slice(-1)[0]
-      if (key) bounds.push(key.bounds)
+      if (key) bounds.push(parseRInt(key.bounds))
     }
     return Object.freeze(bounds)
+  }
+
+  /** @internal */
+  export function parseRInt({x, y, w, h}: Rect<Int | number>): RInt {
+    return Object.freeze(RInt(x, y, w, h))
+  }
+
+  /** @internal */
+  export function parseWHInt({w, h}: WH<Int | number>): WHInt {
+    return Object.freeze(WHInt(w, h))
   }
 }

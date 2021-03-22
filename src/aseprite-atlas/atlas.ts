@@ -1,8 +1,8 @@
 import type {Aseprite} from './aseprite.js'
 import type {Millis} from '../math/millis.js'
-import type {Rect} from '../math/rect.js'
-import type {WH} from '../math/wh.js'
-import type {XY} from '../math/xy.js'
+import type {RInt} from '../math/rect.js'
+import type {WHInt} from '../math/wh.js'
+import type {XYInt} from '../math/xy.js'
 
 /**
  * All `Animations` and metadata for a sprite sheet.
@@ -19,7 +19,7 @@ export type Atlas<AtlasID extends Aseprite.Tag> = Readonly<{
   /** Atlas image format. E.g., 'RGBA8888' or 'I8'. */
   format: string
   /** Atlas image dimensions (power of 2). */
-  size: Readonly<WH>
+  size: Readonly<WHInt>
   animations: Atlas.AnimationRecord<AtlasID>
 }>
 
@@ -35,7 +35,7 @@ export namespace Atlas {
      * Width and height within the source atlas image in integral pixels.
      * Dimensions are identical for every cel.
      */
-    size: Readonly<WH>
+    size: Readonly<WHInt>
     /** Every Animation is expected to have at least one Cel. */
     cels: readonly Cel[]
     /**
@@ -56,10 +56,10 @@ export namespace Atlas {
      * Location within the source atlas image in integral pixels from the
      * top-left.
      */
-    position: Readonly<XY>
+    position: Readonly<XYInt>
     /** Positive cel exposure in integral milliseconds, possibly infinite. */
     duration: Millis | typeof Number.POSITIVE_INFINITY
     /** Slices within the cel in local pixels. */
-    slices: readonly Readonly<Rect>[]
+    slices: readonly Readonly<RInt>[]
   }>
 }

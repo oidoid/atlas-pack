@@ -9,8 +9,9 @@ import type {WH} from '../math/wh.js'
  * undocumented but the related [binary format] is. Types marked
  * "**by convention**" are supplemental to and unenforced by the JSON format.
  * Any data of these types should be validated as soon as possible. All numbers
- * are integers. All indices are zero-based. All geometry are described from
- * the top left to the bottom right in pixel units.
+ * are integers but typing is loosened to `Int | number` so that a cast isn't
+ * needed when parsing the Aseprite JSON. All indices are zero-based. All
+ * geometry are described from the top left to the bottom right in pixel units.
  *
  * [binary format]: https://github.com/aseprite/aseprite/blob/master/docs/ase-file-specs.md
  */
@@ -39,7 +40,7 @@ export namespace Aseprite {
     /** E.g., 'RGBA8888' or 'I8'. */
     format: string
     /** Output dimensions. **Via CLI** `--sheet-pack`, uses a power of 2. */
-    size: Readonly<WH>
+    size: Readonly<WH<Int | number>>
     /** E.g., '1'. */
     scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
@@ -67,13 +68,13 @@ export namespace Aseprite {
      * calculated by subtracting member's WH dimensions from sourceSize and
      * dividing by two.
      */
-    frame: Readonly<Rect>
+    frame: Readonly<Rect<Int | number>>
     rotated: boolean
     trimmed: boolean
     /** The `Frame`'s bounds within the file packed, not including padding. */
-    spriteSourceSize: Readonly<Rect>
+    spriteSourceSize: Readonly<Rect<Int | number>>
     /** The width and height components of spriteSourceSize. */
-    sourceSize: Readonly<WH>
+    sourceSize: Readonly<WH<Int | number>>
     duration: Duration
   }>
 
@@ -85,12 +86,12 @@ export namespace Aseprite {
     /** **By convention**, the associated `Frame`'s `Tag`. */
     name: Tag
     /** The inclusive starting Frame index. */
-    from: Int
+    from: Int | number
     /**
      * The inclusive ending `Frame` index, possibly identical to the starting
      * frame index.
      */
-    to: Int
+    to: Int | number
     /**
      * Loosened typing to a string so a cast isn't needed when parsing the
      * Aseprite JSON.
@@ -145,8 +146,8 @@ export namespace Aseprite {
      * `Key`'s `Frame` index may be calculated from
      * `FrameTag.index + Key.frame`.
      */
-    frame: Int
+    frame: Int | number
     /** The `Slice` dimensions. */
-    bounds: Readonly<Rect>
+    bounds: Readonly<Rect<Int | number>>
   }>
 }
