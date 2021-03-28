@@ -40,12 +40,12 @@
     "build:demo:atlas": "cd src/demo && aseprite-atlas-pack --sheet atlas.png *.aseprite > atlas.json",
     "link": "npm link ../matoid"
   },
+  "workspaces": [
+    "../modules/matoid"
+  ],
   "engines": {
     "node": "15.10.0",
     "npm": "7.5.3"
-  },
-  "dependencies": {
-    "matoid": "0.0.1-next.202103272332.0"
   },
   "devDependencies": {
     "@types/jest": "26.0.21",
