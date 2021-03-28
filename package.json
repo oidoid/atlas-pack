@@ -41,7 +41,7 @@
     "link": "npm link ../matoid"
   },
   "workspaces": [
-    "../modules/matoid"
+    "../matoid"
   ],
   "engines": {
     "node": "15.10.0",
