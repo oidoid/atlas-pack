@@ -4,35 +4,6 @@ aseprite-atlas is an Aseprite sprite sheet parser, animator, and toolset for the
 browser and Node.js. See [installation](#installation) and the
 **[minimal example](#minimal-example)** to get started.
 
-## Table of Contents
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2} -->
-<!-- code_chunk_output -->
-
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Sprite Sheets and Atlases](#sprite-sheets-and-atlases)
-- [Usage](#usage)
-  - [Overview](#overview)
-  - [Pack the Sprite Sheet (CLI)](#pack-the-sprite-sheet-cli)
-  - [Parse and Render (JavaScript)](#parse-and-render-javascript)
-    - [Minimal Example](#minimal-example)
-      - [Parsing](#parsing)
-      - [Retrieve an Animation from the Atlas](#retrieve-an-animation-from-the-atlas)
-      - [Create an Animator and Animate It](#create-an-animator-and-animate-it)
-      - [Render the Animation](#render-the-animation)
-- [Features](#features)
-- [Functionality Not Provided](#functionality-not-provided)
-- [Known Issues](#known-issues)
-- [Assumptions and Conventions](#assumptions-and-conventions)
-  - [Assumptions](#assumptions)
-  - [Conventions](#conventions)
-- [Development](#development)
-- [License](#license)
-  - [GPL-3.0-only](#gpl-30-only)
-
-<!-- /code_chunk_output -->
-
 ## Installation
 
 Execute `npm i -E aseprite-atlas` to install aseprite-atlas. See the
