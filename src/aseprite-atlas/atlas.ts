@@ -1,7 +1,9 @@
 import type {Aseprite} from './aseprite.js'
-import type {Millis} from '../math/millis.js'
-import type {RInt} from '../math/rect.js'
-import type {WHInt} from '../math/wh.js'
+import type {
+  Millis,
+  RInt,
+  WHInt
+} from '../../node_modules/matoid/dist/matoid/matoid.js'
 
 /**
  * All `Animations` and metadata for a sprite sheet.

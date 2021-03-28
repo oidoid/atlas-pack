@@ -1,7 +1,9 @@
-import type {Int} from '../math/int.js'
-import type {Millis} from '../math/millis.js'
-import type {Rect} from '../math/rect.js'
-import type {WH} from '../math/wh.js'
+import type {
+  Int,
+  Millis,
+  Rect,
+  WH
+} from '../../node_modules/matoid/dist/matoid/matoid.js'
 
 /**
  * This typing assumes the options specified in aseprite-atlas-pack and

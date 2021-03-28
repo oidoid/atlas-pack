@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v4.0.0 (unreleased)
 
+- \[build\]\[API\] Extract math to matoid repo
 - \[API\]\[Cel\] Move position into bounds
 - \[API\]\[Int\] Check integers at runtime
 - \[API\]\[Parser\]\[Atlas\] Validate Atlas ID members

@@ -1,8 +1,6 @@
 import {Animator} from './animator.js'
 import {Aseprite} from './aseprite.js'
-import {Int} from '../math/int.js'
-import {RInt} from '../math/rect.js'
-import {WHInt} from '../math/wh.js'
+import {Int, RInt, WHInt} from '../../node_modules/matoid/dist/matoid/matoid.js'
 
 describe('animate()', () => {
   test('exposure < duration', () => {

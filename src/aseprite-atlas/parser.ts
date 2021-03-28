@@ -1,10 +1,14 @@
 import {Aseprite} from './aseprite.js'
-import {assert} from '../math/assert.js'
+import {
+  assert,
+  Int,
+  Millis,
+  Rect,
+  RInt,
+  WH,
+  WHInt
+} from '../../node_modules/matoid/dist/matoid/matoid.js'
 import type {Atlas} from './atlas.js'
-import type {Int} from '../math/int.js'
-import type {Millis} from '../math/millis.js'
-import {Rect, RInt} from '../math/rect.js'
-import {WH, WHInt} from '../math/wh.js'
 
 export namespace Parser {
   /**

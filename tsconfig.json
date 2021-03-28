@@ -1,13 +1,4 @@
 {
-  // Specify all sub-projects as dependencies to force compilation as proper sub
-  // -projects, not single monolith. Sub-projects must explicitly declare their
-  // own dependencies as references.
-  "references": [
-    {"path": "src/math"},
-    {"path": "src/aseprite-atlas"},
-    {"path": "src/demo"}
-  ],
-  // The docs say this isn't needed for a config with only references specified
-  // but it seems to be.
+  "references": [{"path": "src/aseprite-atlas"}, {"path": "src/demo"}],
   "files": []
 }

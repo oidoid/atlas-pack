@@ -1,8 +1,10 @@
 import type {Aseprite} from './aseprite.js'
 import type {Atlas} from './atlas.js'
-import {Int} from '../math/int.js'
-import type {Millis} from '../math/millis.js'
-import {NumberUtil} from '../math/number-util.js'
+import {
+  Int,
+  Millis,
+  NumberUtil
+} from '../../node_modules/matoid/dist/matoid/matoid.js'
 
 export function Animator(animation: Atlas.Animation): Animator {
   return {animation, period: Int(0), exposure: 0}
