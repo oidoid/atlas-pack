@@ -105,7 +105,13 @@ Given a list of Aseprite files, pack all images and animations into a single
 sprite sheet:
 
 ```sh
-npx atlas-pack --sheet atlas.png --data atlas.json *.aseprite
+deno \
+  run \
+  --import-map=https://deno.land/x/atlas_pack/mods.json \
+  https://deno.land/x/atlas_pack/bin/atlas-pack \
+  --sheet atlas.png \
+  --data atlas.json \
+  *.aseprite
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
@@ -132,8 +138,8 @@ need to revise your `PATH` before running the tool. _Something_ like:
 # separates the second path to search,
 # `/Applications/Aseprite.app/Contents/MacOS` where we hope to find an
 # executable named `aseprite`. A second delimiter follows, and finally a made up
-# location to Node.js binaries like `npx` for purposes of example.
-export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/node/bin"
+# location to Deno binaries like `deno` for purposes of example.
+export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/deno"
 
 # Execute the tool (same as noted above).
 deno \

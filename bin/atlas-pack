@@ -1,10 +1,16 @@
-#!/usr/bin/env sh
-# atlas-pack --sheet <filename.png> [--data <filename.json>] [OPTIONS] [FILES]
+#!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
+// atlas-pack --sheet <filename.png> [--data <filename.json>] [OPTIONS] [FILES]
 
-exec aseprite \
-  --batch \
-  "$@" \
-  --filename-format '{tag}-{frame}' \
-  --list-tags \
-  --list-slices \
-  --sheet-pack
+const process = Deno.run({
+  cmd: [
+    'aseprite',
+    '--batch',
+    ...Deno.args,
+    '--filename-format={tag}-{frame}',
+    '--list-tags',
+    '--list-slices',
+    '--sheet-pack',
+  ],
+});
+
+await process.status();

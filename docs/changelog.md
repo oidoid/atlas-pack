@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v4.0.1
+
+- \[fix\] Fix atlas-pack executable
+
 ## v4.0.0
 
 - Migrate to Deno
