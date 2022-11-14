@@ -107,7 +107,7 @@ sprite sheet:
 ```sh
 deno \
   run \
-  --import-map=https://deno.land/x/atlas_pack/mods.json \
+  --allow-run \
   https://deno.land/x/atlas_pack/bin/atlas-pack \
   --sheet atlas.png \
   --data atlas.json \
