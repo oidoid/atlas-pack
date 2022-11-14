@@ -28,14 +28,7 @@ eight-frames. All frames are embedded in a single, static sprite sheet PNG file.
 Any animation can be rendered programmatically from this file, such as this one
 of the backpacker walking right.
 
-<div align="center">
-  <img
-    src="docs/sheet-to-render.gif"
-    width="665"
-    style="image-rendering: pixelated"
-    alt="An example sprite sheet generated from two separate .aseprite files (left) can be used to render any animation cycle or image it contains (right)."
-  >
-</div>
+![An example sprite sheet generated from two separate .aseprite files (left) can be used to render any animation cycle or image it contains (right).](docs/sheet-to-render.gif)
 
 _Above left: All animation frames are embedded into a single PNG. Above right:
 Any sub-textures from the sheet can then be efficiently rendered._
@@ -47,14 +40,7 @@ file as shown in the [API demo](https://atlas-pack.netlify.com/demo).
 Some or all embedded sprites may not be animated. For example, a common use case
 for sprite sheets is drawing text:
 
-<div align="center">
-  <img
-    src="https://raw.githubusercontent.com/oidoid/mem/main/dist/mem-prop-5x6-10x-sheet.png"
-    width="560"
-    style="border: 1px dotted; image-rendering: pixelated"
-    alt="mem font sprite sheet."
-  >
-</div>
+![mem font sprite sheet.](https://raw.githubusercontent.com/oidoid/mem/main/dist/mem-prop-5x6-10x-sheet.png)
 
 _Above: A complete font embedded in a single sprite sheet._
 
@@ -62,14 +48,7 @@ _Above: A complete font embedded in a single sprite sheet._
 
 ### Overview
 
-<div align="center">
-  <img
-    src="docs/workflow.png"
-    width="920"
-    style="border: 1px dotted; image-rendering: pixelated"
-    alt="The design, pack, and run workflow."
-  >
-</div>
+![The design, pack, and run workflow.](docs/workflow.png)
 
 There are three steps in the workflow:
 
@@ -144,7 +123,7 @@ export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/deno"
 # Execute the tool (same as noted above).
 deno \
   run \
-  --import-map=https://deno.land/x/atlas_pack/mods.json \
+  --allow-run \
   https://deno.land/x/atlas_pack/bin/atlas-pack \
   --sheet atlas.png \
   --data atlas.json \
