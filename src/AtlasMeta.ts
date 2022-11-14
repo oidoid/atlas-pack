@@ -1,6 +1,5 @@
-import { Aseprite, CelID } from '@/atlas-pack';
+import { Anim, Aseprite, CelID } from '@/atlas-pack';
 import { I16Box, U16XY } from '@/oidlib';
-import { Anim } from './Anim.ts';
 
 /**
  * All `Anim` and metadata for a sprite sheet.
