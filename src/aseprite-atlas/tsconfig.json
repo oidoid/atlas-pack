@@ -1,4 +1,0 @@
-{
-  "extends": "../sub-tsconfig.json",
-  "references": [{"path": "../../node_modules/matoid/src/matoid"}]
-}

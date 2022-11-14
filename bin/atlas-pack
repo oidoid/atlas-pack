@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# atlas-pack --sheet <filename.png> [--data <filename.json>] [OPTIONS] [FILES]
+
+exec aseprite \
+  --batch \
+  "$@" \
+  --filename-format '{tag}-{frame}' \
+  --list-tags \
+  --list-slices \
+  --sheet-pack

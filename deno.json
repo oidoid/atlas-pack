@@ -1,0 +1,14 @@
+{
+  // https://deno.land/manual@main/typescript/configuration
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "useUnknownInCatchVariables": true,
+    "lib": ["dom", "deno.ns"]
+  },
+  "importMap": "mods.json",
+  "lint": { "rules": { "exclude": ["no-namespace"] } }
+}

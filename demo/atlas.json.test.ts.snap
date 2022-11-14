@@ -1,0 +1,1484 @@
+export const snapshot = {};
+
+snapshot[`Atlas is parsable. 1`] = `
+{
+  animationByID: {
+    BackpackerWalkDown: {
+      cels: [
+        {
+          bounds: {
+            end: {
+              x: 40,
+              y: 45,
+            },
+            start: {
+              x: 32,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 9,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 32,
+              y: 45,
+            },
+            start: {
+              x: 24,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 10,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 24,
+              y: 45,
+            },
+            start: {
+              x: 16,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 11,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 16,
+              y: 45,
+            },
+            start: {
+              x: 8,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 12,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 40,
+              y: 45,
+            },
+            start: {
+              x: 32,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 13,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 8,
+              y: 45,
+            },
+            start: {
+              x: 0,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 14,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 42,
+            },
+            start: {
+              x: 72,
+              y: 29,
+            },
+          },
+          duration: 100,
+          id: 15,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 56,
+              y: 29,
+            },
+            start: {
+              x: 48,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 16,
+          sliceBounds: {
+            end: {
+              x: 7,
+              y: 4,
+            },
+            start: {
+              x: 2,
+              y: 0,
+            },
+          },
+          slices: [
+            {
+              end: {
+                x: 7,
+                y: 4,
+              },
+              start: {
+                x: 2,
+                y: 0,
+              },
+            },
+          ],
+        },
+      ],
+      direction: "Forward",
+      duration: 800,
+      id: "BackpackerWalkDown",
+      wh: {
+        x: 8,
+        y: 13,
+      },
+    },
+    BackpackerWalkRight: {
+      cels: [
+        {
+          bounds: {
+            end: {
+              x: 72,
+              y: 42,
+            },
+            start: {
+              x: 64,
+              y: 29,
+            },
+          },
+          duration: 100,
+          id: 0,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 16,
+              y: 58,
+            },
+            start: {
+              x: 8,
+              y: 45,
+            },
+          },
+          duration: 100,
+          id: 1,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 8,
+              y: 58,
+            },
+            start: {
+              x: 0,
+              y: 45,
+            },
+          },
+          duration: 100,
+          id: 2,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 55,
+            },
+            start: {
+              x: 72,
+              y: 42,
+            },
+          },
+          duration: 100,
+          id: 3,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 72,
+              y: 55,
+            },
+            start: {
+              x: 64,
+              y: 42,
+            },
+          },
+          duration: 100,
+          id: 4,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 55,
+            },
+            start: {
+              x: 56,
+              y: 42,
+            },
+          },
+          duration: 100,
+          id: 5,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 56,
+              y: 55,
+            },
+            start: {
+              x: 48,
+              y: 42,
+            },
+          },
+          duration: 100,
+          id: 6,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 48,
+              y: 45,
+            },
+            start: {
+              x: 40,
+              y: 32,
+            },
+          },
+          duration: 100,
+          id: 7,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 55,
+            },
+            start: {
+              x: 72,
+              y: 42,
+            },
+          },
+          duration: 100,
+          id: 8,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+      ],
+      direction: "Forward",
+      duration: 900,
+      id: "BackpackerWalkRight",
+      wh: {
+        x: 8,
+        y: 13,
+      },
+    },
+    BackpackerWalkUp: {
+      cels: [
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 42,
+            },
+            start: {
+              x: 56,
+              y: 29,
+            },
+          },
+          duration: 100,
+          id: 17,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 56,
+              y: 42,
+            },
+            start: {
+              x: 48,
+              y: 29,
+            },
+          },
+          duration: 100,
+          id: 18,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 29,
+            },
+            start: {
+              x: 72,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 19,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 29,
+            },
+            start: {
+              x: 72,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 20,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 42,
+            },
+            start: {
+              x: 56,
+              y: 29,
+            },
+          },
+          duration: 100,
+          id: 21,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 72,
+              y: 29,
+            },
+            start: {
+              x: 64,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 22,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 29,
+            },
+            start: {
+              x: 56,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 23,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 29,
+            },
+            start: {
+              x: 56,
+              y: 16,
+            },
+          },
+          duration: 100,
+          id: 24,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+      ],
+      direction: "Forward",
+      duration: 800,
+      id: "BackpackerWalkUp",
+      wh: {
+        x: 8,
+        y: 13,
+      },
+    },
+    FrogEat: {
+      cels: [
+        {
+          bounds: {
+            end: {
+              x: 48,
+              y: 32,
+            },
+            start: {
+              x: 32,
+              y: 16,
+            },
+          },
+          duration: 800,
+          id: 25,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 32,
+              y: 32,
+            },
+            start: {
+              x: 16,
+              y: 16,
+            },
+          },
+          duration: 1200,
+          id: 26,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 16,
+              y: 32,
+            },
+            start: {
+              x: 0,
+              y: 16,
+            },
+          },
+          duration: 64,
+          id: 27,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 16,
+            },
+            start: {
+              x: 64,
+              y: 0,
+            },
+          },
+          duration: 64,
+          id: 28,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 64,
+              y: 16,
+            },
+            start: {
+              x: 48,
+              y: 0,
+            },
+          },
+          duration: 64,
+          id: 29,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 80,
+              y: 16,
+            },
+            start: {
+              x: 64,
+              y: 0,
+            },
+          },
+          duration: 64,
+          id: 30,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 16,
+              y: 32,
+            },
+            start: {
+              x: 0,
+              y: 16,
+            },
+          },
+          duration: 64,
+          id: 31,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 48,
+              y: 32,
+            },
+            start: {
+              x: 32,
+              y: 16,
+            },
+          },
+          duration: Infinity,
+          id: 32,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+      ],
+      direction: "Forward",
+      duration: Infinity,
+      id: "FrogEat",
+      wh: {
+        x: 16,
+        y: 16,
+      },
+    },
+    FrogIdle: {
+      cels: [
+        {
+          bounds: {
+            end: {
+              x: 48,
+              y: 16,
+            },
+            start: {
+              x: 32,
+              y: 0,
+            },
+          },
+          duration: 7000,
+          id: 33,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 32,
+              y: 16,
+            },
+            start: {
+              x: 16,
+              y: 0,
+            },
+          },
+          duration: 2000,
+          id: 34,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 48,
+              y: 16,
+            },
+            start: {
+              x: 32,
+              y: 0,
+            },
+          },
+          duration: 4000,
+          id: 35,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+        {
+          bounds: {
+            end: {
+              x: 16,
+              y: 16,
+            },
+            start: {
+              x: 0,
+              y: 0,
+            },
+          },
+          duration: 200,
+          id: 36,
+          sliceBounds: {
+            end: {
+              x: 0,
+              y: 0,
+            },
+            start: {
+              x: 1,
+              y: 1,
+            },
+          },
+          slices: [
+          ],
+        },
+      ],
+      direction: "Forward",
+      duration: 13200,
+      id: "FrogIdle",
+      wh: {
+        x: 16,
+        y: 16,
+      },
+    },
+  },
+  celBoundsByID: {
+    "0": {
+      end: {
+        x: 72,
+        y: 42,
+      },
+      start: {
+        x: 64,
+        y: 29,
+      },
+    },
+    "1": {
+      end: {
+        x: 16,
+        y: 58,
+      },
+      start: {
+        x: 8,
+        y: 45,
+      },
+    },
+    "10": {
+      end: {
+        x: 32,
+        y: 45,
+      },
+      start: {
+        x: 24,
+        y: 32,
+      },
+    },
+    "11": {
+      end: {
+        x: 24,
+        y: 45,
+      },
+      start: {
+        x: 16,
+        y: 32,
+      },
+    },
+    "12": {
+      end: {
+        x: 16,
+        y: 45,
+      },
+      start: {
+        x: 8,
+        y: 32,
+      },
+    },
+    "13": {
+      end: {
+        x: 40,
+        y: 45,
+      },
+      start: {
+        x: 32,
+        y: 32,
+      },
+    },
+    "14": {
+      end: {
+        x: 8,
+        y: 45,
+      },
+      start: {
+        x: 0,
+        y: 32,
+      },
+    },
+    "15": {
+      end: {
+        x: 80,
+        y: 42,
+      },
+      start: {
+        x: 72,
+        y: 29,
+      },
+    },
+    "16": {
+      end: {
+        x: 56,
+        y: 29,
+      },
+      start: {
+        x: 48,
+        y: 16,
+      },
+    },
+    "17": {
+      end: {
+        x: 64,
+        y: 42,
+      },
+      start: {
+        x: 56,
+        y: 29,
+      },
+    },
+    "18": {
+      end: {
+        x: 56,
+        y: 42,
+      },
+      start: {
+        x: 48,
+        y: 29,
+      },
+    },
+    "19": {
+      end: {
+        x: 80,
+        y: 29,
+      },
+      start: {
+        x: 72,
+        y: 16,
+      },
+    },
+    "2": {
+      end: {
+        x: 8,
+        y: 58,
+      },
+      start: {
+        x: 0,
+        y: 45,
+      },
+    },
+    "20": {
+      end: {
+        x: 80,
+        y: 29,
+      },
+      start: {
+        x: 72,
+        y: 16,
+      },
+    },
+    "21": {
+      end: {
+        x: 64,
+        y: 42,
+      },
+      start: {
+        x: 56,
+        y: 29,
+      },
+    },
+    "22": {
+      end: {
+        x: 72,
+        y: 29,
+      },
+      start: {
+        x: 64,
+        y: 16,
+      },
+    },
+    "23": {
+      end: {
+        x: 64,
+        y: 29,
+      },
+      start: {
+        x: 56,
+        y: 16,
+      },
+    },
+    "24": {
+      end: {
+        x: 64,
+        y: 29,
+      },
+      start: {
+        x: 56,
+        y: 16,
+      },
+    },
+    "25": {
+      end: {
+        x: 48,
+        y: 32,
+      },
+      start: {
+        x: 32,
+        y: 16,
+      },
+    },
+    "26": {
+      end: {
+        x: 32,
+        y: 32,
+      },
+      start: {
+        x: 16,
+        y: 16,
+      },
+    },
+    "27": {
+      end: {
+        x: 16,
+        y: 32,
+      },
+      start: {
+        x: 0,
+        y: 16,
+      },
+    },
+    "28": {
+      end: {
+        x: 80,
+        y: 16,
+      },
+      start: {
+        x: 64,
+        y: 0,
+      },
+    },
+    "29": {
+      end: {
+        x: 64,
+        y: 16,
+      },
+      start: {
+        x: 48,
+        y: 0,
+      },
+    },
+    "3": {
+      end: {
+        x: 80,
+        y: 55,
+      },
+      start: {
+        x: 72,
+        y: 42,
+      },
+    },
+    "30": {
+      end: {
+        x: 80,
+        y: 16,
+      },
+      start: {
+        x: 64,
+        y: 0,
+      },
+    },
+    "31": {
+      end: {
+        x: 16,
+        y: 32,
+      },
+      start: {
+        x: 0,
+        y: 16,
+      },
+    },
+    "32": {
+      end: {
+        x: 48,
+        y: 32,
+      },
+      start: {
+        x: 32,
+        y: 16,
+      },
+    },
+    "33": {
+      end: {
+        x: 48,
+        y: 16,
+      },
+      start: {
+        x: 32,
+        y: 0,
+      },
+    },
+    "34": {
+      end: {
+        x: 32,
+        y: 16,
+      },
+      start: {
+        x: 16,
+        y: 0,
+      },
+    },
+    "35": {
+      end: {
+        x: 48,
+        y: 16,
+      },
+      start: {
+        x: 32,
+        y: 0,
+      },
+    },
+    "36": {
+      end: {
+        x: 16,
+        y: 16,
+      },
+      start: {
+        x: 0,
+        y: 0,
+      },
+    },
+    "4": {
+      end: {
+        x: 72,
+        y: 55,
+      },
+      start: {
+        x: 64,
+        y: 42,
+      },
+    },
+    "5": {
+      end: {
+        x: 64,
+        y: 55,
+      },
+      start: {
+        x: 56,
+        y: 42,
+      },
+    },
+    "6": {
+      end: {
+        x: 56,
+        y: 55,
+      },
+      start: {
+        x: 48,
+        y: 42,
+      },
+    },
+    "7": {
+      end: {
+        x: 48,
+        y: 45,
+      },
+      start: {
+        x: 40,
+        y: 32,
+      },
+    },
+    "8": {
+      end: {
+        x: 80,
+        y: 55,
+      },
+      start: {
+        x: 72,
+        y: 42,
+      },
+    },
+    "9": {
+      end: {
+        x: 40,
+        y: 45,
+      },
+      start: {
+        x: 32,
+        y: 32,
+      },
+    },
+  },
+  filename: "atlas.png",
+  format: "I8",
+  version: "1.3-beta21-x64",
+  wh: {
+    x: 80,
+    y: 58,
+  },
+}
+`;
