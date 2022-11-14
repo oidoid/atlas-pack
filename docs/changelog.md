@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v4.0.2
+
+- \[doc\] Degrade Markdown for Deno registry
+
 ## v4.0.1
 
 - \[fix\] Fix atlas-pack executable
@@ -21,7 +25,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 - \[build\] Remove Webpack and NPM workspaces
 - \[build\] Upgrade all dependencies
 - \[build\] Fix Jest config statement type
-- \[docs\] Rename from oddoid to oidoid
+- \[doc] Rename from oddoid to oidoid
 - \[build\] Upgrade all dependencies
 - \[int\]\[millis\] Rename Integer to Int and Milliseconds to Millis
 - \[build\] Use shish-kebab-case for filenames
@@ -35,7 +39,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v3.0.0
 
-- \[docs\] Note power of two sprite sheet size issue
+- \[doc] Note power of two sprite sheet size issue
 - \[enum\] Replace enums with objects and use PascalCasing
 - \[test\] Collect Jest coverage
 - \[build\] Upgrade all dependencies
@@ -43,10 +47,10 @@ Versions and bullets are arranged chronologically from latest to oldest.
   - Source maps now output.
   - Name library as "AsepriteAtlas" for UMD usage.
   - Rename dist/main.js build product to index.js.
-- \[docs\] add NPM keywords
-- \[docs\] drop trailing URL slash
+- \[doc] add NPM keywords
+- \[doc] drop trailing URL slash
 - \[dev\] \[build\] drop needless line continuation
-- \[docs\] emphasize demo
+- \[doc] emphasize demo
 
 ## v2.0.9
 
@@ -59,37 +63,37 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v2.0.7
 
-- \[dev\] \[docs\] revise examples
+- \[dev\] \[doc] revise examples
 - \[dev\] \[build\] improve version scripts
-- \[docs\] add todos
+- \[doc] add todos
 
 ## v2.0.6
 
 - \[dev\] \[demo\] \[build\] add type checking to demo
-- \[docs\] \[NPM\] revise keywords
+- \[doc] \[NPM\] revise keywords
 
 ## v2.0.5
 
 - \[dev\] drop ts-node dependency by moving to JavaScript Webpack configuration
-- \[dev\] \[docs\] link to live demo and GitHub page
+- \[dev\] \[doc] link to live demo and GitHub page
 
 ## v2.0.4
 
 - \[update\] \[Atlas\] add image filename, format, and dimension properties
 - \[dev\] \[typings\] move readonly specifiers to point of use
 - \[dev\] \[typings\] expose supporting types
-- \[dev\] \[docs\] add demo and demo tests
+- \[dev\] \[doc] add demo and demo tests
 - \[dev\] \[build\] upgrade TypeScript from v3.6.3 to 3.6.4
-- \[docs\] \[CLI\] fix outdated asepriteExportAtlas references and example
+- \[doc] \[CLI\] fix outdated asepriteExportAtlas references and example
 - \[dev\] \[VS Code\] ignore demo/node_modules and Aseprite spelling
 
 ## v2.0.3
 
-- \[docs\] \[dev\] revise some JSDocs and export syntax
+- \[doc] \[dev\] revise some JSDocs and export syntax
 
 ## v2.0.2
 
-- \[docs\] revise description in readme
+- \[doc] revise description in readme
 
 ## v2.0.1
 
@@ -97,7 +101,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v2.0.0
 
-- \[docs\] add JavaScript example and revise readme
+- \[doc] add JavaScript example and revise readme
 - \[breaking\] \[CLI\] rename asepriteExportAtlas to aseprite-atlas-pack
 - \[typings\] \[build\] move typing outputs up a level
 
