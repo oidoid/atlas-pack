@@ -6,6 +6,7 @@ const process = Deno.run({
     'aseprite',
     '--batch',
     ...Deno.args,
+    // See TagFrameNumber.
     '--filename-format={tag}-{frame}',
     '--list-tags',
     '--list-slices',

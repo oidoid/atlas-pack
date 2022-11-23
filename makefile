@@ -11,6 +11,8 @@ asset_files := \
   $(demo_dir)/index.html
 dist_files := $(asset_files:$(demo_dir)/%=$(dist_dir)/%)
 
+bundle_flags :=
+
 .PHONY: build
 build: bundle build\:dist
 
@@ -22,20 +24,20 @@ build\:watch:
   watchexec -i dist '$(make) build\:dist'
 
 .PHONY: dev
-dev: build\:watch bundle\:watch dev\:serve
+dev: build\:watch bundle\:watch serve
 
-.PHONY: dev\:serve
-dev\:serve: | $(dist_dir)/
+.PHONY: serve
+serve: | $(dist_dir)/
   $(live-server) '$(dist_dir)'
 
 .PHONY: bundle
 bundle: $(demo_dir)/atlas.json | $(dist_dir)/
   $(deno) bundle --config='$(deno_config)' mod.ts '$(dist_dir)/atlas-pack.js'
-  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js'
+  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' $(bundle_flags)
 
 .PHONY: bundle\:watch
-bundle\:watch: $(demo_dir)/atlas.json | $(dist_dir)/
-  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' --watch
+bundle\:watch: bundle_flags += --watch
+bundle\:watch: bundle
 
 .PHONY: test
 test: build test\:unit; $(deno) lint --config='$(deno_config)' --quiet

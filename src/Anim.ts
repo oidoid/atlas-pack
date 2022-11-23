@@ -1,6 +1,10 @@
 import { Immutable, U16, U16Box, U16Millis, U16XY } from '@/oidlib';
 
-/** A sequence of animation `Cel`s. */
+/**
+ * A sequence of animation `Cel`s.
+ *
+ * Named "Anim" to avoid conflict with the Animation global.
+ */
 export interface Anim {
   /**
    * The Aseprite tag, a unique identifier for the animation like "FrogIdle".
