@@ -1,11 +1,11 @@
 import {
-  Anim,
-  AnimationByID,
   Aseprite,
   AtlasMeta,
   Cel,
   CelBoundsByID,
   CelID,
+  Film,
+  FilmByID,
   Playback,
 } from '@/atlas-pack';
 import {
@@ -22,91 +22,98 @@ import {
 export namespace AtlasMetaParser {
   /**
    * @arg ids If defined, the returned Atlas is validated to have the same
-   *  membership as the AnimationID set. If undefined, the caller may wish to use a
-   *  string type for AnimationID and perform their own Atlas.animations look-up
-   *  checks.
+   *   membership as the FilmID set. If undefined, the caller may wish to use a
+   *   string type for FilmID and perform their own Atlas.filmByID lookup
+   *   checks.
    */
-  export function parse<AnimationID extends Aseprite.Tag>(
+  export function parse<FilmID extends Aseprite.Tag>(
     file: Aseprite.File | JSONObject,
-    ids?: ReadonlySet<AnimationID> | undefined,
-  ): AtlasMeta<AnimationID> {
+    ids?: ReadonlySet<FilmID> | undefined,
+  ): AtlasMeta<FilmID> {
+    const factory = new CelIDFactory();
     const asepriteFile = (file as Aseprite.File);
-    const animationByID = parseAnimationByID(asepriteFile, ids);
+    const filmByID = parseFilmByID(factory, asepriteFile, ids);
     return Immutable({
       version: asepriteFile.meta.version,
       filename: asepriteFile.meta.image,
       format: asepriteFile.meta.format,
       wh: parseU16XY(asepriteFile.meta.size),
-      animationByID,
-      celBoundsByID: constructCelBoundsByID(animationByID),
+      filmByID,
+      celBoundsByID: newCelBoundsByID(factory, filmByID),
     });
   }
 
   /** @internal */
-  export function parseAnimationByID<AnimationID extends Aseprite.Tag>(
-    { meta, frames }: Aseprite.File,
-    ids: ReadonlySet<AnimationID> | undefined,
-  ): AnimationByID<AnimationID> {
-    const { frameTags, slices } = meta;
-    const map = new Map<AnimationID, Anim>();
-    const factory = new CelIDFactory();
+  export function parseFilmByID<FilmID extends Aseprite.Tag>(
+    factory: CelIDFactory,
+    file: Aseprite.File,
+    ids: ReadonlySet<FilmID> | undefined,
+  ): FilmByID<FilmID> {
+    const { frameTags, slices } = file.meta;
+    const map = new Map<FilmID, Film>();
     for (const frameTag of frameTags) {
       const id = frameTag.name;
-      assert(isAnimationID(id, ids), `Unknown ID in atlas: "${id}".`);
+      assert(isFilmID(id, ids), `Unknown ID in atlas: "${id}".`);
       assert(!map.has(id), `Duplicate ID in atlas: "${id}".`);
-      map.set(id, parseAnimation(id, frameTag, frames, slices, factory));
+      map.set(id, parseFilm(id, frameTag, file.frames, slices, factory));
     }
-    if (ids != null && map.size != ids.size) {
-      const missing = Array.from(ids.keys())
-        .filter((id) => !map.has(id))
-        .map((id) => `"${id}"`)
-        .join(', ');
-      throw Error(`Missing ID(s) in atlas: ${missing}.`);
-    }
-
-    // No orphan Slices. Each Slice has a Tag (and there may be multiple Slices with
-    // the same Tag).
-    const orphanSlices = slices.filter((slice) =>
-      !map.has(slice.name as AnimationID)
+    const missingIDs = ids == null || ids.size == map.size
+      ? []
+      : [...ids.keys()].filter((id) => !map.has(id)).map((id) => `"${id}"`);
+    assert(
+      missingIDs.length == 0,
+      `Missing ID(s) in atlas: ${missingIDs.join(', ')}.`,
     );
-    if (orphanSlices.length > 0) {
-      throw Error(
-        `Missing AnimationID(s) for slice(s): ${
-          orphanSlices.map((slice) => slice.name).join(', ')
-        }.`,
-      );
-    }
 
-    return <AnimationByID<AnimationID>> Object.fromEntries(map);
+    // No orphan Slices. Each Slice has a Tag (and there may be multiple Slices
+    // with the same Tag).
+    const orphanSlices = slices.filter((slice) =>
+      !map.has(slice.name as FilmID)
+    );
+    assert(
+      orphanSlices.length == 0,
+      `Missing ID(s) for slice(s): ${
+        orphanSlices.map((slice) => slice.name).join(', ')
+      }.`,
+    );
+
+    return <FilmByID<FilmID>> Object.fromEntries(map);
   }
 
   /** @internal */
-  export function constructCelBoundsByID<AnimationID extends Aseprite.Tag>(
-    animationByID: AnimationByID<AnimationID>,
+  export function newCelBoundsByID<FilmID extends Aseprite.Tag>(
+    factory: Readonly<CelIDFactory>,
+    filmByID: FilmByID<FilmID>,
   ): CelBoundsByID {
-    const celBoundsByID = Object.create(null);
-    for (const animation of Object.values<Anim>(animationByID)) {
-      for (const cel of animation.cels) celBoundsByID[cel.id] = cel.bounds;
+    const celBoundsByID = [];
+    for (const film of Object.values<Film>(filmByID)) {
+      for (const cel of film.cels) celBoundsByID[cel.id] = cel.bounds;
     }
+    assert(
+      celBoundsByID.length == factory.size,
+      `Cel bounds lookup table has incorrect length ` +
+        `(${celBoundsByID.length}); length should equal number of CelIDs ` +
+        `created (${factory.size}).`,
+    );
     return celBoundsByID;
   }
 
   /** @internal */
-  export function isAnimationID<AnimationID extends Aseprite.Tag>(
+  export function isFilmID<FilmID extends Aseprite.Tag>(
     id: Aseprite.Tag,
-    ids: ReadonlySet<AnimationID> | undefined,
-  ): id is AnimationID {
-    return ids == null || ids.has(<AnimationID> id);
+    ids: ReadonlySet<FilmID> | undefined,
+  ): id is FilmID {
+    return ids == null || ids.has(<FilmID> id);
   }
 
   /** @internal */
-  export function parseAnimation<AnimationID extends Aseprite.Tag>(
-    id: AnimationID,
+  export function parseFilm<FilmID extends Aseprite.Tag>(
+    id: FilmID,
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
     slices: readonly Aseprite.Slice[],
     factory: CelIDFactory,
-  ): Anim {
+  ): Film {
     const frames = parseTagFrames(frameTag, frameMap);
     const cels = frames.map((frame, i) =>
       parseCel(frameTag, frame, i, slices, factory)
@@ -118,22 +125,23 @@ export namespace AtlasMetaParser {
     }
     assert(
       duration > 0,
-      `Zero total duration for "${frameTag.name}" animation.`,
+      `Zero total duration for "${frameTag.name}" film.`,
     );
 
-    assert(cels.length > 0, `"${frameTag.name}" animation has no cels.`);
+    assert(cels.length > 0, `"${frameTag.name}" film has no cels.`);
     assert(
       cels.slice(0, -1).every(({ duration }) =>
         duration < Number.POSITIVE_INFINITY
       ),
-      `Intermediate cel has infinite duration for "${frameTag.name}" animation.`,
+      `Intermediate cel has infinite duration for "${frameTag.name}" film.`,
     );
 
+    // Cels is known to have at least one and is derived from frames.
     const wh = parseU16XY(frames[0]!.sourceSize);
     const area = wh.x * wh.y;
     assert(
       cels.every(({ bounds }) => U16Box.area(bounds) == area),
-      `Cel sizes for "${frameTag.name}" animation vary.`,
+      `Cel sizes for "${frameTag.name}" film vary.`,
     );
 
     return {
@@ -215,12 +223,9 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parsePadding({
-    frame,
-    sourceSize,
-  }: Aseprite.Frame): Readonly<U16XY> {
-    const w = frame.w - sourceSize.w;
-    const h = frame.h - sourceSize.h;
+  export function parsePadding(frame: Aseprite.Frame): Readonly<U16XY> {
+    const w = frame.frame.w - frame.sourceSize.w;
+    const h = frame.frame.h - frame.sourceSize.h;
     assert(isEven(w) && isEven(h), 'Cel padding is not evenly divisible.');
     return U16XY(w, h);
   }
@@ -240,14 +245,14 @@ export namespace AtlasMetaParser {
 
   /** @internal */
   export function parseSlices(
-    { name }: Aseprite.FrameTag,
+    frameTag: Aseprite.FrameTag,
     index: number,
     slices: readonly Aseprite.Slice[],
   ): readonly Readonly<U16Box>[] {
     const bounds = [];
     for (const slice of slices) {
       // Ignore Slices not for this Tag.
-      if (slice.name != name) continue;
+      if (slice.name != frameTag.name) continue;
       // Get the greatest relevant Key, if any.
       const key = slice.keys.filter((key) => key.frame <= index).at(-1);
       if (key != null) bounds.push(parseU16Box(key.bounds));
@@ -258,21 +263,26 @@ export namespace AtlasMetaParser {
 
   /** @internal */
   export function parseU16Box(
-    { x, y, w, h }: Readonly<Aseprite.Rect<U16 | number>>,
+    rect: Readonly<Aseprite.Rect<U16 | number>>,
   ): U16Box {
-    return U16Box(x, y, w, h);
+    return U16Box(rect.x, rect.y, rect.w, rect.h);
   }
 
   /** @internal */
-  export function parseU16XY({ w, h }: Aseprite.WH<Int | number>): U16XY {
-    return U16XY(w, h);
+  export function parseU16XY(wh: Aseprite.WH<Int | number>): U16XY {
+    return U16XY(wh.w, wh.h);
+  }
+}
+
+/** @internal */
+export class CelIDFactory {
+  #id: CelID = <CelID> 0;
+
+  new(): CelID {
+    return <CelID> this.#id++;
   }
 
-  /** @internal */
-  export class CelIDFactory {
-    #id: CelID = <CelID> 0;
-    new(): CelID {
-      return <CelID> this.#id++;
-    }
+  get size(): number {
+    return this.#id;
   }
 }

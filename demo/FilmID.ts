@@ -6,9 +6,9 @@ import { Immutable } from '@/oidlib';
  * animation duration, from the Atlas. The tag convention used here is
  * <file stem>-<state or variant or ancillary image>.
  */
-export type AnimationID = Parameters<typeof AnimationID.values['has']>[0];
+export type FilmID = Parameters<typeof FilmID.values['has']>[0];
 
-export namespace AnimationID {
+export namespace FilmID {
   export const values = Immutable(
     new Set(
       [

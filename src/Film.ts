@@ -1,14 +1,8 @@
 import { Immutable, U16, U16Box, U16Millis, U16XY } from '@/oidlib';
 
-/**
- * A sequence of animation `Cel`s.
- *
- * Named "Anim" to avoid conflict with the Animation global.
- */
-export interface Anim {
-  /**
-   * The Aseprite tag, a unique identifier for the animation like "FrogIdle".
-   */
+/** A sequence of animation cels. */
+export interface Film {
+  /** The Aseprite tag, a unique identifier for the film like "FrogIdle". */
   readonly id: string;
 
   /**
@@ -17,29 +11,29 @@ export interface Anim {
    */
   readonly wh: Readonly<U16XY>;
 
-  /** Every animation is expected to have at least one Cel. */
+  /** Every film is expected to have at least one cel. */
   readonly cels: readonly Cel[];
 
   /**
-   * Positive animation length in milliseconds for a full cycle, possibly
-   * infinite. For a ping-pong animation, this is a full traversal forward
-   * plus the traversal backward excluding the first and last frame. Eg, in a
-   * five cel animation, the total duration would be the sum of the individual
-   * durations for the initial five frames and the middle three frames.
+   * Positive film length in milliseconds for a full cycle, possibly infinite.
+   * For a ping-pong film, this is a full traversal forward plus the traversal
+   * backward excluding the first and last frame. Eg, in a five cel animation,
+   * the total duration would be the sum of the individual durations for the
+   * initial five frames and the middle three frames.
    */
   readonly duration: U16Millis | typeof Number.POSITIVE_INFINITY;
 
   readonly direction: Playback;
 }
 
-/** A single frame of an animation sequence. */
+/** A single animation frame of a film. */
 export interface Cel {
   readonly id: CelID;
 
   /**
    * Location and area within the source atlas image in integral pixels from
-   * the top-left. The width and height duplicate the owning animation's size
-   * and are for convenience only. Sizes does not vary from animation.
+   * the top-left. The width and height duplicate the owning film's size and are
+   * for convenience only. Sizes never vary.
    */
   readonly bounds: Readonly<U16Box>;
 
@@ -74,9 +68,9 @@ export namespace Playback {
 
         /**
          * Animate from start to end - 1 or start, whichever is greater; when
-         * looping, change direction (initially, end to start + 1 or end, whichever
-         * is lesser. A traversal from start to end - 1 then end to start + 1 is
-         * considered a complete loop.
+         * looping, change direction (initially, end to start + 1 or end,
+         * whichever is lesser. A traversal from start to end - 1 then end to
+         * start + 1 is considered a complete loop.
          */
         'PingPong',
       ] as const,

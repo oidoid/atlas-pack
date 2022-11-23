@@ -61,7 +61,7 @@ There are three steps in the workflow:
 - **Run**: Parse the sprite sheet JSON and generate an immutable sprite `Atlas`
   optimized for lookup and sharing. Every distinct renderable object should then
   create its own `Animator` state. Finally, `Animator` is used to update and
-  render the `Anim` state sub-textures each frame.
+  render the `Film` state sub-textures each frame.
 
 Aseprite itself provides everything needed. However, the latter two steps
 benefit from the tooling provided by atlas-pack:
@@ -69,10 +69,10 @@ benefit from the tooling provided by atlas-pack:
 - `atlas-pack`: A thin wrapper around the Aseprite executable with the defaults
   expected by the `AtlasMetaParser`.
 - `AtlasMetaParser`: Accepts a sprite sheet JSON file and outputs an immutable
-  `AtlasMeta` for efficient `Anim` sub-texture lookup. Each sprite sheet has one
-  `AtlasMeta` object.
-- `Animator`: The current playback state for a given `Anim`. There are often
-  multiple distinct `Animator`s associated with the same `Anim`. A renderer
+  `AtlasMeta` for efficient `Film` (animation) sub-texture lookup. Each sprite
+  sheet has one `AtlasMeta` object.
+- `Animator`: The current playback state for a given `Film`. There are often
+  multiple distinct `Animator`s associated with the same `Film`. A renderer
   should consult `Animator` states to determine the appropriate sub-texture
   regions to blit from the `Atlas` each loop.
 
@@ -151,8 +151,8 @@ import asepriteJSON from './atlas.json' assert { type: 'json' };
 
 const meta = AtlasMetaParser.parse(asepriteJSON);
 
-const animation = meta.animationByID['FrogIdle'];
-const animator = Animator(animation);
+const film = meta.filmByID['FrogIdle'];
+const animator = Animator(film);
 
 Animator.animate(animator, 16.667);
 const { start, end } = Animator.cel(animator).bounds;
@@ -177,13 +177,13 @@ import asepriteJSON from './atlas.json' assert { type: 'json' };
 const meta = AtlasMetaParser.parse(asepriteJSON);
 ```
 
-##### Retrieve an Animation from the Atlas
+##### Retrieve a Film from the Atlas
 
 Animations are stateless and are retrieved by Aseprite tag:
 
 ```js
-// Retrieve the Anim tagged "FrogIdle".
-const animation = meta.animationByID['FrogIdle'];
+// Retrieve the Film tagged "FrogIdle".
+const film = meta.filmByID['FrogIdle'];
 ```
 
 ##### Create an Animator and Animate It

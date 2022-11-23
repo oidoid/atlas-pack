@@ -1,6 +1,7 @@
 import { Aseprite, AtlasMetaParser, CelID, Playback } from '@/atlas-pack';
 import { U16Box, U16Millis, U16XY } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
+import { CelIDFactory } from './AtlasMetaParser.ts';
 
 Deno.test('parse()', async (test) => {
   await test.step('Parses Meta.', () => {
@@ -26,15 +27,15 @@ Deno.test('parse()', async (test) => {
         filename: 'atlas.png',
         format: 'I8',
         wh: U16XY(1, 2),
-        animationByID: {},
-        celBoundsByID: {},
+        filmByID: {},
+        celBoundsByID: [],
       },
     );
   });
 });
 
-Deno.test('parseAnimationByID()', async (test) => {
-  await test.step('Parses animations.', () => {
+Deno.test('parseFilmByID()', async (test) => {
+  await test.step('Parses films.', () => {
     const frameTags = [
       { name: 'sceneryCloud', from: 0, to: 0, direction: 'forward' },
       { name: 'palette-red', from: 1, to: 1, direction: 'forward' },
@@ -98,7 +99,8 @@ Deno.test('parseAnimationByID()', async (test) => {
       },
     ];
     assertEquals(
-      AtlasMetaParser.parseAnimationByID(
+      AtlasMetaParser.parseFilmByID(
+        new CelIDFactory(),
         { meta: <Aseprite.Meta> (<unknown> { frameTags, slices }), frames },
         new Set([
           'sceneryCloud',
@@ -197,7 +199,8 @@ Deno.test('parseAnimationByID()', async (test) => {
       },
     };
     assertThrows(() =>
-      AtlasMetaParser.parseAnimationByID(
+      AtlasMetaParser.parseFilmByID(
+        new CelIDFactory(),
         { meta: <Aseprite.Meta> (<unknown> { frameTags, slices: [] }), frames },
         new Set(['sceneryCloud', 'palette-red']),
       )
@@ -205,7 +208,7 @@ Deno.test('parseAnimationByID()', async (test) => {
   });
 });
 
-Deno.test('parseAnimation()', async (test) => {
+Deno.test('parseFilm()', async (test) => {
   await test.step('Parses FrameTag, Frame from Frame[], and Slice.', () => {
     const frameTag = { name: 'cloud s', from: 1, to: 1, direction: 'forward' };
     const frames = {
@@ -252,12 +255,12 @@ Deno.test('parseAnimation()', async (test) => {
       },
     ];
     assertEquals(
-      AtlasMetaParser.parseAnimation(
+      AtlasMetaParser.parseFilm(
         'cloud s',
         frameTag,
         frames,
         slices,
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       ),
       {
         id: 'cloud s',
@@ -314,12 +317,12 @@ Deno.test('parseAnimation()', async (test) => {
       },
     };
     assertEquals(
-      AtlasMetaParser.parseAnimation(
+      AtlasMetaParser.parseFilm(
         'frog',
         frameTag,
         frames,
         [],
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       ).duration,
       1 + 12 + 130 + 1400 + 12 + 130,
     );
@@ -346,12 +349,12 @@ Deno.test('parseAnimation()', async (test) => {
       },
     };
     assertThrows(() =>
-      AtlasMetaParser.parseAnimation(
+      AtlasMetaParser.parseFilm(
         'frog',
         frameTag,
         frames,
         [],
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       )
     );
   });
@@ -377,12 +380,12 @@ Deno.test('parseAnimation()', async (test) => {
       },
     };
     assertThrows(() =>
-      AtlasMetaParser.parseAnimation(
+      AtlasMetaParser.parseFilm(
         'frog',
         frameTag,
         frames,
         [],
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       )
     );
   });
@@ -390,12 +393,12 @@ Deno.test('parseAnimation()', async (test) => {
   await test.step('Throws Error when no Frame is associated with Tag.', () => {
     const frameTag = { name: 'frog', from: 0, to: 0, direction: 'forward' };
     assertThrows(() =>
-      AtlasMetaParser.parseAnimation(
+      AtlasMetaParser.parseFilm(
         'frog',
         frameTag,
         {},
         [],
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       )
     );
   });
@@ -454,7 +457,7 @@ Deno.test('parseCel()', async (test) => {
         frame,
         0,
         slices,
-        new AtlasMetaParser.CelIDFactory(),
+        new CelIDFactory(),
       ),
       {
         id: <CelID> 0,

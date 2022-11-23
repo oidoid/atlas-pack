@@ -1,7 +1,7 @@
 import { Animator, AtlasMeta, AtlasMetaParser } from '@/atlas-pack';
 import { assertNonNull, U16Box, UnumberMillis } from '@/oidlib';
-import { AnimationID } from './AnimationID.ts';
 import atlasJSON from './atlas.json' assert { type: 'json' };
+import { FilmID } from './FilmID.ts';
 
 interface Demo {
   readonly window: Window;
@@ -9,7 +9,7 @@ interface Demo {
   readonly context: CanvasRenderingContext2D;
   readonly animator: Animator;
   readonly atlas: HTMLImageElement;
-  readonly atlasMeta: AtlasMeta<AnimationID>;
+  readonly atlasMeta: AtlasMeta<FilmID>;
 }
 
 async function main(window: Window): Promise<void> {
@@ -31,13 +31,13 @@ atlas-pack ┌>°┐
   context.imageSmoothingEnabled = false;
 
   const atlas = await loadImage('atlas.png');
-  const atlasMeta = AtlasMetaParser.parse(atlasJSON, AnimationID.values);
-  const animation = atlasMeta.animationByID['BackpackerWalkRight'];
+  const atlasMeta = AtlasMetaParser.parse(atlasJSON, FilmID.values);
+  const film = atlasMeta.filmByID['BackpackerWalkRight'];
   const demo = {
     window,
     canvas,
     context,
-    animator: Animator(animation),
+    animator: Animator(film),
     atlas,
     atlasMeta,
   };

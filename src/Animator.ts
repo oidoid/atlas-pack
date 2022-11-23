@@ -1,37 +1,37 @@
-import { Anim, Cel, CelID, Playback } from '@/atlas-pack';
-import { I32, NumUtil, UnumberMillis } from '@/oidlib';
+import { Cel, CelID, Film, Playback } from '@/atlas-pack';
+import { I32, NumUtil, U16, UnumberMillis } from '@/oidlib';
 
-export function Animator(animation: Anim): Animator {
-  return { animation, period: I32(0), exposure: UnumberMillis(0) };
+export function Animator(film: Film): Animator {
+  return { film, period: I32(0), exposure: UnumberMillis(0) };
 }
 
-/** Record and update `Anim` playback state. */
+/** Film playback state. */
 export interface Animator {
-  /**
-   * The current animation cycle offset, used to track oscillation state and
-   * calculate index. The animation may be changed after construction but use
-   * `reset()` which will also clear the period and duration.
-   */
-  animation: Anim;
+  /** The currently loaded film. */
+  film: Film;
 
   /**
-   * `Cel` index oscillation state. This integer may fall outside of animation
-   * bounds (even negative) depending on the animation interval selected by
-   * direction. This value should be carried over from each call unless the
-   * `Cel` is manually set. Any integer in [0, `Anim.cels.length`) is
-   * always valid. Aseprite indices are u16s but a period can be negative.
+   * Cel index oscillation state used to derive active cel index.
    *
-   * Every `Anim` is expected to have at least one `Cel` as validated by
-   * the parser.
+   * Any integer in [0, `Film.cels.length`) is always valid. Aseprite indices
+   * are U16s but this period may fall outside of the film bounds (even
+   * negative) depending on the `Film.direction` interval.
+   *
+   * Every Film is expected to have at least one `Cel` as validated by the
+   * parser.
+   *
+   * The period advances when the current cel has met its exposure duration.
+   *
+   * All films start at period zero.
    */
   period: I32;
 
   /**
-   * Current `Cel` exposure in milliseconds. When the fractional value meets or
-   * exceeds the `Cel` exposure duration, the `Cel` is advanced according to
-   * direction. This value should be carried over from each call with the
-   * current time step added, and zeroed on manual `Cel` change. Any number in
-   * [0, ∞) is valid.
+   * Current cel exposure in milliseconds. When the running exposure meets or
+   * exceeds the cel exposure duration, the cel is advanced according to the
+   * film direction.
+   *
+   * Any number in [0, ∞) is valid.
    */
   exposure: UnumberMillis;
 }
@@ -39,39 +39,30 @@ export interface Animator {
 export namespace Animator {
   /**
    * Clear the exposure time and set the animation to the starting cel. This is
-   * useful when changing animations.
+   * useful when changing films or resetting the active film.
    */
-  export function reset(
-    self: Animator,
-    animation: Anim = self.animation,
-  ): void {
-    self.animation = animation;
+  export function setFilm(self: Animator, film: Film = self.film): void {
+    self.film = film;
     self.period = I32(0);
     self.exposure = UnumberMillis(0);
   }
 
-  /** Change the animation cel and reset the exposure. */
-  export function set(self: Animator, period: I32): void {
-    self.period = period;
-    self.exposure = UnumberMillis(0);
-  }
-
   /**
-   * Apply the time since last frame was shown, possibly advancing the
-   * `Anim` period. The worst case scenario is when `exposure` is
-   * `animation.duration - 1` which would iterate over every `Cel` in the
-   * `Anim`. Since `Anim`s are usually animated every frame, this
-   * is expected to be a rarity.
+   * Apply the time since last cel was shown, possibly advancing the cel.
+   *
+   * The worst case scenario is when exposure is `film.duration - 1` which would
+   * iterate over every cel in the film. Since films are usually animated every
+   * vblank, this is expected to be a rarity.
    *
    * @arg exposure The time delta since the last call to animate(). For example,
    *  in a 60 frames per second animation, this is often ~16.667 milliseconds.
    */
   export function animate(self: Animator, exposure: UnumberMillis): void {
-    // Avoid unnecessary iterations by skipping complete `Anim` cycles.
-    // `animation.duration` may be infinite but the modulo of any number and
-    // infinity is that number. Duration is positive.
+    // Avoid unnecessary iterations by skipping complete playback cycles.
+    // `Film.duration` may be infinite but the modulo of any number and infinity
+    // is that number. Duration is positive.
     self.exposure = UnumberMillis(
-      (self.exposure + exposure) % self.animation.duration,
+      (self.exposure + exposure) % self.film.duration,
     );
     for (
       let { duration } = cel(self);
@@ -79,33 +70,31 @@ export namespace Animator {
       { duration } = cel(self)
     ) {
       self.exposure = UnumberMillis(self.exposure - duration);
-      self.period = nextPeriod[self.animation.direction](
+      self.period = nextPeriod[self.film.direction](
         self.period,
-        self.animation.cels.length,
+        self.film.cels.length,
       );
     }
   }
 
-  // isEnd() true if last cel and finite duration has passed
-
-  /** @return The `Anim` `Cel` for period. */
+  /** @return The active film cel. */
   export function cel(self: Readonly<Animator>): Cel {
-    // Anim length is greater than zero as enforced by parser.
-    return self.animation.cels[index(self)]!;
+    // Film length is greater than zero as enforced by parser.
+    return self.film.cels[index(self)]!;
   }
 
-  /** @return The `Anim` `CelID` for period. */
+  /** @return The active film cel's ID. */
   export function celID(self: Readonly<Animator>): CelID {
     return cel(self).id;
   }
 
-  /** @return The `Anim` `Cel` index for period. */
-  export function index(self: Readonly<Animator>): number {
-    return Math.abs(self.period % self.animation.cels.length);
+  /** @return The active film cel index. */
+  export function index(self: Readonly<Animator>): U16 {
+    return U16(Math.abs(self.period % self.film.cels.length));
   }
 }
 
-/** Given a period and `Anim` size, advance to the next period. */
+/** Given a period and film cel sequence size, advance to the next period. */
 const nextPeriod: Readonly<
   Record<Playback, (period: I32, len: number) => I32>
 > = Object.freeze({
