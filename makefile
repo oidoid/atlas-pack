@@ -19,12 +19,12 @@ build: bundle build\:dist
 .PHONY: build\:dist
 build\:dist: $(dist_files)
 
-.PHONY: build\:watch
-build\:watch:
+.PHONY: watch\:build
+watch\:build:
   watchexec -i dist '$(make) build\:dist'
 
-.PHONY: dev
-dev: build\:watch bundle\:watch serve
+.PHONY: watch
+watch: watch\:build watch\:bundle serve
 
 .PHONY: serve
 serve: | $(dist_dir)/
@@ -35,9 +35,9 @@ bundle: $(demo_dir)/atlas.json | $(dist_dir)/
   $(deno) bundle --config='$(deno_config)' mod.ts '$(dist_dir)/atlas-pack.js'
   $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' $(bundle_flags)
 
-.PHONY: bundle\:watch
-bundle\:watch: bundle_flags += --watch
-bundle\:watch: bundle
+.PHONY: watch\:bundle
+watch\:bundle: bundle_flags += --watch
+watch\:bundle: bundle
 
 .PHONY: test
 test: build test\:unit; $(deno) lint --config='$(deno_config)' --quiet
