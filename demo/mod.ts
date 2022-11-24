@@ -1,4 +1,4 @@
-import { Animator, AtlasMeta, AtlasMetaParser } from '@/atlas-pack';
+import { Animator, AtlasMeta } from '@/atlas-pack';
 import { assertNonNull, U16Box, UnumberMillis } from '@/oidlib';
 import atlasJSON from './atlas.json' assert { type: 'json' };
 import { FilmID } from './FilmID.ts';
@@ -31,8 +31,8 @@ atlas-pack ┌>°┐
   context.imageSmoothingEnabled = false;
 
   const atlas = await loadImage('atlas.png');
-  const atlasMeta = AtlasMetaParser.parse(atlasJSON, FilmID.values);
-  const film = atlasMeta.filmByID['BackpackerWalkRight'];
+  const atlasMeta = atlasJSON as unknown as AtlasMeta<FilmID>;
+  const film = atlasMeta.filmByID.BackpackerWalkRight;
   const demo = {
     window,
     canvas,

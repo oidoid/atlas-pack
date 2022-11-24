@@ -5,6 +5,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 ## v5.0.0
 
 - \[API\] Use film terminology over animation.
+- \[API\] Use integers for duration for plain JSON compatibility.
 
 ## v4.0.2
 

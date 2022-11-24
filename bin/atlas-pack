@@ -1,17 +1,12 @@
 #!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
-// atlas-pack --sheet <filename.png> [--data <filename.json>] [OPTIONS] [FILES]
+// atlas-pack
 
-const process = Deno.run({
-  cmd: [
-    'aseprite',
-    '--batch',
-    ...Deno.args,
-    // See TagFrameNumber.
-    '--filename-format={tag}-{frame}',
-    '--list-tags',
-    '--list-slices',
-    '--sheet-pack',
-  ],
-});
+import { AtlasMetaParser } from '@/atlas-pack';
 
-await process.status();
+const decoder = new TextDecoder();
+const chunks = [];
+for await (const chunk of Deno.stdin.readable) {
+  chunks.push(decoder.decode(chunk));
+}
+const json = JSON.parse(chunks.join(''));
+console.log(JSON.stringify(AtlasMetaParser.parse(json), null, 2));

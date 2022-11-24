@@ -48,27 +48,25 @@ _Above: A complete font embedded in a single sprite sheet._
 
 ### Overview
 
-![The design, pack, and run workflow.](docs/workflow.png)
-
-There are three steps in the workflow:
+There are four steps in the workflow:
 
 - **Design**: Aseprite pixeling as per usual. Draw, tag, and slice sprites
   across `*.aseprite` files as wanted.
-- **Pack**: Concatenate all Aseprite rendered outputs using `atlas-pack` as part
-  of a project's build process. A single, big PNG sprite sheet containing all
-  frames of animation from all input files as well as an associated JSON texture
-  lookup file are output.
-- **Run**: Parse the sprite sheet JSON and generate an immutable sprite `Atlas`
-  optimized for lookup and sharing. Every distinct renderable object should then
-  create its own `Animator` state. Finally, `Animator` is used to update and
-  render the `Film` state sub-textures each frame.
+- **Export**: Generate a sprite and data sheet using `aseprite-batch`. A single,
+  big PNG sprite sheet containing all frames of animation from all input files
+  as well as an associated JSON texture lookup file are output.
+- **Pack**: Use `atlas-pack` to parse the sprite sheet JSON and generate an
+  immutable sprite `AtlasMeta` optimized for lookup and sharing.
+- **Run**: Every distinct renderable object should then create its own
+  `Animator` state. Finally, `Animator` is used to update and render the `Film`
+  state sub-textures each frame.
 
 Aseprite itself provides everything needed. However, the latter two steps
 benefit from the tooling provided by atlas-pack:
 
-- `atlas-pack`: A thin wrapper around the Aseprite executable with the defaults
-  expected by the `AtlasMetaParser`.
-- `AtlasMetaParser`: Accepts a sprite sheet JSON file and outputs an immutable
+- `aseprite-batch`: A thin wrapper around the Aseprite executable with the
+  defaults expected by the `AtlasMetaParser`.
+- `atlas-pack`: Accepts a sprite sheet JSON file and outputs an immutable
   `AtlasMeta` for efficient `Film` (animation) sub-texture lookup. Each sprite
   sheet has one `AtlasMeta` object.
 - `Animator`: The current playback state for a given `Film`. There are often
@@ -87,16 +85,16 @@ sprite sheet:
 deno \
   run \
   --allow-run \
-  https://deno.land/x/atlas_pack/bin/atlas-pack \
+  https://deno.land/x/atlas_pack/bin/aseprite-batch \
   --sheet atlas.png \
-  --data atlas.json \
-  *.aseprite
+  *.aseprite |
+deno run https://deno.land/x/atlas_pack/bin/atlas-pack > atlas.json
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
-[`Aseprite.File`](src/Aseprite.ts) (`atlas.json`) which is ready for parsing.
-These outputs should be regenerated any time assets (Aseprite files) change,
-usually as part of a build step.
+[`AtlasMeta`](src/AtlasMeta.ts) (`atlas.json`). These outputs should be
+regenerated any time assets (Aseprite files) change, usually as part of a build
+step.
 
 <details markdown>
 <summary>💡 Troubleshooting…</summary>
@@ -124,10 +122,10 @@ export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/deno"
 deno \
   run \
   --allow-run \
-  https://deno.land/x/atlas_pack/bin/atlas-pack \
+  https://deno.land/x/atlas_pack/bin/aseprite-batch \
   --sheet atlas.png \
-  --data atlas.json \
-  *.aseprite
+  *.aseprite |
+deno run https://deno.land/x/atlas_pack/bin/atlas-pack > atlas.json
 ```
 
 If the tool executes without any errors, no need to worry about changing the
@@ -146,15 +144,27 @@ minimal example follows. Subsequent sections detail each step in the example.
 All together, parse the packed sprite sheet and play the frog's idle animation:
 
 ```js
-import { Animator, AtlasMetaParser } from 'atlas_pack';
-import asepriteJSON from './atlas.json' assert { type: 'json' };
+import { Animator, AtlasMeta } from 'atlas_pack';
+import atlasJSON from './atlas.json' assert { type: 'json' };
 
-const meta = AtlasMetaParser.parse(asepriteJSON);
+// An AtlasMesa is just plain JSON and can be safely cast.
+const meta = atlasJSON as unknown as AtlasMeta;
 
-const film = meta.filmByID['FrogIdle'];
+// Retrieve a film from the atlas. Animations are stateless and are retrieved by
+// Aseprite tag ("FrogIdle", in this case).
+const film = meta.filmByID.FrogIdle;
+
+// Create a film player. Animators keep a record of the active cel and how long
+// its been exposed.
 const animator = Animator(film);
 
+// Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
+// duration specified in Aseprite, this may or may not advance the active cel.
+// For a multi-cel forward animation where the first cel has a 10 millisecond
+// duration, animator's state would be {film, period: 1, exposure: 6.667}.
 Animator.animate(animator, 16.667);
+
+// Print the location of the active cel within the sprite sheet PNG.
 const { start, end } = Animator.cel(animator).bounds;
 console.log(start.x, start.y, end.x, end.y);
 ```
@@ -162,59 +172,6 @@ console.log(start.x, start.y, end.x, end.y);
 `Animator.animate()` usually occurs within a loop.
 [See the API demo](https://atlas-pack.netlify.com/demo) for a running example
 rendered to a canvas.
-
-The following sections only detail the above example.
-
-##### Parsing
-
-Parse the `Aseprite.File` into an `AtlasMeta`:
-
-```js
-import { AtlasMetaParser } from 'atlas-pack';
-import asepriteJSON from './atlas.json' assert { type: 'json' };
-
-// Parse the Aseprite.File (atlas.json) into an AtlasMeta.
-const meta = AtlasMetaParser.parse(asepriteJSON);
-```
-
-##### Retrieve a Film from the Atlas
-
-Animations are stateless and are retrieved by Aseprite tag:
-
-```js
-// Retrieve the Film tagged "FrogIdle".
-const film = meta.filmByID['FrogIdle'];
-```
-
-##### Create an Animator and Animate It
-
-```js
-import { Animator } from 'atlas-pack';
-
-// Create a mutable Animator state. Animators keep a record of the cel index
-// oscillation period (which is used to derive the active index for the cels
-// array) and its exposure timer (which is used to determine when the period
-// should be advanced). Animators are just plain data.
-const animator = Animator(animation);
-
-// Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
-// duration specified in Aseprite, this may or may not advance the active cel.
-// For a multi-cel forward animation where the first cel has a 10 millisecond
-// duration, animator's state would be {animation, period: 1, exposure: 6.667}.
-Animator.animate(animator, 16.667);
-```
-
-##### Render the Animation
-
-Once the animation has been animated, the current cel should be shown each
-render loop:
-
-```js
-// Print the location of the active cel within the sprite sheet PNG.
-const cel = Animator.cel(animator);
-const { start, end } = cel.bounds;
-console.log(start.x, start.y, end.x, end.y);
-```
 
 ## Features
 
@@ -246,17 +203,13 @@ collision detection, etc. It is hoped that by focusing on a small set of
 responsibilities with a simple API, it will be easy to use (or not use) this
 library.
 
-Cel durations are allowed to be infinite. This means they are incompatible with
-JSON (JSON5 supports infinite values). As an alternative, the parser can output
-a JavaScript file instead.
-
 ## Assumptions and Conventions
 
 ### Assumptions
 
 The Aseprite CLI is flexible and can produce a many different formats. The
-atlas-pack library expects an input generated by the options used in
-[atlas-pack](bin/atlas-pack). Only the current version of Aseprite,
+atlas-pack CLI and library expect an input generated by the options used in
+[aseprite-batch](bin/aseprite-batch). Only the current version of Aseprite,
 v1.3-beta21-x64, is tested.
 
 ### Conventions
@@ -264,21 +217,17 @@ v1.3-beta21-x64, is tested.
 Some wanted functionality is not modeled in the stock Aseprite format. This
 section lists conventions used by atlas-pack. It's possible to forget to apply
 these conventions, which can lead to bugs that atlas-pack cannot detect. To the
-extent possible, consumers should add tests for conventions unique to their code
-or, even better, test that parsing succeeds. See
-[the demo parsing test](demo/atlas.json.test.ts).
+extent possible, consumers should add tests for conventions unique to their
+code.
 
 - A duration of 65 535 (hexadecimal ffff) is considered a special value by
-  atlas-pack and parsed as `Number.POSITIVE_INFINITY`. This value is only
+  atlas-pack and parsed as 4 294 967 295 (hex ffff ffff). This value is only
   permitted in the last cel of a tagged animation but can appear in multiple
   tagged animations within the same Aseprite file.
-- Slices are associated to cels by AnimationID. This is error-prone for artists
-  so consumers may wish to add tests to assure that all slices are associated to
-  a cel tag.
 
 ## Development
 
-Incomplete work is tracked under [todo](docs/to-do.text).
+Incomplete work is tracked under [to-do](docs/to-do.text).
 
 ## License
 
