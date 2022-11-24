@@ -1,6 +1,7 @@
 import { Animator, CelID, Playback } from '@/atlas-pack';
 import { I32, U16Box, U16Millis, U16XY, UnumberMillis } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
+import { InfiniteDuration } from './Film.ts';
 
 Deno.test('animate()', async (test) => {
   await test.step('Exposure < duration.', () => {
@@ -90,12 +91,12 @@ Deno.test('animate()', async (test) => {
         {
           id: <CelID> 1,
           bounds: U16Box(1, 2, 3, 4),
-          duration: Number.POSITIVE_INFINITY,
+          duration: InfiniteDuration,
           sliceBounds: U16Box(1, 1, -1, -1),
           slices: [],
         },
       ],
-      duration: Number.POSITIVE_INFINITY,
+      duration: InfiniteDuration,
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
@@ -141,7 +142,7 @@ Deno.test('reset()', () => {
   const cel = {
     id: <CelID> 0,
     bounds: U16Box(0, 0, 0, 0),
-    duration: UnumberMillis(1),
+    duration: U16Millis(1),
     sliceBounds: U16Box(1, 1, -1, -1),
     slices: [],
   };

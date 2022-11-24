@@ -2,6 +2,7 @@ import { Aseprite, AtlasMetaParser, CelID, Playback } from '@/atlas-pack';
 import { U16Box, U16Millis, U16XY } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 import { CelIDFactory } from './AtlasMetaParser.ts';
+import { InfiniteDuration } from './Film.ts';
 
 Deno.test('parse()', async (test) => {
   await test.step('Parses Meta.', () => {
@@ -132,12 +133,12 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 1,
               bounds: U16Box(91, 55, 16, 16),
-              duration: Number.POSITIVE_INFINITY,
+              duration: InfiniteDuration,
               sliceBounds: U16Box(7, 11, 3, 4),
               slices: [U16Box(7, 11, 3, 4)],
             },
           ],
-          duration: Number.POSITIVE_INFINITY,
+          duration: InfiniteDuration,
           direction: 'Forward',
         },
         sceneryConifer: {
@@ -147,12 +148,12 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 2,
               bounds: U16Box(73, 55, 16, 16),
-              duration: Number.POSITIVE_INFINITY,
+              duration: InfiniteDuration,
               sliceBounds: U16Box(7, 10, 3, 5),
               slices: [U16Box(7, 10, 3, 5)],
             },
           ],
-          duration: Number.POSITIVE_INFINITY,
+          duration: InfiniteDuration,
           direction: 'Forward',
         },
         'sceneryConifer-shadow': {
@@ -162,12 +163,12 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 3,
               bounds: U16Box(55, 55, 16, 16),
-              duration: Number.POSITIVE_INFINITY,
+              duration: InfiniteDuration,
               sliceBounds: U16Box(7, 9, 3, 6),
               slices: [U16Box(7, 9, 3, 6)],
             },
           ],
-          duration: Number.POSITIVE_INFINITY,
+          duration: InfiniteDuration,
           direction: 'Forward',
         },
       },
@@ -269,12 +270,12 @@ Deno.test('parseFilm()', async (test) => {
           {
             id: <CelID> 0,
             bounds: U16Box(185, 37, 16, 16),
-            duration: Number.POSITIVE_INFINITY,
+            duration: InfiniteDuration,
             sliceBounds: U16Box(4, 11, 9, 4),
             slices: [U16Box(4, 11, 9, 4)],
           },
         ],
-        duration: Number.POSITIVE_INFINITY,
+        duration: InfiniteDuration,
         direction: 'Forward',
       },
     );
@@ -328,7 +329,7 @@ Deno.test('parseFilm()', async (test) => {
     );
   });
 
-  await test.step('Throws Error on Animation with no Cels.', () => {
+  await test.step('Throws error on film with no cels.', () => {
     const frameTag = { name: 'frog', from: 1, to: 0, direction: 'forward' };
     const frames = {
       'frog.0': {
@@ -462,7 +463,7 @@ Deno.test('parseCel()', async (test) => {
       {
         id: <CelID> 0,
         bounds: U16Box(131, 19, 16, 16),
-        duration: Number.POSITIVE_INFINITY,
+        duration: InfiniteDuration,
         sliceBounds: U16Box(4, 4, 8, 12),
         slices: [U16Box(4, 4, 8, 12)],
       },
@@ -553,7 +554,7 @@ Deno.test('parseDuration()', async (test) => {
   await test.step('Parses infinite duration.', () =>
     assertEquals(
       AtlasMetaParser.parseDuration(65535),
-      Number.POSITIVE_INFINITY,
+      InfiniteDuration,
     ));
 
   await test.step('Parses negative duration.', () => {

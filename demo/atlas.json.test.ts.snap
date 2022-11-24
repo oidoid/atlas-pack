@@ -1334,7 +1334,7 @@ snapshot[`Atlas is parsable. 1`] = `
               y: 16,
             },
           },
-          duration: Infinity,
+          duration: 4294967295,
           id: 32,
           sliceBounds: {
             end: {
@@ -1351,7 +1351,7 @@ snapshot[`Atlas is parsable. 1`] = `
         },
       ],
       direction: "Forward",
-      duration: Infinity,
+      duration: 4294967295,
       id: "FrogEat",
       wh: {
         x: 16,

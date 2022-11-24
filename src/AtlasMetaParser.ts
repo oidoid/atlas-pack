@@ -15,9 +15,10 @@ import {
   JSONObject,
   U16,
   U16Box,
-  U16Millis,
   U16XY,
+  U32Millis,
 } from '@/oidlib';
+import { InfiniteDuration } from './Film.ts';
 
 export namespace AtlasMetaParser {
   /**
@@ -118,23 +119,29 @@ export namespace AtlasMetaParser {
     const cels = frames.map((frame, i) =>
       parseCel(frameTag, frame, i, slices, factory)
     );
-    let duration = cels.reduce((time, { duration }) => time + duration, 0);
+    assert(cels.length > 0, `"${frameTag.name}" film has no cels.`);
+
+    assert(
+      cels.slice(0, -1).every(({ duration }) => duration < InfiniteDuration),
+      `Intermediate cel has infinite duration (${Aseprite.Infinity}) for ` +
+        `"${frameTag.name}" film.`,
+    );
+
+    let duration = cels.reduce(
+      (time, { duration }) => Math.min(InfiniteDuration, time + duration),
+      0,
+    );
+
     const pingPong = frameTag.direction == Aseprite.Direction.PingPong;
+    assert(
+      !pingPong || duration != InfiniteDuration,
+      `Duration cannot be infinite (${Aseprite.Infinity}) for ping-pong ` +
+        'playback.',
+    );
     if (pingPong && cels.length > 2) {
       duration += duration - (cels[0]!.duration + cels.at(-1)!.duration);
     }
-    assert(
-      duration > 0,
-      `Zero total duration for "${frameTag.name}" film.`,
-    );
-
-    assert(cels.length > 0, `"${frameTag.name}" film has no cels.`);
-    assert(
-      cels.slice(0, -1).every(({ duration }) =>
-        duration < Number.POSITIVE_INFINITY
-      ),
-      `Intermediate cel has infinite duration for "${frameTag.name}" film.`,
-    );
+    assert(duration > 0, `Zero total duration for "${frameTag.name}" film.`);
 
     // Cels is known to have at least one and is derived from frames.
     const wh = parseU16XY(frames[0]!.sourceSize);
@@ -148,7 +155,7 @@ export namespace AtlasMetaParser {
       id,
       wh,
       cels,
-      duration,
+      duration: U32Millis(duration),
       direction: parsePlayback(frameTag.direction),
     };
   }
@@ -238,9 +245,10 @@ export namespace AtlasMetaParser {
   /** @internal */
   export function parseDuration(
     duration: Aseprite.Duration,
-  ): U16Millis | typeof Number.POSITIVE_INFINITY {
+  ): U32Millis {
     assert(duration > 0, 'Cel duration is not positive.');
-    return duration == Aseprite.Infinite ? Number.POSITIVE_INFINITY : duration;
+    if (duration == Aseprite.Infinity) return InfiniteDuration;
+    return U32Millis(duration);
   }
 
   /** @internal */

@@ -7,7 +7,7 @@ export function Animator(film: Film): Animator {
 
 /** Film playback state. */
 export interface Animator {
-  /** The currently loaded film. */
+  /** The currently loaded animation. */
   film: Film;
 
   /**
@@ -31,7 +31,7 @@ export interface Animator {
    * exceeds the cel exposure duration, the cel is advanced according to the
    * film direction.
    *
-   * Any number in [0, ∞) is valid.
+   * Any number in [0, `Film.duration`] is valid.
    */
   exposure: UnumberMillis;
 }
@@ -59,16 +59,20 @@ export namespace Animator {
    */
   export function animate(self: Animator, exposure: UnumberMillis): void {
     // Avoid unnecessary iterations by skipping complete playback cycles.
-    // `Film.duration` may be infinite but the modulo of any number and infinity
-    // is that number. Duration is positive.
     self.exposure = UnumberMillis(
       (self.exposure + exposure) % self.film.duration,
     );
+
+    // `duration` is greater than zero. Catch the current cel up to the current
+    // pending exposure. If the active cell has an infinite duration, the total
+    // film duration will be infinite and self.exposure will never meet it.
     for (
       let { duration } = cel(self);
       self.exposure >= duration;
       { duration } = cel(self)
     ) {
+      // The current cel has has met or exceeded its exposure requirements.
+      // Subtract the active cel's exposure, advance the cel, and continue.
       self.exposure = UnumberMillis(self.exposure - duration);
       self.period = nextPeriod[self.film.direction](
         self.period,
@@ -100,14 +104,14 @@ const nextPeriod: Readonly<
 > = Object.freeze({
   /** @arg period An integer in the domain [0, len - 1]. */
   Forward(period) {
+    // to-do: I32.addMod().
     return I32((period % I32.max) + 1);
-    // return I32.mod(period + 1);
   },
 
   /** @arg period An integer in the domain (-∞, len - 1]. */
   Reverse(period, len) {
+    // to-do: I32.addMod().
     return I32((period % I32.min) - 1 + len);
-    // return I32.mod(period - 1 + len);
   },
 
   /** @arg period An integer in the domain [2 - len, len - 1]. */

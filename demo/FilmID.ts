@@ -1,10 +1,9 @@
 import { Immutable } from '@/oidlib';
 
 /**
- * The Atlas.Animation identifier for all Animations in the Atlas. IDs are used
- * to reference immutable image source properties, such as dimensions and
- * animation duration, from the Atlas. The tag convention used here is
- * <file stem>-<state or variant or ancillary image>.
+ * The film identifier for all Animations in the Atlas. IDs are used to
+ * reference immutable image source properties, such as dimensions and animation
+ * duration, from the Atlas.
  */
 export type FilmID = Parameters<typeof FilmID.values['has']>[0];
 
