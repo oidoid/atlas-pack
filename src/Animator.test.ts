@@ -3,7 +3,7 @@ import { I32, U16Box, U16Millis, U16XY, UnumberMillis } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
 import { InfiniteDuration } from './Film.ts';
 
-Deno.test('animate()', async (test) => {
+Deno.test('play()', async (test) => {
   await test.step('Exposure < duration.', () => {
     const cel = {
       id: <CelID> 0,
@@ -20,7 +20,7 @@ Deno.test('animate()', async (test) => {
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.animate(animator, UnumberMillis(0.5));
+    Animator.play(animator, UnumberMillis(0.5));
     assertEquals(animator, {
       film,
       period: I32(0),
@@ -44,7 +44,7 @@ Deno.test('animate()', async (test) => {
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.animate(animator, UnumberMillis(1));
+    Animator.play(animator, UnumberMillis(1));
     assertEquals(animator, {
       film,
       period: I32(1),
@@ -68,7 +68,7 @@ Deno.test('animate()', async (test) => {
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.animate(animator, UnumberMillis(1.5));
+    Animator.play(animator, UnumberMillis(1.5));
     assertEquals(animator, {
       film,
       period: I32(1),
@@ -100,13 +100,13 @@ Deno.test('animate()', async (test) => {
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.animate(animator, UnumberMillis(0.5));
+    Animator.play(animator, UnumberMillis(0.5));
     assertEquals(animator, {
       film,
       period: I32(0),
       exposure: UnumberMillis(0.5),
     });
-    Animator.animate(animator, UnumberMillis(100));
+    Animator.play(animator, UnumberMillis(100));
     assertEquals(animator, {
       film,
       period: I32(1),
@@ -129,7 +129,7 @@ Deno.test('animate()', async (test) => {
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.animate(animator, UnumberMillis(1.5));
+    Animator.play(animator, UnumberMillis(1.5));
     assertEquals(animator, {
       film,
       period: I32(1),
@@ -154,7 +154,7 @@ Deno.test('reset()', () => {
     direction: 'Forward' as const,
   };
   const animator = Animator(film);
-  Animator.animate(animator, UnumberMillis(1.5));
+  Animator.play(animator, UnumberMillis(1.5));
   assertEquals(animator.period, 1);
   assertEquals(animator.exposure, 0.5);
   Animator.setFilm(animator);
@@ -180,7 +180,7 @@ Deno.test('index()', async (test) => {
         direction,
       };
       const animator = Animator(film);
-      Animator.animate(animator, UnumberMillis(1));
+      Animator.play(animator, UnumberMillis(1));
       const index = Animator.index(animator);
       assertEquals(index, 1);
     });
@@ -207,7 +207,7 @@ Deno.test('index()', async (test) => {
         period: I32(1),
         exposure: UnumberMillis(0),
       };
-      Animator.animate(animator, UnumberMillis(1));
+      Animator.play(animator, UnumberMillis(1));
       const index = Animator.index(animator);
       assertEquals(index, 0);
     });
@@ -274,7 +274,7 @@ Deno.test('index()', async (test) => {
       };
       const playback = [];
       for (let i = 0; i < film.cels.length * 5; ++i) {
-        Animator.animate(animator, UnumberMillis(1));
+        Animator.play(animator, UnumberMillis(1));
         playback.push(Animator.index(animator));
       }
       assertEquals(playback, expected);
@@ -300,7 +300,7 @@ Deno.test('index()', async (test) => {
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        Animator.animate(animator, UnumberMillis(1));
+        Animator.play(animator, UnumberMillis(1));
         playback.push(Animator.index(animator));
       }
       const expected = {
@@ -331,7 +331,7 @@ Deno.test('index()', async (test) => {
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        Animator.animate(animator, UnumberMillis(6));
+        Animator.play(animator, UnumberMillis(6));
         playback.push(Animator.index(animator));
       }
       const expected = {
@@ -362,7 +362,7 @@ Deno.test('index()', async (test) => {
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.animate(animator, UnumberMillis(0.9));
+        Animator.play(animator, UnumberMillis(0.9));
         playback.push(Animator.index(animator));
       }
       // deno-fmt-ignore
@@ -394,7 +394,7 @@ Deno.test('index()', async (test) => {
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.animate(animator, UnumberMillis(0.5));
+        Animator.play(animator, UnumberMillis(0.5));
         playback.push(Animator.index(animator));
       }
       // deno-fmt-ignore
@@ -426,7 +426,7 @@ Deno.test('index()', async (test) => {
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.animate(animator, UnumberMillis(5.5));
+        Animator.play(animator, UnumberMillis(5.5));
         playback.push(Animator.index(animator));
       }
       // deno-fmt-ignore

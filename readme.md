@@ -162,14 +162,14 @@ const animator = Animator(film);
 // duration specified in Aseprite, this may or may not advance the active cel.
 // For a multi-cel forward animation where the first cel has a 10 millisecond
 // duration, animator's state would be {film, period: 1, exposure: 6.667}.
-Animator.animate(animator, 16.667);
+Animator.play(animator, 16.667);
 
 // Print the location of the active cel within the sprite sheet PNG.
 const { start, end } = Animator.cel(animator).bounds;
 console.log(start.x, start.y, end.x, end.y);
 ```
 
-`Animator.animate()` usually occurs within a loop.
+`Animator.play()` usually occurs within a loop.
 [See the API demo](https://atlas-pack.netlify.com/demo) for a running example
 rendered to a canvas.
 

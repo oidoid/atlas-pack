@@ -57,7 +57,7 @@ export namespace Animator {
    * @arg exposure The time delta since the last call to animate(). For example,
    *  in a 60 frames per second animation, this is often ~16.667 milliseconds.
    */
-  export function animate(self: Animator, exposure: UnumberMillis): void {
+  export function play(self: Animator, exposure: UnumberMillis): void {
     // Avoid unnecessary iterations by skipping complete playback cycles.
     self.exposure = UnumberMillis(
       (self.exposure + exposure) % self.film.duration,

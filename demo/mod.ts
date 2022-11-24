@@ -50,7 +50,7 @@ function loop(demo: Demo, then: UnumberMillis, now: UnumberMillis): void {
   const millis = UnumberMillis(now - then);
 
   demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
-  Animator.animate(demo.animator, millis);
+  Animator.play(demo.animator, millis);
 
   const scale = 16;
   const { bounds } = Animator.cel(demo.animator);
