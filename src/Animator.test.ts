@@ -1,9 +1,16 @@
 import { Animator, CelID, Playback } from '@/atlas-pack';
-import { I32, U16Box, U16Millis, U16XY, UnumberMillis } from '@/oidlib';
+import {
+  U16,
+  U16Box,
+  U16Millis,
+  U16XY,
+  U32Millis,
+  UnumberMillis,
+} from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
 import { InfiniteDuration } from './Film.ts';
 
-Deno.test('play()', async (test) => {
+Deno.test('Animator()', async (test) => {
   await test.step('Exposure < duration.', () => {
     const cel = {
       id: <CelID> 0,
@@ -16,16 +23,15 @@ Deno.test('play()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
+      celIndexByDivision: [U16(0), U16(1)],
+      timeDivision: U32Millis(1),
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
-    const animator = Animator(film);
-    Animator.play(animator, UnumberMillis(0.5));
-    assertEquals(animator, {
-      film,
-      period: I32(0),
-      exposure: UnumberMillis(0.5),
-    });
+    const animator = Animator(film, UnumberMillis(0.5));
+    assertEquals(animator, { film, start: UnumberMillis(0.5) });
+    const index = Animator.index(animator, UnumberMillis(0.5));
+    assertEquals(index, 0);
   });
 
   await test.step('Exposure == duration.', () => {
@@ -40,16 +46,15 @@ Deno.test('play()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
+      celIndexByDivision: [U16(0), U16(1)],
+      timeDivision: U32Millis(1),
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.play(animator, UnumberMillis(1));
-    assertEquals(animator, {
-      film,
-      period: I32(1),
-      exposure: UnumberMillis(0),
-    });
+    assertEquals(animator, { film, start: UnumberMillis(0) });
+    const index = Animator.index(animator, UnumberMillis(1));
+    assertEquals(index, 1);
   });
 
   await test.step('Exposure > duration.', () => {
@@ -64,16 +69,15 @@ Deno.test('play()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
+      celIndexByDivision: [U16(0), U16(1)],
+      timeDivision: U32Millis(1),
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.play(animator, UnumberMillis(1.5));
-    assertEquals(animator, {
-      film,
-      period: I32(1),
-      exposure: UnumberMillis(0.5),
-    });
+    assertEquals(animator, { film, start: UnumberMillis(0) });
+    const index = Animator.index(animator, UnumberMillis(1.5));
+    assertEquals(index, 1);
   });
 
   await test.step('Infinite duration.', () => {
@@ -96,22 +100,17 @@ Deno.test('play()', async (test) => {
           slices: [],
         },
       ],
+      celIndexByDivision: [U16(0), U16(1)],
+      timeDivision: U32Millis(1),
       duration: InfiniteDuration,
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.play(animator, UnumberMillis(0.5));
-    assertEquals(animator, {
-      film,
-      period: I32(0),
-      exposure: UnumberMillis(0.5),
-    });
-    Animator.play(animator, UnumberMillis(100));
-    assertEquals(animator, {
-      film,
-      period: I32(1),
-      exposure: UnumberMillis(99.5),
-    });
+    assertEquals(animator, { film, start: UnumberMillis(0) });
+    let index = Animator.index(animator, UnumberMillis(0.5));
+    assertEquals(index, 0);
+    index = Animator.index(animator, UnumberMillis(100));
+    assertEquals(index, 1);
   });
 
   await test.step('One cel.', () => {
@@ -125,20 +124,19 @@ Deno.test('play()', async (test) => {
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       }],
+      celIndexByDivision: [U16(0)],
+      timeDivision: U32Millis(1),
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
     const animator = Animator(film);
-    Animator.play(animator, UnumberMillis(1.5));
-    assertEquals(animator, {
-      film,
-      period: I32(1),
-      exposure: UnumberMillis(0.5),
-    });
+    assertEquals(animator, { film, start: UnumberMillis(0) });
+    const index = Animator.index(animator, UnumberMillis(1.5));
+    assertEquals(index, 0);
   });
 });
 
-Deno.test('reset()', () => {
+Deno.test('setFilm()', () => {
   const cel = {
     id: <CelID> 0,
     bounds: U16Box(0, 0, 0, 0),
@@ -151,15 +149,16 @@ Deno.test('reset()', () => {
     wh: U16XY(0, 0),
     cels: [cel, cel],
     duration: U16Millis(2),
+    celIndexByDivision: [U16(0), U16(1)],
+    timeDivision: U32Millis(1),
     direction: 'Forward' as const,
   };
   const animator = Animator(film);
-  Animator.play(animator, UnumberMillis(1.5));
-  assertEquals(animator.period, 1);
-  assertEquals(animator.exposure, 0.5);
-  Animator.setFilm(animator);
-  assertEquals(animator.period, 0);
-  assertEquals(animator.exposure, 0);
+  let index = Animator.index(animator, UnumberMillis(1.5));
+  assertEquals(index, 1);
+  Animator.setFilm(animator, UnumberMillis(2));
+  index = Animator.index(animator, UnumberMillis(2));
+  assertEquals(index, 0);
 });
 
 Deno.test('index()', async (test) => {
@@ -176,13 +175,15 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel],
+        celIndexByDivision: [U16(0), U16(1)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(2),
         direction,
       };
       const animator = Animator(film);
-      Animator.play(animator, UnumberMillis(1));
-      const index = Animator.index(animator);
-      assertEquals(index, 1);
+      const index = Animator.index(animator, UnumberMillis(1));
+      const expected = { Forward: 1, Reverse: 0, PingPong: 1 };
+      assertEquals(index, expected[direction]);
     });
   }
 
@@ -199,60 +200,63 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel],
+        celIndexByDivision: [U16(0), U16(1)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(2),
         direction,
       };
-      const animator = {
-        film,
-        period: I32(1),
-        exposure: UnumberMillis(0),
-      };
-      Animator.play(animator, UnumberMillis(1));
-      const index = Animator.index(animator);
-      assertEquals(index, 0);
+      const animator = Animator(film);
+      const index = Animator.index(animator, UnumberMillis(2));
+      const expected = { Forward: 0, Reverse: 1, PingPong: 0 };
+      assertEquals(index, expected[direction]);
     });
   }
 
   for (
-    const [direction, period, expected] of [
+    const [direction, offset, expected] of [
       [
         'Forward',
         0,
-        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
       ],
       [
         'Forward',
-        I32.max,
-        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        10 * 4,
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
       ],
       [
         'Reverse',
-        I32.min,
+        0,
         [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0],
       ],
       [
         'Reverse',
-        3,
+        10 * 4,
+        [3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0],
+      ],
+      [
+        'Reverse',
+        1,
         [2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0, 3],
       ],
       [
         'PingPong',
-        -2,
-        [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2],
+        2,
+        [2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3],
       ],
       [
         'PingPong',
         0,
-        [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2],
+        [0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1],
       ],
       [
         'PingPong',
         3,
-        [2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1],
+        [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2],
       ],
     ] as [Playback, number, number[]][]
   ) {
-    await test.step(`Direction ${direction} bounds ${period}.`, () => {
+    await test.step(`Direction ${direction} offset ${offset}.`, () => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
@@ -264,18 +268,15 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(4),
         direction,
       };
-      const animator = {
-        film,
-        period: I32(period),
-        exposure: UnumberMillis(0),
-      };
+      const animator = { film, start: UnumberMillis(0) };
       const playback = [];
       for (let i = 0; i < film.cels.length * 5; ++i) {
-        Animator.play(animator, UnumberMillis(1));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(offset + 1 * i)));
       }
       assertEquals(playback, expected);
     });
@@ -294,26 +295,27 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3), U16(4)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(5),
         direction,
       };
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        Animator.play(animator, UnumberMillis(1));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(1 * i)));
       }
       const expected = {
-        Forward: [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
+        Forward: [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
         Reverse: [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        PingPong: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1],
+        PingPong: [0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2],
       };
       assertEquals(playback, expected[direction]);
     });
   }
 
   for (const direction of Playback.values) {
-    await test.step(`Exposure > duration, Direction %s cycles.`, () => {
+    await test.step(`Exposure > duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
@@ -325,19 +327,23 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3), U16(4)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(5),
         direction,
       };
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        Animator.play(animator, UnumberMillis(6));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(6 * i)));
       }
+      // deno-fmt-ignore
       const expected = {
-        Forward: [1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0],
-        Reverse: [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        PingPong: [1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1],
+        // time     0   6  12  18  24  30  36  42  48  54  60  66  72  78  84
+        // % 5      0   1   2   3   4   0   1   2   3   4   0   1   2   3   4
+        Forward:  [ 0,  1,  2,  3,  4,  0,  1,  2,  3,  4,  0,  1,  2,  3,  4],
+        Reverse:  [ 4,  3,  2,  1,  0,  4,  3,  2,  1,  0,  4,  3,  2,  1,  0],
+        PingPong: [ 0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4],
       };
       assertEquals(playback, expected[direction]);
     });
@@ -356,20 +362,23 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3), U16(4)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(5),
         direction,
       };
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.play(animator, UnumberMillis(0.9));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(0.9 * i)));
       }
       // deno-fmt-ignore
       const expected = {
-        Forward:  [0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 1],
-        Reverse:  [0, 4, 3, 2, 1, 0, 4, 3, 2, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 4],
-        PingPong: [0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2]
+        //         v                             v                             v
+        // decimal 0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1
+        Forward:  [0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1],
+        Reverse:  [4, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 1, 0, 4, 3, 2, 1, 0, 4, 3],
+        PingPong: [0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2, 3, 4, 3, 2, 1, 0, 1, 2]
       }
       assertEquals(playback, expected[direction]);
     });
@@ -388,20 +397,21 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3), U16(4)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(5),
         direction,
       };
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.play(animator, UnumberMillis(0.5));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(0.5 * i)));
       }
       // deno-fmt-ignore
       const expected = {
-        Forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        Reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        PingPong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        Forward:  [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+        Reverse:  [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
+        PingPong: [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2]
       }
       assertEquals(playback, expected[direction]);
     });
@@ -420,20 +430,21 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
+        celIndexByDivision: [U16(0), U16(1), U16(2), U16(3), U16(4)],
+        timeDivision: U32Millis(1),
         duration: U16Millis(5),
         direction,
       };
       const animator = Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        Animator.play(animator, UnumberMillis(5.5));
-        playback.push(Animator.index(animator));
+        playback.push(Animator.index(animator, UnumberMillis(5.5 * i)));
       }
       // deno-fmt-ignore
       const expected = {
-        Forward:  [0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
-        Reverse:  [0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0],
-        PingPong: [0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1]
+        Forward:  [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+        Reverse:  [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
+        PingPong: [0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1, 3, 2, 0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1]
       }
       assertEquals(playback, expected[direction]);
     });

@@ -17,6 +17,7 @@ import {
   U16Box,
   U16XY,
   U32Millis,
+  Uint,
 } from '@/oidlib';
 import { InfiniteDuration } from './Film.ts';
 
@@ -151,10 +152,13 @@ export namespace AtlasMetaParser {
       `Cel sizes for "${frameTag.name}" film vary.`,
     );
 
+    const [timeDivision, celIndexByDivision] = computeTimeDivision(cels);
     return {
       id,
       wh,
       cels,
+      celIndexByDivision,
+      timeDivision,
       duration: U32Millis(duration),
       direction: parsePlayback(frameTag.direction),
     };
@@ -243,9 +247,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parseDuration(
-    duration: Aseprite.Duration,
-  ): U32Millis {
+  export function parseDuration(duration: Aseprite.Duration): U32Millis {
     assert(duration > 0, 'Cel duration is not positive.');
     if (duration == Aseprite.Infinity) return InfiniteDuration;
     return U32Millis(duration);
@@ -279,6 +281,62 @@ export namespace AtlasMetaParser {
   /** @internal */
   export function parseU16XY(wh: Aseprite.WH<Int | number>): U16XY {
     return U16XY(wh.w, wh.h);
+  }
+
+  function computeTimeDivision(
+    cels: readonly Cel[],
+  ): [U32Millis | InfiniteDuration, U16[]] {
+    const durations = cels.map((cel) => cel.duration);
+    if (durations.length == 1) return [durations[0]!, [U16(0)]];
+
+    const infinite = durations.at(-1) == InfiniteDuration;
+    const finiteDurations = infinite ? durations.slice(0, -1) : durations;
+    const timeDivision = greatestCommonDivisor(
+      finiteDurations as [U32Millis, ...U32Millis[]],
+    );
+    const totalDuration =
+      (infinite ? [...finiteDurations, timeDivision] : finiteDurations).reduce(
+        (time, duration) => time + duration,
+        0,
+      );
+    const divisionsLen = Uint(totalDuration / timeDivision);
+    assert(
+      divisionsLen < 1024,
+      `Cel lookup table too large (${divisionsLen}); adjust cel durations to ` +
+        'share a greater common multiple.',
+    );
+
+    const celIndexByDivision = [];
+    for (
+      let divisionIndex = 0, celIndex = 0, duration = 0;
+      divisionIndex < divisionsLen;
+      divisionIndex++
+    ) {
+      celIndexByDivision.push(U16(celIndex));
+      duration += timeDivision;
+      if (duration == cels[celIndex]!.duration) {
+        celIndex++;
+        duration = 0;
+      }
+    }
+
+    return [U32Millis(timeDivision), celIndexByDivision];
+  }
+
+  /** @internal */
+  export function greatestCommonDivisor(ints: [Int, ...Int[]]): Int {
+    return ints.reduce(
+      (gcd, int) => greatestCommonDivisorPair(gcd, int),
+      ints[0],
+    );
+  }
+
+  /** @internal */
+  export function greatestCommonDivisorPair(lhs: Int, rhs: Int): Int {
+    assert(lhs != 0 && rhs != 0, 'Cannot divide by zero.');
+    const remainder = lhs % rhs;
+    if (remainder == 0) return rhs;
+    return greatestCommonDivisorPair(rhs, Int(remainder));
   }
 }
 

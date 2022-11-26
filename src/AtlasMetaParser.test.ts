@@ -1,5 +1,5 @@
 import { Aseprite, AtlasMetaParser, CelID, Playback } from '@/atlas-pack';
-import { U16Box, U16Millis, U16XY } from '@/oidlib';
+import { U16, U16Box, U16Millis, U16XY, U32Millis } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 import { CelIDFactory } from './AtlasMetaParser.ts';
 import { InfiniteDuration } from './Film.ts';
@@ -123,6 +123,8 @@ Deno.test('parseFilmByID()', async (test) => {
               slices: [U16Box(8, 12, 2, 3)],
             },
           ],
+          celIndexByDivision: [U16(0)],
+          timeDivision: U32Millis(1),
           duration: U16Millis(1),
           direction: 'Forward',
         },
@@ -138,6 +140,8 @@ Deno.test('parseFilmByID()', async (test) => {
               slices: [U16Box(7, 11, 3, 4)],
             },
           ],
+          celIndexByDivision: [U16(0)],
+          timeDivision: InfiniteDuration,
           duration: InfiniteDuration,
           direction: 'Forward',
         },
@@ -153,6 +157,8 @@ Deno.test('parseFilmByID()', async (test) => {
               slices: [U16Box(7, 10, 3, 5)],
             },
           ],
+          celIndexByDivision: [U16(0)],
+          timeDivision: InfiniteDuration,
           duration: InfiniteDuration,
           direction: 'Forward',
         },
@@ -168,6 +174,8 @@ Deno.test('parseFilmByID()', async (test) => {
               slices: [U16Box(7, 9, 3, 6)],
             },
           ],
+          celIndexByDivision: [U16(0)],
+          timeDivision: InfiniteDuration,
           duration: InfiniteDuration,
           direction: 'Forward',
         },
@@ -275,6 +283,8 @@ Deno.test('parseFilm()', async (test) => {
             slices: [U16Box(4, 11, 9, 4)],
           },
         ],
+        celIndexByDivision: [U16(0)],
+        timeDivision: InfiniteDuration,
         duration: InfiniteDuration,
         direction: 'Forward',
       },
@@ -290,7 +300,7 @@ Deno.test('parseFilm()', async (test) => {
         trimmed: false,
         spriteSourceSize: { x: 0, y: 0, w: 0, h: 0 },
         sourceSize: { w: 0, h: 0 },
-        duration: 1,
+        duration: 10,
       },
       'frog-1': {
         frame: { x: 1, y: 1, w: 0, h: 0 },
@@ -325,7 +335,7 @@ Deno.test('parseFilm()', async (test) => {
         [],
         new CelIDFactory(),
       ).duration,
-      1 + 12 + 130 + 1400 + 12 + 130,
+      10 + 12 + 130 + 1400 + 12 + 130,
     );
   });
 

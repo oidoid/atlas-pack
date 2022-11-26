@@ -46,14 +46,11 @@ atlas-pack ┌>°┐
   );
 }
 
-function loop(demo: Demo, then: UnumberMillis, now: UnumberMillis): void {
-  const millis = UnumberMillis(now - then);
-
+function loop(demo: Demo, _then: UnumberMillis, now: UnumberMillis): void {
   demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
-  Animator.play(demo.animator, millis);
 
   const scale = 16;
-  const { bounds } = Animator.cel(demo.animator);
+  const { bounds } = Animator.cel(demo.animator, now);
   const atlasSource = [
     bounds.start.x,
     bounds.start.y,

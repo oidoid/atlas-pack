@@ -12,6 +12,7 @@ export namespace FilmID {
     new Set(
       [
         'FrogEat',
+        'FrogEatLoop',
         'FrogIdle',
         'BackpackerWalkRight',
         'BackpackerWalkDown',

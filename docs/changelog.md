@@ -6,6 +6,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 - \[API\] Use film terminology over animation.
 - \[API\] Use integers for duration for plain JSON compatibility.
+- \[API\] Make cel lookup constant time.
 
 ## v4.0.2
 
