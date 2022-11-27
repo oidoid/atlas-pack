@@ -11,7 +11,8 @@ asset_files := \
   $(demo_dir)/index.html
 dist_files := $(asset_files:$(demo_dir)/%=$(dist_dir)/%)
 
-bundle_flags :=
+bundle_args ?=
+test_unit_args ?=
 
 .PHONY: build
 build: bundle build\:dist
@@ -20,37 +21,40 @@ build: bundle build\:dist
 build\:dist: $(dist_files)
 
 .PHONY: watch\:build
-watch\:build:
-  watchexec -i dist '$(make) build\:dist'
+watch\:build:; watchexec -i dist '$(make) build\:dist'
 
 .PHONY: watch
 watch: watch\:build watch\:bundle serve
 
 .PHONY: serve
-serve: | $(dist_dir)/
-  $(live-server) '$(dist_dir)'
+serve: | $(dist_dir)/; $(live-server) '$(dist_dir)'
 
 .PHONY: bundle
 bundle: $(demo_dir)/atlas.json | $(dist_dir)/
   $(deno) bundle --config='$(deno_config)' mod.ts '$(dist_dir)/atlas-pack.js'
-  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' $(bundle_flags)
+  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' $(bundle_args)
 
 .PHONY: watch\:bundle
-watch\:bundle: bundle_flags += --watch
+watch\:bundle: bundle_args += --watch
 watch\:bundle: bundle
 
 .PHONY: test
-test: build test\:unit; $(deno) lint --config='$(deno_config)' --quiet
+test: test\:format test\:lint build test\:unit
+
+.PHONY: test\:format
+test\:format:; $(deno) fmt --check --config='$(deno_config)'
+
+.PHONY: test\:lint
+test\:lint:; $(deno) lint --config='$(deno_config)' $(if $(value v),,--quiet)
 
 .PHONY: test\:unit
-test\:unit: build; $(deno) test --allow-read=. --config='$(deno_config)'
+test\:unit: build; $(deno) test --allow-read=. --config='$(deno_config)' $(test_unit_args)
 
 .PHONY: test\:unit\:update
-test\:unit\:update: build
-  $(deno) test --allow-read=. --allow-write=. --config='$(deno_config)' -- --update
+test\:unit\:update: test_unit_args += --allow-write=. -- --update
+test\:unit\:update: test\:unit
 
-$(dist_dir)/%: $(demo_dir)/% | $(dist_dir)/
-  $(cp) '$<' '$@'
+$(dist_dir)/%: $(demo_dir)/% | $(dist_dir)/; $(cp) '$<' '$@'
 
 $(demo_dir)/atlas.json $(demo_dir)/atlas.png&: $(atlas_in_files)
   bin/aseprite-batch \
@@ -63,5 +67,4 @@ $(demo_dir)/atlas.json $(demo_dir)/atlas.png&: $(atlas_in_files)
 $(dist_dir)/:; $(mkdir) '$@'
 
 .PHONY: clean
-clean:
-  $(rm) '$(dist_dir)/' '$(demo_dir)/atlas.json' '$(demo_dir)/atlas.png'
+clean:; $(rm) '$(dist_dir)/' '$(demo_dir)/atlas.json' '$(demo_dir)/atlas.png'
