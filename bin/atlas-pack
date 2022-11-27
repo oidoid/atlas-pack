@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
+#!/usr/bin/env -S deno --quiet run --allow-read --check=typescript
 // atlas-pack
 
 import { AtlasMetaParser } from '@/atlas-pack';
