@@ -9,6 +9,14 @@
     "useUnknownInCatchVariables": true,
     "lib": ["dom", "deno.ns"]
   },
+  "fmt": {
+    "files": { "exclude": ["dist"] },
+    "options": { "singleQuote": true }
+  },
   "importMap": "mods.json",
-  "lint": { "rules": { "exclude": ["no-namespace"] } }
+  "lint": {
+    "files": { "exclude": ["dist"] },
+    "rules": { "exclude": ["no-empty-interface", "no-namespace"] }
+  },
+  "test": { "files": { "exclude": ["dist"] } }
 }
