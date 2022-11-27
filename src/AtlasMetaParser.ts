@@ -17,7 +17,6 @@ import {
   U16Box,
   U16XY,
   U32Millis,
-  Uint,
 } from '@/oidlib';
 import { InfiniteDuration } from './Film.ts';
 
@@ -152,13 +151,25 @@ export namespace AtlasMetaParser {
       `Cel sizes for "${frameTag.name}" film vary.`,
     );
 
-    const [timeDivision, celIndexByDivision] = computeTimeDivision(cels);
+    const period = computePeriod(cels);
+
+    // Add cels needed to make the tagged film's frequency uniform so that cel
+    // lookup uses the same formula.
+    for (let i = cels.length - 1; i >= 0; i--) {
+      const cel = cels[i]!;
+      if (cel.duration == InfiniteDuration) continue;
+      for (
+        let duration: number = period;
+        duration < cel.duration;
+        duration += period
+      ) cels.splice(i, 0, cel);
+    }
+
     return {
       id,
       wh,
       cels,
-      celIndexByDivision,
-      timeDivision,
+      period,
       duration: U32Millis(duration),
       direction: parsePlayback(frameTag.direction),
     };
@@ -283,44 +294,19 @@ export namespace AtlasMetaParser {
     return U16XY(wh.w, wh.h);
   }
 
-  function computeTimeDivision(
+  function computePeriod(
     cels: readonly Cel[],
-  ): [U32Millis | InfiniteDuration, U16[]] {
+  ): U32Millis | InfiniteDuration {
     const durations = cels.map((cel) => cel.duration);
-    if (durations.length == 1) return [durations[0]!, [U16(0)]];
+    if (durations.length <= 1) return durations[0]!;
 
     const infinite = durations.at(-1) == InfiniteDuration;
     const finiteDurations = infinite ? durations.slice(0, -1) : durations;
-    const timeDivision = greatestCommonDivisor(
+    const period = greatestCommonDivisor(
       finiteDurations as [U32Millis, ...U32Millis[]],
     );
-    const totalDuration =
-      (infinite ? [...finiteDurations, timeDivision] : finiteDurations).reduce(
-        (time, duration) => time + duration,
-        0,
-      );
-    const divisionsLen = Uint(totalDuration / timeDivision);
-    assert(
-      divisionsLen < 1024,
-      `Cel lookup table too large (${divisionsLen}); adjust cel durations to ` +
-        'share a greater common multiple.',
-    );
 
-    const celIndexByDivision = [];
-    for (
-      let divisionIndex = 0, celIndex = 0, duration = 0;
-      divisionIndex < divisionsLen;
-      divisionIndex++
-    ) {
-      celIndexByDivision.push(U16(celIndex));
-      duration += timeDivision;
-      if (duration == cels[celIndex]!.duration) {
-        celIndex++;
-        duration = 0;
-      }
-    }
-
-    return [U32Millis(timeDivision), celIndexByDivision];
+    return U32Millis(period);
   }
 
   /** @internal */

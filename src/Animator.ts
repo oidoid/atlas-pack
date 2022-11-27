@@ -1,5 +1,5 @@
 import { Cel, CelID, Playback } from '@/atlas-pack';
-import { NumUtil, U16, UnumberMillis } from '@/oidlib';
+import { NumUtil, UnumberMillis } from '@/oidlib';
 import { Film, InfiniteDuration } from './Film.ts';
 
 export function Animator(
@@ -48,28 +48,17 @@ export namespace Animator {
   }
 
   /** @return The active film cel index. */
-  export function index(self: Readonly<Animator>, time: UnumberMillis): U16 {
-    const divisionPeriod = Math.trunc(
-      (time - self.start) / self.film.timeDivision,
-    );
+  export function index(self: Readonly<Animator>, time: UnumberMillis): number {
+    const periodIndex = Math.trunc((time - self.start) / self.film.period);
 
     // If the film is infinite and at or exceeded one iteration, show the final
     // cel.
     const infinite = self.film.duration == InfiniteDuration;
-    if (
-      infinite && divisionPeriod >= (self.film.celIndexByDivision.length - 1)
-    ) {
-      return U16(self.film.cels.length - 1);
+    if (infinite && periodIndex >= (self.film.cels.length - 1)) {
+      return self.film.cels.length - 1;
     }
 
-    // Get the time division window index.
-    const divisionIndex = celIndex[self.film.direction](
-      divisionPeriod,
-      self.film.celIndexByDivision.length,
-    );
-
-    // Dereference and the cel index.
-    return U16(self.film.celIndexByDivision[divisionIndex]!);
+    return celIndex[self.film.direction](periodIndex, self.film.cels.length);
   }
 }
 

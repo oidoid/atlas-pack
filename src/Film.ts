@@ -40,29 +40,33 @@ export interface Film {
   readonly cels: readonly Cel[];
 
   /**
-   * Map each time division to a cel index. This is precomputed by the parser to
-   * save processing at the expense of memory.
+   * The length of time before the cel may change, possibly infinite. This is
+   * the inverse of frequency, or cels per second, and is the greatest common
+   * multiple of cel durations, excluding infinite durations.
+   *
+   * Cels are duplicated by reference as needed by the parser to support a
+   * uniform frequency.
    *
    * Eg, consider an animation with three cels:
    *
-   *   Duration  Time Window   Cel Index
+   *   Duration  Active        Cel Index
    *   100 ms      0 -  99 ms  0
    *   400 ms    100 - 499 ms  1
    *   200 ms    500 - 699 ms  2
    *
-   * The greatest common multiple duration is 100 ms so the frequency of
-   * divisions is 1 / 100 ms. The total duration is 700 ms.
+   * The greatest common multiple of durations is 100 ms. That is, the animation
+   * changes cels at a maximum frequency of once every 100 ms (1 / 100 ms) and
+   * the period is the inverse (100 ms). The total duration is 700 ms.
    *
-   *   number of divisions = frequency * total duration
-   *                       = (1 / 100 ms) * 700 ms
-   *                       = 7
+   *   total periods = frequency * total duration
+   *                 = (1 / 100 ms) * 700 ms
+   *                 = 7
    *
-   * Each division maps to a cel index: [0, 1, 1, 1, 1, 2, 2]. A time is mapped
-   * to division and then to an index via: trunc(time * frequency).
+   * Time is mapped to a period via trunc(time * frequency).
    *
    * Infinite durations are ignored for multi-cel animation greatest common
-   * multiple computation. Single cel animations with infinite duration have a
-   * greatest common multiple of 1.
+   * multiple computations. The period of single cel animations is the duration
+   * of the cel.
    *
    * The same example with an additional infinite duration cel:
    *
@@ -72,20 +76,10 @@ export interface Film {
    *   200 ms    500 - 699 ms  2
    *     ∞ ms    700 -   ∞ ms  3
    *
-   * Greatest common multiple: 100 ms
-   * Divisions: [0, 1, 1, 1, 1, 2, 2, 3]
-   *
-   * The cels property could be duplicated by reference and indexed directly but
-   * this format is intended to be JSON friendly.
+   * The period is still 100 ms since infinite durations only appear in the last
+   * cel and are treated specially.
    */
-  readonly celIndexByDivision: readonly U16[];
-
-  /**
-   * The width of each division, possibly infinite. This is the greatest common
-   * multiple of cel durations, excluding infinite durations. See
-   * celIndexByDivision.
-   */
-  readonly timeDivision: U32Millis | InfiniteDuration;
+  readonly period: U32Millis | InfiniteDuration;
 
   readonly direction: Playback;
 }
