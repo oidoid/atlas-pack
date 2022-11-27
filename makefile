@@ -21,7 +21,7 @@ build: bundle build\:dist
 build\:dist: $(dist_files)
 
 .PHONY: watch\:build
-watch\:build:; watchexec -i dist '$(make) build\:dist'
+watch\:build:; watchexec --ignore='*/dist/*' '$(make) build\:dist'
 
 .PHONY: watch
 watch: watch\:build watch\:bundle serve
