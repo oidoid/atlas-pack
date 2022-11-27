@@ -47,6 +47,26 @@ export namespace Animator {
     return cel(self, time).id;
   }
 
+  /** Returns true on animation changes. */
+  export function isTransition(
+    self: Readonly<Animator>,
+    then: UnumberMillis,
+    now: UnumberMillis,
+  ): boolean {
+    if (now - then >= self.film.duration) return true;
+    return cel(self, then).id != cel(self, now).id;
+  }
+
+  /** Returns true if every cel could be exposed. See Playback. */
+  export function isCycled(
+    self: Readonly<Animator>,
+    time: UnumberMillis,
+  ): boolean {
+    if (time - self.start >= self.film.duration) return true;
+    if (cel(self, time).duration == InfiniteDuration) return true;
+    return false;
+  }
+
   /** @return The active film cel index. */
   export function index(self: Readonly<Animator>, time: UnumberMillis): number {
     const periodIndex = Math.trunc((time - self.start) / self.film.period);

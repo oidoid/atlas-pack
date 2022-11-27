@@ -7,6 +7,9 @@ export const InfiniteDuration = U32Millis.max;
 /**
  * A sequence of animation cels.
  *
+ * Films advance at a frequency determined by their cels. Ideally, cels share a
+ * high duration factor to avoid duplicate spacer cels.
+ *
  * "Film" terminology is user over "animation" to avoid conflict with the
  * `Animation` global.
  */
