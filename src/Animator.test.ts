@@ -1,7 +1,6 @@
-import { Animator, CelID, Playback } from '@/atlas-pack';
+import { Animator, CelID, InfiniteDuration, Playback } from '@/atlas-pack';
 import { U16Box, U16Millis, U16XY, U32Millis, UnumberMillis } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
-import { InfiniteDuration } from './Film.ts';
 
 Deno.test('Animator()', async (test) => {
   await test.step('Exposure < duration.', () => {

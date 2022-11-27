@@ -1,6 +1,5 @@
-import { Cel, CelID, Playback } from '@/atlas-pack';
+import { Cel, CelID, Film, InfiniteDuration, Playback } from '@/atlas-pack';
 import { NumUtil, UnumberMillis } from '@/oidlib';
-import { Film, InfiniteDuration } from './Film.ts';
 
 export function Animator(
   film: Film,

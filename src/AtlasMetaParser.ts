@@ -6,6 +6,7 @@ import {
   CelID,
   Film,
   FilmByID,
+  InfiniteDuration,
   Playback,
 } from '@/atlas-pack';
 import {
@@ -18,7 +19,6 @@ import {
   U16XY,
   U32Millis,
 } from '@/oidlib';
-import { InfiniteDuration } from './Film.ts';
 
 export namespace AtlasMetaParser {
   /**

@@ -1,8 +1,13 @@
-import { Aseprite, AtlasMetaParser, CelID, Playback } from '@/atlas-pack';
+import {
+  Aseprite,
+  AtlasMetaParser,
+  CelID,
+  CelIDFactory,
+  InfiniteDuration,
+  Playback,
+} from '@/atlas-pack';
 import { U16Box, U16Millis, U16XY, U32Millis } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
-import { CelIDFactory } from './AtlasMetaParser.ts';
-import { InfiniteDuration } from './Film.ts';
 
 Deno.test('parse()', async (test) => {
   await test.step('Parses Meta.', () => {
