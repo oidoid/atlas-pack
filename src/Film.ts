@@ -128,17 +128,24 @@ export namespace Playback {
   export const values = Immutable(
     new Set(
       [
-        /** Animate from start to end; when looping, return to start. */
+        /**
+         * Animate from start to end; when looping, return to start. Supports an
+         * infinite duration in the last cel.
+         */
         'Forward',
 
-        /** Animate from end to start; when looping, return to end. */
+        /**
+         * Animate from end to start; when looping, return to end. Supports an
+         * infinite duration in the first cel.
+         */
         'Reverse',
 
         /**
          * Animate from start to end - 1 or start, whichever is greater; when
          * looping, change direction (initially, end to start + 1 or end,
          * whichever is lesser. A traversal from start to end - 1 then end to
-         * start + 1 is considered a complete loop.
+         * start + 1 is considered a complete loop. Does not support infinite
+         * duration cels.
          */
         'PingPong',
       ] as const,

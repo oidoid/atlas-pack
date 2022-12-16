@@ -121,9 +121,14 @@ export namespace AtlasMetaParser {
     );
     assert(cels.length > 0, `"${frameTag.name}" film has no cels.`);
 
+    const invalidDurationCelIndex = cels.slice(
+      frameTag.direction == Aseprite.Direction.Reverse ? 1 : 0,
+      frameTag.direction == Aseprite.Direction.Forward ? -1 : undefined,
+    ).findIndex(({ duration }) => duration == InfiniteDuration);
     assert(
-      cels.slice(0, -1).every(({ duration }) => duration < InfiniteDuration),
-      `Intermediate cel has infinite duration (${Aseprite.Infinity}) for ` +
+      invalidDurationCelIndex == -1,
+      `Cel ${invalidDurationCelIndex} must have finite duration (less than ` +
+        `${Aseprite.Infinity}) for ${frameTag.direction} playback in ` +
         `"${frameTag.name}" film.`,
     );
 
@@ -131,14 +136,7 @@ export namespace AtlasMetaParser {
       (time, { duration }) => Math.min(InfiniteDuration, time + duration),
       0,
     );
-
-    const pingPong = frameTag.direction == Aseprite.Direction.PingPong;
-    assert(
-      !pingPong || duration != InfiniteDuration,
-      `Duration cannot be infinite (${Aseprite.Infinity}) for ping-pong ` +
-        'playback.',
-    );
-    if (pingPong && cels.length > 2) {
+    if (frameTag.direction == Aseprite.Direction.PingPong && cels.length > 2) {
       duration += duration - (cels[0]!.duration + cels.at(-1)!.duration);
     }
     assert(duration > 0, `Zero total duration for "${frameTag.name}" film.`);
@@ -195,7 +193,7 @@ export namespace AtlasMetaParser {
     direction: Aseprite.Direction | string,
   ): Playback {
     assert(isDirection(direction), `"${direction}" is not a Direction.`);
-    const playback: Record<Aseprite.Direction, Playback> = {
+    const playback: { [direction in Aseprite.Direction]: Playback } = {
       'forward': 'Forward',
       'reverse': 'Reverse',
       'pingpong': 'PingPong',
