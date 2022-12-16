@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v6.0.0
+
+- \[API\] Rename some Animator APIs.
+
 ## v5.0.0
 
 - \[API\] Use film terminology over animation.

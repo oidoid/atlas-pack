@@ -15,24 +15,38 @@ export interface Animator {
 
   /**
    * The time the film started playing. Playback position is relative this start
-   * time. There are no guards on passing future or past times.
+   * time.
    */
   start: UnumberMillis;
 }
 
+/**
+ * Playback oscillation patterns:
+ *
+ * - Forward [0, +∞): start at the array beginning. Advance until the end and
+ *   then rollover.
+ * - Reverse (-∞, len): start at the array end. Reverse until the beginning and
+ *   then rollover.
+ * - Ping-pong (-len, len): start at the array beginning and double-back at each
+ *   end.
+ */
+const period: Readonly<
+  { [playback in Playback]: (timeIndex: number, len: number) => number }
+> = Object.freeze({
+  Forward: (timeIndex, len) => timeIndex % len,
+  Reverse: (timeIndex, len) => (len - 1) - (timeIndex % len),
+  PingPong: (timeIndex, len) => Math.abs(NumUtil.wrap(timeIndex, 2 - len, len)),
+});
+
 export namespace Animator {
-  /**
-   * Clear the start time (set the animation to the starting cel) and optionally
-   * change the film. This is useful when changing films or resetting the active
-   * film.
-   */
-  export function setFilm(
-    self: Animator,
-    start: UnumberMillis,
-    film?: Film,
-  ): void {
-    self.film = film ?? self.film;
-    self.start = start;
+  /** Returns true if cel transitioned. */
+  export function advanced(
+    self: Readonly<Animator>,
+    from: UnumberMillis,
+    to: UnumberMillis,
+  ): boolean {
+    if ((to - from) >= self.film.duration) return true;
+    return cel(self, from).id != cel(self, to).id;
   }
 
   /** @return The active film cel. */
@@ -46,62 +60,41 @@ export namespace Animator {
     return cel(self, time).id;
   }
 
-  /** Returns true on animation changes. */
-  export function isTransition(
-    self: Readonly<Animator>,
-    then: UnumberMillis,
-    now: UnumberMillis,
-  ): boolean {
-    if (now - then >= self.film.duration) return true;
-    return cel(self, then).id != cel(self, now).id;
+  /** @return The active film cel index. */
+  export function index(self: Readonly<Animator>, time: UnumberMillis): number {
+    const timeIndex = Math.trunc((time - self.start) / self.film.period);
+
+    // If the film is infinite and at or exceeded the end, return the final cel.
+    const infinite = self.film.duration == InfiniteDuration;
+    if (infinite && timeIndex >= (self.film.cels.length - 1)) {
+      return self.film.cels.length - 1;
+    }
+
+    // The film can loop. Compute the index from the period.
+    return period[self.film.direction](timeIndex, self.film.cels.length);
   }
 
-  /** Returns true if every cel could be exposed. See Playback. */
-  export function isCycled(
+  /** Returns true if every cel could be exposed at least once. See Playback. */
+  export function played(
     self: Readonly<Animator>,
     time: UnumberMillis,
   ): boolean {
-    if (time - self.start >= self.film.duration) return true;
+    if ((time - self.start) >= self.film.duration) return true;
     if (cel(self, time).duration == InfiniteDuration) return true;
     return false;
   }
 
-  /** @return The active film cel index. */
-  export function index(self: Readonly<Animator>, time: UnumberMillis): number {
-    const periodIndex = Math.trunc((time - self.start) / self.film.period);
-
-    // If the film is infinite and at or exceeded one iteration, show the final
-    // cel.
-    const infinite = self.film.duration == InfiniteDuration;
-    if (infinite && periodIndex >= (self.film.cels.length - 1)) {
-      return self.film.cels.length - 1;
-    }
-
-    return celIndex[self.film.direction](periodIndex, self.film.cels.length);
+  /**
+   * Clear the start time (set the animation to the starting cel) and optionally
+   * change the film. This is useful when changing films or resetting the active
+   * film.
+   */
+  export function reset(
+    self: Animator,
+    start: UnumberMillis,
+    film?: Film,
+  ): void {
+    self.film = film ?? self.film;
+    self.start = start;
   }
 }
-
-/**
- * Playback oscillation patterns:
- *
- * - Forward: start at the beginning. Always advance until the end and then
- *   rollover.
- * - Reverse: start at the end. Always reverse until the beginning and then
- *   rollover.
- * - Ping-pong: start at the beginning and double-back at the end.
- */
-const celIndex: Readonly<
-  Record<Playback, (period: number, len: number) => number>
-> = Object.freeze({
-  Forward(period, len) {
-    return period % len;
-  },
-
-  Reverse(period, len) {
-    return (len - 1) - (period % len);
-  },
-
-  PingPong(period, len) {
-    return Math.abs(NumUtil.wrap(period, 2 - len, len)) % len;
-  },
-});

@@ -123,7 +123,7 @@ Deno.test('Animator()', async (test) => {
   });
 });
 
-Deno.test('setFilm()', () => {
+Deno.test('reset()', () => {
   const cel = {
     id: <CelID> 0,
     bounds: U16Box(0, 0, 0, 0),
@@ -142,7 +142,7 @@ Deno.test('setFilm()', () => {
   const animator = Animator(film);
   let index = Animator.index(animator, UnumberMillis(1.5));
   assertEquals(index, 1);
-  Animator.setFilm(animator, UnumberMillis(2));
+  Animator.reset(animator, UnumberMillis(2));
   index = Animator.index(animator, UnumberMillis(2));
   assertEquals(index, 0);
 });
