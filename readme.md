@@ -2,7 +2,7 @@
 
 atlas-pack is an Aseprite sprite sheet parser, animator, and toolset for the
 browser and Deno. See [installation](#installation) and the
-**[minimal example](#minimal-example)** to get started.
+**[example](demo/mod.ts)** to get started.
 
 ## Installation
 
@@ -136,40 +136,11 @@ If the tool executes without any errors, no need to worry about changing the
 ### Parse and Render (JavaScript)
 
 Once `atlas.json` and `atlas.png` are available, a program can parse
-`atlas.json` to animate and render animations from `atlas.png`. A complete but
-minimal example follows. Subsequent sections detail each step in the example.
+`atlas.json` to animate and render animations from `atlas.png`. A complete
+example follows. Subsequent sections detail each step in the example.
 
-#### Minimal Example
+#### Example
 
-All together, parse the packed sprite sheet and play the frog's idle animation:
-
-```js
-import { Animator, AtlasMeta } from 'atlas_pack';
-import atlasJSON from './atlas.json' assert { type: 'json' };
-
-// An AtlasMesa is just plain JSON and can be safely cast.
-const meta = atlasJSON as unknown as AtlasMeta;
-
-// Retrieve a film from the atlas. Animations are stateless and are retrieved by
-// Aseprite tag ("FrogIdle", in this case).
-const film = meta.filmByID.FrogIdle;
-
-// Create a film player. Animators keep a record of the active cel and how long
-// its been exposed.
-const animator = Animator(film);
-
-// Animate by 1/60th of a second (~16.667 milliseconds). Depending on the cel
-// duration specified in Aseprite, this may or may not advance the active cel.
-// For a multi-cel forward animation where the first cel has a 10 millisecond
-// duration, animator's state would be {film, period: 1, exposure: 6.667}.
-Animator.play(animator, 16.667);
-
-// Print the location of the active cel within the sprite sheet PNG.
-const { start, end } = Animator.cel(animator).bounds;
-console.log(start.x, start.y, end.x, end.y);
-```
-
-`Animator.play()` usually occurs within a loop.
 [See the API demo](https://atlas-pack.netlify.com/demo) for a running example
 rendered to a canvas.
 
