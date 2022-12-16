@@ -19,9 +19,8 @@ Deno.test('Animator()', async (test) => {
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
-    const animator = Animator(film, UnumberMillis(0.5));
-    assertEquals(animator, { film, start: UnumberMillis(0.5) });
-    const index = Animator.index(animator, UnumberMillis(0.5));
+    const animator = new Animator(film, UnumberMillis(0.5));
+    const index = animator.index(UnumberMillis(0.5));
     assertEquals(index, 0);
   });
 
@@ -41,9 +40,8 @@ Deno.test('Animator()', async (test) => {
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
-    const animator = Animator(film);
-    assertEquals(animator, { film, start: UnumberMillis(0) });
-    const index = Animator.index(animator, UnumberMillis(1));
+    const animator = new Animator(film);
+    const index = animator.index(UnumberMillis(1));
     assertEquals(index, 1);
   });
 
@@ -63,9 +61,8 @@ Deno.test('Animator()', async (test) => {
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
-    const animator = Animator(film);
-    assertEquals(animator, { film, start: UnumberMillis(0) });
-    const index = Animator.index(animator, UnumberMillis(1.5));
+    const animator = new Animator(film);
+    const index = animator.index(UnumberMillis(1.5));
     assertEquals(index, 1);
   });
 
@@ -93,11 +90,10 @@ Deno.test('Animator()', async (test) => {
       duration: InfiniteDuration,
       direction: 'Forward' as const,
     };
-    const animator = Animator(film);
-    assertEquals(animator, { film, start: UnumberMillis(0) });
-    let index = Animator.index(animator, UnumberMillis(0.5));
+    const animator = new Animator(film);
+    let index = animator.index(UnumberMillis(0.5));
     assertEquals(index, 0);
-    index = Animator.index(animator, UnumberMillis(100));
+    index = animator.index(UnumberMillis(100));
     assertEquals(index, 1);
   });
 
@@ -116,9 +112,8 @@ Deno.test('Animator()', async (test) => {
       duration: U16Millis(2),
       direction: 'Forward' as const,
     };
-    const animator = Animator(film);
-    assertEquals(animator, { film, start: UnumberMillis(0) });
-    const index = Animator.index(animator, UnumberMillis(1.5));
+    const animator = new Animator(film);
+    const index = animator.index(UnumberMillis(1.5));
     assertEquals(index, 0);
   });
 });
@@ -139,11 +134,11 @@ Deno.test('reset()', () => {
     period: U32Millis(1),
     direction: 'Forward' as const,
   };
-  const animator = Animator(film);
-  let index = Animator.index(animator, UnumberMillis(1.5));
+  const animator = new Animator(film);
+  let index = animator.index(UnumberMillis(1.5));
   assertEquals(index, 1);
-  Animator.reset(animator, UnumberMillis(2));
-  index = Animator.index(animator, UnumberMillis(2));
+  animator.reset(UnumberMillis(2));
+  index = animator.index(UnumberMillis(2));
   assertEquals(index, 0);
 });
 
@@ -165,8 +160,8 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(2),
         direction,
       };
-      const animator = Animator(film);
-      const index = Animator.index(animator, UnumberMillis(1));
+      const animator = new Animator(film);
+      const index = animator.index(UnumberMillis(1));
       const expected = { Forward: 1, Reverse: 0, PingPong: 1 };
       assertEquals(index, expected[direction]);
     });
@@ -189,8 +184,8 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(2),
         direction,
       };
-      const animator = Animator(film);
-      const index = Animator.index(animator, UnumberMillis(2));
+      const animator = new Animator(film);
+      const index = animator.index(UnumberMillis(2));
       const expected = { Forward: 0, Reverse: 1, PingPong: 0 };
       assertEquals(index, expected[direction]);
     });
@@ -256,10 +251,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(4),
         direction,
       };
-      const animator = { film, start: UnumberMillis(0) };
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 5; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(offset + 1 * i)));
+        playback.push(animator.index(UnumberMillis(offset + 1 * i)));
       }
       assertEquals(playback, expected);
     });
@@ -282,10 +277,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(5),
         direction,
       };
-      const animator = Animator(film);
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(1 * i)));
+        playback.push(animator.index(UnumberMillis(1 * i)));
       }
       const expected = {
         Forward: [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
@@ -313,10 +308,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(5),
         direction,
       };
-      const animator = Animator(film);
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(6 * i)));
+        playback.push(animator.index(UnumberMillis(6 * i)));
       }
       // deno-fmt-ignore
       const expected = {
@@ -347,10 +342,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(5),
         direction,
       };
-      const animator = Animator(film);
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(0.9 * i)));
+        playback.push(animator.index(UnumberMillis(0.9 * i)));
       }
       // deno-fmt-ignore
       const expected = {
@@ -381,10 +376,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(5),
         direction,
       };
-      const animator = Animator(film);
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(0.5 * i)));
+        playback.push(animator.index(UnumberMillis(0.5 * i)));
       }
       // deno-fmt-ignore
       const expected = {
@@ -413,10 +408,10 @@ Deno.test('index()', async (test) => {
         duration: U16Millis(5),
         direction,
       };
-      const animator = Animator(film);
+      const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(Animator.index(animator, UnumberMillis(5.5 * i)));
+        playback.push(animator.index(UnumberMillis(5.5 * i)));
       }
       // deno-fmt-ignore
       const expected = {

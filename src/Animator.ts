@@ -1,23 +1,60 @@
 import { Cel, CelID, Film, InfiniteDuration, Playback } from '@/atlas-pack';
 import { NumUtil, UnumberMillis } from '@/oidlib';
 
-export function Animator(
-  film: Film,
-  start: UnumberMillis = UnumberMillis(0),
-): Animator {
-  return { film, start };
-}
-
 /** Film playback state. */
-export interface Animator {
+export class Animator {
   /** The currently loaded animation. */
-  film: Film;
+  #film: Film;
 
   /**
    * The time the film started playing. Playback position is relative this start
    * time.
    */
-  start: UnumberMillis;
+  #start: UnumberMillis;
+
+  get film(): Film {
+    return this.#film;
+  }
+
+  constructor(film: Film, start: UnumberMillis = UnumberMillis(0)) {
+    this.#film = film;
+    this.#start = start;
+  }
+
+  /** @return The active film cel. */
+  cel(time: UnumberMillis): Cel {
+    // Film length is greater than zero as enforced by parser.
+    return this.#film.cels[this.index(time)]!;
+  }
+
+  /** @return The active film cel's ID. */
+  celID(time: UnumberMillis): CelID {
+    return this.cel(time).id;
+  }
+
+  /** @return The active film cel index. */
+  index(time: UnumberMillis): number {
+    const timeIndex = Math.trunc((time - this.#start) / this.#film.period);
+
+    // If the film is infinite and at or exceeded the end, return the final cel.
+    const infinite = this.#film.duration == InfiniteDuration;
+    if (infinite && timeIndex >= (this.#film.cels.length - 1)) {
+      return this.#film.cels.length - 1;
+    }
+
+    // The film can loop. Compute the index from the period.
+    return period[this.#film.direction](timeIndex, this.#film.cels.length);
+  }
+
+  /**
+   * Clear the start time (set the animation to the starting cel) and optionally
+   * change the film. This is useful when changing films or resetting the active
+   * film.
+   */
+  reset(start: UnumberMillis, film?: Film): void {
+    this.#film = film ?? this.#film;
+    this.#start = start;
+  }
 }
 
 /**
@@ -37,44 +74,3 @@ const period: Readonly<
   Reverse: (timeIndex, len) => (len - 1) - (timeIndex % len),
   PingPong: (timeIndex, len) => Math.abs(NumUtil.wrap(timeIndex, 2 - len, len)),
 });
-
-export namespace Animator {
-  /** @return The active film cel. */
-  export function cel(self: Readonly<Animator>, time: UnumberMillis): Cel {
-    // Film length is greater than zero as enforced by parser.
-    return self.film.cels[index(self, time)]!;
-  }
-
-  /** @return The active film cel's ID. */
-  export function celID(self: Readonly<Animator>, time: UnumberMillis): CelID {
-    return cel(self, time).id;
-  }
-
-  /** @return The active film cel index. */
-  export function index(self: Readonly<Animator>, time: UnumberMillis): number {
-    const timeIndex = Math.trunc((time - self.start) / self.film.period);
-
-    // If the film is infinite and at or exceeded the end, return the final cel.
-    const infinite = self.film.duration == InfiniteDuration;
-    if (infinite && timeIndex >= (self.film.cels.length - 1)) {
-      return self.film.cels.length - 1;
-    }
-
-    // The film can loop. Compute the index from the period.
-    return period[self.film.direction](timeIndex, self.film.cels.length);
-  }
-
-  /**
-   * Clear the start time (set the animation to the starting cel) and optionally
-   * change the film. This is useful when changing films or resetting the active
-   * film.
-   */
-  export function reset(
-    self: Animator,
-    start: UnumberMillis,
-    film?: Film,
-  ): void {
-    self.film = film ?? self.film;
-    self.start = start;
-  }
-}

@@ -37,7 +37,7 @@ atlas-pack ┌>°┐
     window,
     canvas,
     context,
-    animator: Animator(film),
+    animator: new Animator(film),
     atlas,
     atlasMeta,
   };
@@ -50,7 +50,7 @@ function loop(demo: Demo, _then: UnumberMillis, now: UnumberMillis): void {
   demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
 
   const scale = 16;
-  const { bounds } = Animator.cel(demo.animator, now);
+  const { bounds } = demo.animator.cel(now);
   const atlasSource = [
     bounds.start.x,
     bounds.start.y,

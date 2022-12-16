@@ -4,6 +4,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 ## v6.0.0
 
+- \[API\] Refactor Animator as a class
 - \[API\] Rename some Animator APIs
 - \[API\] Delete Animator.played() and advanced()
 - \[fix\] Infinite duration check for reverse
