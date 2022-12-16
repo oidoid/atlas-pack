@@ -1,5 +1,5 @@
 import { AtlasMeta } from '@/atlas-pack';
-import { assertExists } from 'https://deno.land/std@0.159.0/testing/asserts.ts';
+import { assertExists } from 'std/testing/asserts.ts';
 import atlasJSON from './atlas.json' assert { type: 'json' };
 import { FilmID } from './FilmID.ts';
 
