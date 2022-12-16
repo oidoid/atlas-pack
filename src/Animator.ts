@@ -39,16 +39,6 @@ const period: Readonly<
 });
 
 export namespace Animator {
-  /** Returns true if cel transitioned. */
-  export function advanced(
-    self: Readonly<Animator>,
-    from: UnumberMillis,
-    to: UnumberMillis,
-  ): boolean {
-    if ((to - from) >= self.film.duration) return true;
-    return cel(self, from).id != cel(self, to).id;
-  }
-
   /** @return The active film cel. */
   export function cel(self: Readonly<Animator>, time: UnumberMillis): Cel {
     // Film length is greater than zero as enforced by parser.
@@ -72,16 +62,6 @@ export namespace Animator {
 
     // The film can loop. Compute the index from the period.
     return period[self.film.direction](timeIndex, self.film.cels.length);
-  }
-
-  /** Returns true if every cel could be exposed at least once. See Playback. */
-  export function played(
-    self: Readonly<Animator>,
-    time: UnumberMillis,
-  ): boolean {
-    if ((time - self.start) >= self.film.duration) return true;
-    if (cel(self, time).duration == InfiniteDuration) return true;
-    return false;
   }
 
   /**
