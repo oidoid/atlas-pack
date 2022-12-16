@@ -6,7 +6,7 @@ Versions and bullets are arranged chronologically from latest to oldest.
 
 - \[API\] Refactor Animator as a class
 - \[API\] Rename some Animator APIs
-- \[API\] Delete Animator.played() and advanced()
+- \[API\] Remove Animator.celID(), index(), played() and advanced()
 - \[fix\] Infinite duration check for reverse
 
 ## v5.0.0

@@ -1,4 +1,4 @@
-import { Cel, CelID, Film, InfiniteDuration, Playback } from '@/atlas-pack';
+import { Cel, Film, InfiniteDuration, Playback } from '@/atlas-pack';
 import { NumUtil, UnumberMillis } from '@/oidlib';
 
 /** Film playback state. */
@@ -27,12 +27,10 @@ export class Animator {
     return this.#film.cels[this.index(time)]!;
   }
 
-  /** @return The active film cel's ID. */
-  celID(time: UnumberMillis): CelID {
-    return this.cel(time).id;
-  }
-
-  /** @return The active film cel index. */
+  /**
+   * @internal
+   * @return The active film cel index.
+   */
   index(time: UnumberMillis): number {
     const timeIndex = Math.trunc((time - this.#start) / this.#film.period);
 
