@@ -46,8 +46,7 @@ export class Animator {
 
   /**
    * Clear the start time (set the animation to the starting cel) and optionally
-   * change the film. This is useful when changing films or resetting the active
-   * film.
+   * change the film. This is useful to reset the active film or switch films.
    */
   reset(start: UnumberMillis, film?: Film): void {
     this.#film = film ?? this.#film;

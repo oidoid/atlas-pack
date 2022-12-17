@@ -32,7 +32,7 @@ serve: | $(dist_dir)/; $(live-server) '$(dist_dir)'
 .PHONY: bundle
 bundle: $(demo_dir)/atlas.json | $(dist_dir)/
   $(deno) bundle --config='$(deno_config)' mod.ts '$(dist_dir)/atlas-pack.js'
-  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/mod.ts' '$(dist_dir)/demo.js' $(bundle_args)
+  $(deno) bundle --config='$(deno_config)' '$(demo_dir)/index.ts' '$(dist_dir)/index.js' $(bundle_args)
 
 .PHONY: watch\:bundle
 watch\:bundle: bundle_args += --watch
