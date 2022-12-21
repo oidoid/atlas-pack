@@ -1,5 +1,5 @@
 import { Animator, CelID, InfiniteDuration, Playback } from '@/atlas-pack';
-import { U16Box, U16Millis, U16XY, U32Millis, UnumberMillis } from '@/oidlib';
+import { U16, U16Box, U16XY, U32 } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
 
 Deno.test('Animator()', async (test) => {
@@ -7,7 +7,7 @@ Deno.test('Animator()', async (test) => {
     const cel = {
       id: <CelID> 0,
       bounds: U16Box(1, 2, 3, 4),
-      duration: U16Millis(1),
+      duration: U16(1),
       sliceBounds: U16Box(1, 1, -1, -1),
       slices: [],
     };
@@ -15,12 +15,12 @@ Deno.test('Animator()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
-      period: U32Millis(1),
-      duration: U16Millis(2),
+      period: U32(1),
+      duration: U16(2),
       direction: 'Forward' as const,
     };
-    const animator = new Animator(film, UnumberMillis(0.5));
-    const index = animator.index(UnumberMillis(0.5));
+    const animator = new Animator(film, 0.5);
+    const index = animator.index(0.5);
     assertEquals(index, 0);
   });
 
@@ -28,7 +28,7 @@ Deno.test('Animator()', async (test) => {
     const cel = {
       id: <CelID> 0,
       bounds: U16Box(1, 2, 3, 4),
-      duration: U16Millis(1),
+      duration: U16(1),
       sliceBounds: U16Box(1, 1, -1, -1),
       slices: [],
     };
@@ -36,12 +36,12 @@ Deno.test('Animator()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
-      period: U32Millis(1),
-      duration: U16Millis(2),
+      period: U32(1),
+      duration: U16(2),
       direction: 'Forward' as const,
     };
     const animator = new Animator(film);
-    const index = animator.index(UnumberMillis(1));
+    const index = animator.index(1);
     assertEquals(index, 1);
   });
 
@@ -49,7 +49,7 @@ Deno.test('Animator()', async (test) => {
     const cel = {
       id: <CelID> 0,
       bounds: U16Box(1, 2, 3, 4),
-      duration: U16Millis(1),
+      duration: U16(1),
       sliceBounds: U16Box(1, 1, -1, -1),
       slices: [],
     };
@@ -57,12 +57,12 @@ Deno.test('Animator()', async (test) => {
       id: 'abc',
       wh: U16XY(0, 0),
       cels: [cel, cel],
-      period: U32Millis(1),
-      duration: U16Millis(2),
+      period: U32(1),
+      duration: U16(2),
       direction: 'Forward' as const,
     };
     const animator = new Animator(film);
-    const index = animator.index(UnumberMillis(1.5));
+    const index = animator.index(1.5);
     assertEquals(index, 1);
   });
 
@@ -74,7 +74,7 @@ Deno.test('Animator()', async (test) => {
         {
           id: <CelID> 0,
           bounds: U16Box(1, 2, 3, 4),
-          duration: U16Millis(1),
+          duration: U16(1),
           sliceBounds: U16Box(1, 1, -1, -1),
           slices: [],
         },
@@ -86,14 +86,14 @@ Deno.test('Animator()', async (test) => {
           slices: [],
         },
       ],
-      period: U32Millis(1),
+      period: U32(1),
       duration: InfiniteDuration,
       direction: 'Forward' as const,
     };
     const animator = new Animator(film);
-    let index = animator.index(UnumberMillis(0.5));
+    let index = animator.index(0.5);
     assertEquals(index, 0);
-    index = animator.index(UnumberMillis(100));
+    index = animator.index(100);
     assertEquals(index, 1);
   });
 
@@ -104,16 +104,16 @@ Deno.test('Animator()', async (test) => {
       cels: [{
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       }],
-      period: U32Millis(1),
-      duration: U16Millis(2),
+      period: U32(1),
+      duration: U16(2),
       direction: 'Forward' as const,
     };
     const animator = new Animator(film);
-    const index = animator.index(UnumberMillis(1.5));
+    const index = animator.index(1.5);
     assertEquals(index, 0);
   });
 });
@@ -122,7 +122,7 @@ Deno.test('reset()', () => {
   const cel = {
     id: <CelID> 0,
     bounds: U16Box(0, 0, 0, 0),
-    duration: U16Millis(1),
+    duration: U16(1),
     sliceBounds: U16Box(1, 1, -1, -1),
     slices: [],
   };
@@ -130,15 +130,15 @@ Deno.test('reset()', () => {
     id: 'abc',
     wh: U16XY(0, 0),
     cels: [cel, cel],
-    duration: U16Millis(2),
-    period: U32Millis(1),
+    duration: U16(2),
+    period: U32(1),
     direction: 'Forward' as const,
   };
   const animator = new Animator(film);
-  let index = animator.index(UnumberMillis(1.5));
+  let index = animator.index(1.5);
   assertEquals(index, 1);
-  animator.reset(UnumberMillis(2));
-  index = animator.index(UnumberMillis(2));
+  animator.reset(2);
+  index = animator.index(2);
   assertEquals(index, 0);
 });
 
@@ -148,7 +148,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -156,12 +156,12 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(2),
+        period: U32(1),
+        duration: U16(2),
         direction,
       };
       const animator = new Animator(film);
-      const index = animator.index(UnumberMillis(1));
+      const index = animator.index(1);
       const expected = { Forward: 1, Reverse: 0, PingPong: 1 };
       assertEquals(index, expected[direction]);
     });
@@ -172,7 +172,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -180,12 +180,12 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(2),
+        period: U32(1),
+        duration: U16(2),
         direction,
       };
       const animator = new Animator(film);
-      const index = animator.index(UnumberMillis(2));
+      const index = animator.index(2);
       const expected = { Forward: 0, Reverse: 1, PingPong: 0 };
       assertEquals(index, expected[direction]);
     });
@@ -239,7 +239,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -247,14 +247,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(4),
+        period: U32(1),
+        duration: U16(4),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 5; ++i) {
-        playback.push(animator.index(UnumberMillis(offset + 1 * i)));
+        playback.push(animator.index(offset + 1 * i));
       }
       assertEquals(playback, expected);
     });
@@ -265,7 +265,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -273,14 +273,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(5),
+        period: U32(1),
+        duration: U16(5),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        playback.push(animator.index(UnumberMillis(1 * i)));
+        playback.push(animator.index(1 * i));
       }
       const expected = {
         Forward: [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
@@ -296,7 +296,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -304,14 +304,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(5),
+        period: U32(1),
+        duration: U16(5),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 3; ++i) {
-        playback.push(animator.index(UnumberMillis(6 * i)));
+        playback.push(animator.index(6 * i));
       }
       // deno-fmt-ignore
       const expected = {
@@ -330,7 +330,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -338,14 +338,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(5),
+        period: U32(1),
+        duration: U16(5),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(animator.index(UnumberMillis(0.9 * i)));
+        playback.push(animator.index(0.9 * i));
       }
       // deno-fmt-ignore
       const expected = {
@@ -364,7 +364,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -372,14 +372,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(5),
+        period: U32(1),
+        duration: U16(5),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(animator.index(UnumberMillis(0.5 * i)));
+        playback.push(animator.index(0.5 * i));
       }
       // deno-fmt-ignore
       const expected = {
@@ -396,7 +396,7 @@ Deno.test('index()', async (test) => {
       const cel = {
         id: <CelID> 0,
         bounds: U16Box(1, 2, 3, 4),
-        duration: U16Millis(1),
+        duration: U16(1),
         sliceBounds: U16Box(1, 1, -1, -1),
         slices: [],
       };
@@ -404,14 +404,14 @@ Deno.test('index()', async (test) => {
         id: 'abc',
         wh: U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32Millis(1),
-        duration: U16Millis(5),
+        period: U32(1),
+        duration: U16(5),
         direction,
       };
       const animator = new Animator(film);
       const playback = [];
       for (let i = 0; i < film.cels.length * 6; ++i) {
-        playback.push(animator.index(UnumberMillis(5.5 * i)));
+        playback.push(animator.index(5.5 * i));
       }
       // deno-fmt-ignore
       const expected = {

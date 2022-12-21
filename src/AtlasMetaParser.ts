@@ -17,7 +17,7 @@ import {
   U16,
   U16Box,
   U16XY,
-  U32Millis,
+  U32,
 } from '@/oidlib';
 
 export namespace AtlasMetaParser {
@@ -168,7 +168,7 @@ export namespace AtlasMetaParser {
       wh,
       cels,
       period,
-      duration: U32Millis(duration),
+      duration: U32(duration),
       direction: parsePlayback(frameTag.direction),
     };
   }
@@ -256,10 +256,10 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parseDuration(duration: Aseprite.Duration): U32Millis {
+  export function parseDuration(duration: Aseprite.Duration): U32 {
     assert(duration > 0, 'Cel duration is not positive.');
     if (duration == Aseprite.Infinity) return InfiniteDuration;
-    return U32Millis(duration);
+    return U32(duration);
   }
 
   /** @internal */
@@ -294,17 +294,17 @@ export namespace AtlasMetaParser {
 
   function computePeriod(
     cels: readonly Cel[],
-  ): U32Millis | InfiniteDuration {
+  ): U32 | InfiniteDuration {
     const durations = cels.map((cel) => cel.duration);
     if (durations.length <= 1) return durations[0]!;
 
     const infinite = durations.at(-1) == InfiniteDuration;
     const finiteDurations = infinite ? durations.slice(0, -1) : durations;
     const period = greatestCommonDivisor(
-      finiteDurations as [U32Millis, ...U32Millis[]],
+      finiteDurations as [U32, ...U32[]],
     );
 
-    return U32Millis(period);
+    return U32(period);
   }
 
   /** @internal */

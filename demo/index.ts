@@ -1,5 +1,5 @@
 import { Animator, AtlasMeta } from '@/atlas-pack';
-import { assertNonNull, U16Box, UnumberMillis } from '@/oidlib';
+import { assertNonNull, U16Box } from '@/oidlib';
 import atlasJSON from './atlas.json' assert { type: 'json' };
 import { FilmID } from './FilmID.ts';
 
@@ -41,12 +41,10 @@ atlas-pack ┌>°┐
     atlas,
     atlasMeta,
   };
-  window.requestAnimationFrame((now) =>
-    loop(demo, UnumberMillis(now), UnumberMillis(now))
-  );
+  window.requestAnimationFrame((now) => loop(demo, now, now));
 }
 
-function loop(demo: Demo, _then: UnumberMillis, now: UnumberMillis): void {
+function loop(demo: Demo, _then: number, now: number): void {
   demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
 
   const scale = 16;
@@ -65,9 +63,7 @@ function loop(demo: Demo, _then: UnumberMillis, now: UnumberMillis): void {
   ] as const;
   demo.context.drawImage(demo.atlas, ...atlasSource, ...canvasDestination);
 
-  demo.window.requestAnimationFrame((then) =>
-    loop(demo, now, UnumberMillis(then))
-  );
+  demo.window.requestAnimationFrame((then) => loop(demo, now, then));
 }
 
 function loadImage(uri: string): Promise<HTMLImageElement> {

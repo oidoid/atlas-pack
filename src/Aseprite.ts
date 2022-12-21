@@ -1,4 +1,4 @@
-import { Immutable, U16, U16Millis, XY } from '@/oidlib';
+import { Immutable, U16, XY } from '@/oidlib';
 
 /**
  * This typing assumes the options specified in atlas-pack and annotated herein
@@ -102,7 +102,7 @@ export namespace Aseprite {
    * Positive animation length in milliseconds. **By convention**, animations
    * that should pause use the special Infinite value.
    */
-  export type Duration = U16Millis | Infinity | number;
+  export type Duration = U16 | Infinity | number;
 
   /**
    * **By convention**, a reserved value to indicate a value without

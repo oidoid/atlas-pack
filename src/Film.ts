@@ -1,8 +1,8 @@
-import { Immutable, U16, U16Box, U16XY, U32Millis } from '@/oidlib';
+import { Immutable, U16, U16Box, U16XY, U32 } from '@/oidlib';
 
 /** A reserved value to indicate endless time. */
 export type InfiniteDuration = typeof InfiniteDuration;
-export const InfiniteDuration = U32Millis.max;
+export const InfiniteDuration = U32.max;
 
 /**
  * A sequence of animation cels.
@@ -31,7 +31,7 @@ export interface Film {
    *
    * This is a U32, not a U16, since its an aggregation of U16s.
    */
-  readonly duration: U32Millis | InfiniteDuration;
+  readonly duration: U32 | InfiniteDuration;
 
   /**
    * Width and height within the source atlas image in integral pixels.
@@ -82,7 +82,7 @@ export interface Film {
    * The period is still 100 ms since infinite durations only appear in the last
    * cel and are treated specially.
    */
-  readonly period: U32Millis | InfiniteDuration;
+  readonly period: U32 | InfiniteDuration;
 
   readonly direction: Playback;
 }
@@ -106,7 +106,7 @@ export interface Cel {
    * a U32. However, that means that `Cel.duration` and `Film.duration` must
    * agree on a definition of infinity that cannot be accidentally summed to.
    */
-  readonly duration: U32Millis | InfiniteDuration;
+  readonly duration: U32 | InfiniteDuration;
 
   /**
    * The union of all slices. If a point is not in sliceBounds, it's not in

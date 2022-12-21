@@ -1,5 +1,5 @@
 import { Cel, Film, InfiniteDuration, Playback } from '@/atlas-pack';
-import { NumUtil, UnumberMillis } from '@/oidlib';
+import { NumUtil } from '@/oidlib';
 
 /** Film playback state. */
 export class Animator {
@@ -10,19 +10,19 @@ export class Animator {
    * The time the film started playing. Playback position is relative this start
    * time.
    */
-  #start: UnumberMillis;
+  #start: number;
 
   get film(): Film {
     return this.#film;
   }
 
-  constructor(film: Film, start: UnumberMillis = UnumberMillis(0)) {
+  constructor(film: Film, start: number = 0) {
     this.#film = film;
     this.#start = start;
   }
 
   /** @return The active film cel. */
-  cel(time: UnumberMillis): Cel {
+  cel(time: number): Cel {
     // Film length is greater than zero as enforced by parser.
     return this.#film.cels[this.index(time)]!;
   }
@@ -31,7 +31,7 @@ export class Animator {
    * @internal
    * @return The active film cel index.
    */
-  index(time: UnumberMillis): number {
+  index(time: number): number {
     const timeIndex = Math.trunc((time - this.#start) / this.#film.period);
 
     // If the film is infinite and at or exceeded the end, return the final cel.
@@ -48,7 +48,7 @@ export class Animator {
    * Clear the start time (set the animation to the starting cel) and optionally
    * change the film. This is useful to reset the active film or switch films.
    */
-  reset(start: UnumberMillis, film?: Film): void {
+  reset(start: number, film?: Film): void {
     this.#film = film ?? this.#film;
     this.#start = start;
   }
