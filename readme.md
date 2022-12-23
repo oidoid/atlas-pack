@@ -35,7 +35,7 @@ Any sub-textures from the sheet can then be efficiently rendered._
 
 Although this readme is constrained to use GIFs for animation, an atlas-pack
 consumer would instead render all animations from the static sprite sheet PNG
-file as shown in the [API demo](https://atlas-pack.netlify.com/demo).
+file as shown in the [API demo](https://atlas-pack.netlify.com).
 
 Some or all embedded sprites may not be animated. For example, a common use case
 for sprite sheets is drawing text:
@@ -141,7 +141,7 @@ example follows. Subsequent sections detail each step in the example.
 
 #### Example
 
-[See the API demo](https://atlas-pack.netlify.com/demo) for a running example
+[See the API demo](https://atlas-pack.netlify.com) for a running example
 rendered to a canvas.
 
 ## Features
