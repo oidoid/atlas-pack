@@ -6,7 +6,7 @@ import {
   InfiniteDuration,
   Playback,
 } from '@/atlas-pack';
-import { U16Box, U16Millis, U16XY, U32Millis } from '@/oidlib';
+import { U16, U16Box, U16XY, U32 } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 Deno.test('parse()', async (test) => {
@@ -123,13 +123,13 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 0,
               bounds: U16Box(221, 19, 16, 16),
-              duration: U16Millis(1),
+              duration: U16(1),
               sliceBounds: U16Box(8, 12, 2, 3),
               slices: [U16Box(8, 12, 2, 3)],
             },
           ],
-          period: U32Millis(1),
-          duration: U16Millis(1),
+          period: U32(1),
+          duration: U16(1),
           direction: 'Forward',
         },
         'palette-red': {
