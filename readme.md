@@ -2,7 +2,7 @@
 
 atlas-pack is an Aseprite sprite sheet parser, animator, and toolset for the
 browser and Deno. See [installation](#installation) and the
-**[example](demo/mod.ts)** to get started.
+**[example](demo/index.ts)** to get started.
 
 ## Installation
 
@@ -74,7 +74,7 @@ benefit from the tooling provided by atlas-pack:
   should consult `Animator` states to determine the appropriate sub-texture
   regions to blit from the `Atlas` each loop.
 
-See the [API demo source](demo/mod.ts)!
+See the [API demo source](demo/index.ts)!
 
 ### Pack the Sprite Sheet (CLI)
 
@@ -84,11 +84,17 @@ sprite sheet:
 ```sh
 deno \
   run \
-  --allow-run \
-  https://deno.land/x/atlas_pack/bin/aseprite-batch \
-  --sheet atlas.png \
-  *.aseprite |
-deno run https://deno.land/x/atlas_pack/bin/atlas-pack > atlas.json
+    --allow-run \
+    --import-map=https://deno.land/x/atlas_pack@v5.0.0/mods.json \
+    https://deno.land/x/atlas_pack@v5.0.0/bin/aseprite-batch \
+      --sheet atlas.png \
+      --data atlas.json \
+      *.aseprite |
+deno \
+  run \
+    --allow-run \
+    --import-map=https://deno.land/x/atlas_pack@v5.0.0/mods.json \
+    https://deno.land/x/atlas_pack@v5.0.0/bin/atlas-pack > atlas.json
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
@@ -118,14 +124,7 @@ need to revise your `PATH` before running the tool. _Something_ like:
 # location to Deno binaries like `deno` for purposes of example.
 export PATH="$PATH:/Applications/Aseprite.app/Contents/MacOS:/path/to/deno"
 
-# Execute the tool (same as noted above).
-deno \
-  run \
-  --allow-run \
-  https://deno.land/x/atlas_pack/bin/aseprite-batch \
-  --sheet atlas.png \
-  *.aseprite |
-deno run https://deno.land/x/atlas_pack/bin/atlas-pack > atlas.json
+# Execute the tool (the same way as noted above).
 ```
 
 If the tool executes without any errors, no need to worry about changing the
