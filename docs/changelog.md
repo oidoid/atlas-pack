@@ -2,15 +2,12 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
-## v6.0.0
+## v5.0.0
 
 - \[API\] Refactor Animator as a class
 - \[API\] Rename some Animator APIs
 - \[API\] Remove Animator.celID(), index(), played() and advanced()
 - \[fix\] Infinite duration check for reverse
-
-## v5.0.0
-
 - \[API\] Use film terminology over animation.
 - \[API\] Use integers for duration for plain JSON compatibility.
 - \[API\] Make cel lookup constant time.
