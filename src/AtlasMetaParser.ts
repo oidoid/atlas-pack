@@ -32,7 +32,7 @@ export namespace AtlasMetaParser {
     ids?: ReadonlySet<FilmID> | undefined,
   ): AtlasMeta<FilmID> {
     const factory = new CelIDFactory();
-    const asepriteFile = (file as Aseprite.File);
+    const asepriteFile = file as Aseprite.File;
     const filmByID = parseFilmByID(factory, asepriteFile, ids);
     return Immutable({
       version: asepriteFile.meta.version,
