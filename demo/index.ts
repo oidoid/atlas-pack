@@ -1,7 +1,7 @@
 import { Animator, AtlasMeta } from '@/atlas-pack';
 import { assertNonNull, U16Box } from '@/oidlib';
 import atlasJSON from './atlas.json' assert { type: 'json' };
-import { FilmID } from './FilmID.ts';
+import { FilmID } from './film-id.ts';
 
 interface Demo {
   readonly window: Window;

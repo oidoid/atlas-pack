@@ -1,7 +1,7 @@
 import { AtlasMeta } from '@/atlas-pack';
 import { assertExists } from 'std/testing/asserts.ts';
 import atlasJSON from './atlas.json' assert { type: 'json' };
-import { FilmID } from './FilmID.ts';
+import { FilmID } from './film-id.ts';
 
 Deno.test('Atlas and FilmIDs are aligned.', () => {
   const atlasMeta = atlasJSON as unknown as AtlasMeta<FilmID>;
