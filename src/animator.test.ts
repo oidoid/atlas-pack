@@ -1,19 +1,19 @@
 import { Animator, CelID, InfiniteDuration, Playback } from '@/atlas-pack';
-import { U16, U16Box, U16XY, U32 } from '@/oidlib';
+import { I16Box, U16, U16Box, U16XY, U32 } from '@/oidlib';
 import { assertEquals } from 'std/testing/asserts.ts';
 
 Deno.test('Animator()', async (test) => {
   await test.step('Exposure < duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: U16Box(1, 2, 3, 4),
+      bounds: new U16Box(1, 2, 3, 4),
       duration: U16(1),
-      sliceBounds: U16Box(1, 1, -1, -1),
+      sliceBounds: new I16Box(1, 1, 2, 2),
       slices: [],
     };
     const film = {
       id: 'abc',
-      wh: U16XY(0, 0),
+      wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
       duration: U16(2),
@@ -27,14 +27,14 @@ Deno.test('Animator()', async (test) => {
   await test.step('Exposure == duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: U16Box(1, 2, 3, 4),
+      bounds: new U16Box(1, 2, 3, 4),
       duration: U16(1),
-      sliceBounds: U16Box(1, 1, -1, -1),
+      sliceBounds: new I16Box(1, 1, 2, 2),
       slices: [],
     };
     const film = {
       id: 'abc',
-      wh: U16XY(0, 0),
+      wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
       duration: U16(2),
@@ -48,14 +48,14 @@ Deno.test('Animator()', async (test) => {
   await test.step('Exposure > duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: U16Box(1, 2, 3, 4),
+      bounds: new U16Box(1, 2, 3, 4),
       duration: U16(1),
-      sliceBounds: U16Box(1, 1, -1, -1),
+      sliceBounds: new I16Box(1, 1, 2, 2),
       slices: [],
     };
     const film = {
       id: 'abc',
-      wh: U16XY(0, 0),
+      wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
       duration: U16(2),
@@ -69,20 +69,20 @@ Deno.test('Animator()', async (test) => {
   await test.step('Infinite duration.', () => {
     const film = {
       id: 'abc',
-      wh: U16XY(0, 0),
+      wh: new U16XY(0, 0),
       cels: [
         {
           id: <CelID> 0,
-          bounds: U16Box(1, 2, 3, 4),
+          bounds: new U16Box(1, 2, 3, 4),
           duration: U16(1),
-          sliceBounds: U16Box(1, 1, -1, -1),
+          sliceBounds: new I16Box(1, 1, 2, 2),
           slices: [],
         },
         {
           id: <CelID> 1,
-          bounds: U16Box(1, 2, 3, 4),
+          bounds: new U16Box(1, 2, 3, 4),
           duration: InfiniteDuration,
-          sliceBounds: U16Box(1, 1, -1, -1),
+          sliceBounds: new I16Box(1, 1, 2, 2),
           slices: [],
         },
       ],
@@ -100,12 +100,12 @@ Deno.test('Animator()', async (test) => {
   await test.step('One cel.', () => {
     const film = {
       id: 'abc',
-      wh: U16XY(0, 0),
+      wh: new U16XY(0, 0),
       cels: [{
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       }],
       period: U32(1),
@@ -121,14 +121,14 @@ Deno.test('Animator()', async (test) => {
 Deno.test('reset()', () => {
   const cel = {
     id: <CelID> 0,
-    bounds: U16Box(0, 0, 0, 0),
+    bounds: new U16Box(0, 0, 0, 0),
     duration: U16(1),
-    sliceBounds: U16Box(1, 1, -1, -1),
+    sliceBounds: new I16Box(1, 1, 2, 2),
     slices: [],
   };
   const film = {
     id: 'abc',
-    wh: U16XY(0, 0),
+    wh: new U16XY(0, 0),
     cels: [cel, cel],
     duration: U16(2),
     period: U32(1),
@@ -147,14 +147,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Direction ${direction} array start.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
         duration: U16(2),
@@ -171,14 +171,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Direction ${direction} array end.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
         duration: U16(2),
@@ -238,14 +238,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Direction ${direction} offset ${offset}.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel],
         period: U32(1),
         duration: U16(4),
@@ -264,14 +264,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Exposure == duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
         duration: U16(5),
@@ -295,14 +295,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Exposure > duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
         duration: U16(5),
@@ -329,14 +329,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Fractional exposure < duration, not met Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
         duration: U16(5),
@@ -363,14 +363,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Fractional exposure == duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
         duration: U16(5),
@@ -395,14 +395,14 @@ Deno.test('index()', async (test) => {
     await test.step(`Fractional exposure > duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: U16Box(1, 2, 3, 4),
+        bounds: new U16Box(1, 2, 3, 4),
         duration: U16(1),
-        sliceBounds: U16Box(1, 1, -1, -1),
+        sliceBounds: new I16Box(1, 1, 2, 2),
         slices: [],
       };
       const film = {
         id: 'abc',
-        wh: U16XY(0, 0),
+        wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
         duration: U16(5),

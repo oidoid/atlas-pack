@@ -1,5 +1,5 @@
 import { Animator, AtlasMeta } from '@/atlas-pack';
-import { assertNonNull, U16Box } from '@/oidlib';
+import { assertNonNull } from '@/oidlib';
 import atlasJSON from './atlas.json' assert { type: 'json' };
 import { FilmID } from './film-id.ts';
 
@@ -49,18 +49,8 @@ function loop(demo: Demo, _then: number, now: number): void {
 
   const scale = 16;
   const { bounds } = demo.animator.cel(now);
-  const atlasSource = [
-    bounds.start.x,
-    bounds.start.y,
-    U16Box.width(bounds),
-    U16Box.height(bounds),
-  ] as const;
-  const canvasDestination = [
-    0,
-    0,
-    U16Box.width(bounds) * scale,
-    U16Box.height(bounds) * scale,
-  ] as const;
+  const atlasSource = [bounds.x, bounds.y, bounds.w, bounds.h] as const;
+  const canvasDestination = [0, 0, bounds.w * scale, bounds.h * scale] as const;
   demo.context.drawImage(demo.atlas, ...atlasSource, ...canvasDestination);
 
   demo.window.requestAnimationFrame((then) => loop(demo, now, then));

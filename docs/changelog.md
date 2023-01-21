@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v6.0.0
+
+- \[API\] Class-ify XY and Box; add AtlasMeta.fromJSON().
+
 ## v5.0.0
 
 - \[API\] Refactor Animator as a class

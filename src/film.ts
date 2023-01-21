@@ -1,4 +1,4 @@
-import { Immutable, U16, U16Box, U16XY, U32 } from '@/oidlib';
+import { I16Box, Immutable, U16, U16Box, U16XY, U32 } from '@/oidlib';
 
 /** A reserved value to indicate endless time. */
 export type InfiniteDuration = typeof InfiniteDuration;
@@ -113,10 +113,10 @@ export interface Cel {
    * slices. Slice bounds are a subset of bounds and a superset of slices, may
    * vary cel-to-cel, and are flipped when no slices.
    */
-  readonly sliceBounds: Readonly<U16Box>;
+  readonly sliceBounds: Readonly<I16Box>;
 
   /** Slices within the cel in local pixels. Slices may vary cel-to-cel. */
-  readonly slices: readonly Readonly<U16Box>[];
+  readonly slices: readonly Readonly<I16Box>[];
 }
 
 /** A unique identifier for the cel, contiguous and starting at 0. */

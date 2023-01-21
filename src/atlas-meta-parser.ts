@@ -11,10 +11,10 @@ import {
 } from '@/atlas-pack';
 import {
   assert,
+  I16Box,
   Immutable,
   Int,
   JSONObject,
-  U16,
   U16Box,
   U16XY,
   U32,
@@ -145,7 +145,7 @@ export namespace AtlasMetaParser {
     const wh = parseU16XY(frames[0]!.sourceSize);
     const area = wh.x * wh.y;
     assert(
-      cels.every(({ bounds }) => U16Box.area(bounds) == area),
+      cels.every(({ bounds }) => bounds.areaNum == area),
       `Cel sizes for "${frameTag.name}" film vary.`,
     );
 
@@ -220,8 +220,8 @@ export namespace AtlasMetaParser {
     // rendered in Aseprite.
     const sliceBoxes = parseSlices(frameTag, frameNumber, slices);
     const sliceBounds = sliceBoxes.length < 1
-      ? U16Box(1, 1, -1, -1)
-      : sliceBoxes.reduce((sum, slice) => U16Box.union(sum, slice));
+      ? new I16Box(1, 1, -1, -1)
+      : sliceBoxes.reduce((sum, slice) => sum.union(slice));
     return {
       id: factory.new(),
       bounds: parseBounds(frame),
@@ -234,7 +234,7 @@ export namespace AtlasMetaParser {
   /** @internal */
   export function parseBounds(frame: Aseprite.Frame): Readonly<U16Box> {
     const padding = parsePadding(frame);
-    return U16Box(
+    return new U16Box(
       frame.frame.x + padding.x / 2,
       frame.frame.y + padding.y / 2,
       frame.sourceSize.w,
@@ -247,10 +247,9 @@ export namespace AtlasMetaParser {
     const w = frame.frame.w - frame.sourceSize.w;
     const h = frame.frame.h - frame.sourceSize.h;
     assert(isEven(w) && isEven(h), 'Cel padding is not evenly divisible.');
-    return U16XY(w, h);
+    return new U16XY(w, h);
   }
 
-  /** @internal */
   function isEven(val: number): boolean {
     return (val & 1) == 0;
   }
@@ -267,34 +266,25 @@ export namespace AtlasMetaParser {
     frameTag: Aseprite.FrameTag,
     index: number,
     slices: readonly Aseprite.Slice[],
-  ): readonly Readonly<U16Box>[] {
+  ): readonly Readonly<I16Box>[] {
     const bounds = [];
     for (const slice of slices) {
       // Ignore Slices not for this Tag.
       if (slice.name != frameTag.name) continue;
       // Get the greatest relevant Key, if any.
       const key = slice.keys.filter((key) => key.frame <= index).at(-1);
-      if (key != null) bounds.push(parseU16Box(key.bounds));
+      if (key != null) bounds.push(new I16Box(key.bounds));
     }
 
     return bounds;
   }
 
   /** @internal */
-  export function parseU16Box(
-    rect: Readonly<Aseprite.Rect<U16 | number>>,
-  ): U16Box {
-    return U16Box(rect.x, rect.y, rect.w, rect.h);
-  }
-
-  /** @internal */
   export function parseU16XY(wh: Aseprite.WH<Int | number>): U16XY {
-    return U16XY(wh.w, wh.h);
+    return new U16XY(wh.w, wh.h);
   }
 
-  function computePeriod(
-    cels: readonly Cel[],
-  ): U32 | InfiniteDuration {
+  function computePeriod(cels: readonly Cel[]): U32 | InfiniteDuration {
     const durations = cels.map((cel) => cel.duration);
     if (durations.length <= 1) return durations[0]!;
 

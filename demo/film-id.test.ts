@@ -4,7 +4,7 @@ import atlasJSON from './atlas.json' assert { type: 'json' };
 import { FilmID } from './film-id.ts';
 
 Deno.test('Atlas and FilmIDs are aligned.', () => {
-  const atlasMeta = atlasJSON as unknown as AtlasMeta<FilmID>;
+  const atlasMeta = AtlasMeta.fromJSON(atlasJSON);
   for (const id of FilmID.values) {
     assertExists(atlasMeta.filmByID[id], `Atlas missing ${id} FilmID.`);
   }

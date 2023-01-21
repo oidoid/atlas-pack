@@ -6,7 +6,7 @@ import {
   InfiniteDuration,
   Playback,
 } from '@/atlas-pack';
-import { U16, U16Box, U16XY, U32 } from '@/oidlib';
+import { I16Box, U16, U16Box, U16XY, U32 } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 Deno.test('parse()', async (test) => {
@@ -32,7 +32,7 @@ Deno.test('parse()', async (test) => {
         version: '1.2.8.1',
         filename: 'atlas.png',
         format: 'I8',
-        wh: U16XY(1, 2),
+        wh: new U16XY(1, 2),
         filmByID: {},
         celBoundsByID: [],
       },
@@ -118,14 +118,14 @@ Deno.test('parseFilmByID()', async (test) => {
       {
         sceneryCloud: {
           id: 'sceneryCloud',
-          wh: U16XY(16, 16),
+          wh: new U16XY(16, 16),
           cels: [
             {
               id: <CelID> 0,
-              bounds: U16Box(221, 19, 16, 16),
+              bounds: new U16Box(221, 19, 16, 16),
               duration: U16(1),
-              sliceBounds: U16Box(8, 12, 2, 3),
-              slices: [U16Box(8, 12, 2, 3)],
+              sliceBounds: new I16Box(8, 12, 2, 3),
+              slices: [new I16Box(8, 12, 2, 3)],
             },
           ],
           period: U32(1),
@@ -134,14 +134,14 @@ Deno.test('parseFilmByID()', async (test) => {
         },
         'palette-red': {
           id: 'palette-red',
-          wh: U16XY(16, 16),
+          wh: new U16XY(16, 16),
           cels: [
             {
               id: <CelID> 1,
-              bounds: U16Box(91, 55, 16, 16),
+              bounds: new U16Box(91, 55, 16, 16),
               duration: InfiniteDuration,
-              sliceBounds: U16Box(7, 11, 3, 4),
-              slices: [U16Box(7, 11, 3, 4)],
+              sliceBounds: new I16Box(7, 11, 3, 4),
+              slices: [new I16Box(7, 11, 3, 4)],
             },
           ],
           period: InfiniteDuration,
@@ -150,14 +150,14 @@ Deno.test('parseFilmByID()', async (test) => {
         },
         sceneryConifer: {
           id: 'sceneryConifer',
-          wh: U16XY(16, 16),
+          wh: new U16XY(16, 16),
           cels: [
             {
               id: <CelID> 2,
-              bounds: U16Box(73, 55, 16, 16),
+              bounds: new U16Box(73, 55, 16, 16),
               duration: InfiniteDuration,
-              sliceBounds: U16Box(7, 10, 3, 5),
-              slices: [U16Box(7, 10, 3, 5)],
+              sliceBounds: new I16Box(7, 10, 3, 5),
+              slices: [new I16Box(7, 10, 3, 5)],
             },
           ],
           period: InfiniteDuration,
@@ -166,14 +166,14 @@ Deno.test('parseFilmByID()', async (test) => {
         },
         'sceneryConifer-shadow': {
           id: 'sceneryConifer-shadow',
-          wh: U16XY(16, 16),
+          wh: new U16XY(16, 16),
           cels: [
             {
               id: <CelID> 3,
-              bounds: U16Box(55, 55, 16, 16),
+              bounds: new U16Box(55, 55, 16, 16),
               duration: InfiniteDuration,
-              sliceBounds: U16Box(7, 9, 3, 6),
-              slices: [U16Box(7, 9, 3, 6)],
+              sliceBounds: new I16Box(7, 9, 3, 6),
+              slices: [new I16Box(7, 9, 3, 6)],
             },
           ],
           period: InfiniteDuration,
@@ -274,14 +274,14 @@ Deno.test('parseFilm()', async (test) => {
       ),
       {
         id: 'cloud s',
-        wh: U16XY(16, 16),
+        wh: new U16XY(16, 16),
         cels: [
           {
             id: <CelID> 0,
-            bounds: U16Box(185, 37, 16, 16),
+            bounds: new U16Box(185, 37, 16, 16),
             duration: InfiniteDuration,
-            sliceBounds: U16Box(4, 11, 9, 4),
-            slices: [U16Box(4, 11, 9, 4)],
+            sliceBounds: new I16Box(4, 11, 9, 4),
+            slices: [new I16Box(4, 11, 9, 4)],
           },
         ],
         period: InfiniteDuration,
@@ -472,10 +472,10 @@ Deno.test('parseCel()', async (test) => {
       ),
       {
         id: <CelID> 0,
-        bounds: U16Box(131, 19, 16, 16),
+        bounds: new U16Box(131, 19, 16, 16),
         duration: InfiniteDuration,
-        sliceBounds: U16Box(4, 4, 8, 12),
-        slices: [U16Box(4, 4, 8, 12)],
+        sliceBounds: new I16Box(4, 4, 8, 12),
+        slices: [new I16Box(4, 4, 8, 12)],
       },
     );
   });
@@ -491,7 +491,7 @@ Deno.test('parseBounds()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     };
-    assertEquals(AtlasMetaParser.parseBounds(frame), U16Box(1, 2, 3, 4));
+    assertEquals(AtlasMetaParser.parseBounds(frame), new U16Box(1, 2, 3, 4));
   });
 
   await test.step('Parses texture mapping with padding.', () => {
@@ -503,7 +503,7 @@ Deno.test('parseBounds()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     };
-    assertEquals(AtlasMetaParser.parseBounds(frame), U16Box(2, 3, 3, 4));
+    assertEquals(AtlasMetaParser.parseBounds(frame), new U16Box(2, 3, 3, 4));
   });
 });
 
@@ -517,7 +517,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     };
-    assertEquals(AtlasMetaParser.parsePadding(frame), U16XY(0, 0));
+    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(0, 0));
   });
 
   await test.step('Fails on indivisible padding.', () => {
@@ -541,7 +541,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 4, h: 4 },
       duration: 1,
     };
-    assertEquals(AtlasMetaParser.parsePadding(frame), U16XY(2, 2));
+    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(2, 2));
   });
 
   await test.step('Parses mixed padding.', () => {
@@ -553,7 +553,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 4, h: 6 },
       duration: 1,
     };
-    assertEquals(AtlasMetaParser.parsePadding(frame), U16XY(2, 4));
+    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(2, 4));
   });
 });
 
@@ -577,7 +577,7 @@ Deno.test('parseDuration()', async (test) => {
 });
 
 Deno.test('parseSlices()', async (test) => {
-  await test.step('Converts Slice to Rect[].', () => {
+  await test.step('Converts Slice to Box[].', () => {
     const frameTag = { name: 'stem ', from: 0, to: 0, direction: 'forward' };
     const slices = [
       {
@@ -587,7 +587,7 @@ Deno.test('parseSlices()', async (test) => {
       },
     ];
     assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [
-      U16Box(0, 1, 2, 3),
+      new I16Box(0, 1, 2, 3),
     ]);
   });
 
@@ -617,11 +617,11 @@ Deno.test('parseSlices()', async (test) => {
       },
     ];
     assertEquals(AtlasMetaParser.parseSlices(frameTag, 1, slices), [
-      U16Box(4, 5, 6, 7),
+      new I16Box(4, 5, 6, 7),
     ]);
   });
 
-  await test.step('Converts Slice with multiple Keys to Rect[].', () => {
+  await test.step('Converts Slice with multiple Keys to Box[].', () => {
     const frameTag = { name: 'stem ', from: 0, to: 1, direction: 'forward' };
     const slices = [
       {
@@ -634,7 +634,7 @@ Deno.test('parseSlices()', async (test) => {
       },
     ];
     assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [
-      U16Box(0, 1, 2, 3),
+      new I16Box(0, 1, 2, 3),
     ]);
   });
 
@@ -672,9 +672,9 @@ Deno.test('parseSlices()', async (test) => {
       },
     ];
     assertEquals(AtlasMetaParser.parseSlices(frameTag, 1, slices), [
-      U16Box(4, 5, 6, 7),
-      U16Box(0, 1, 2, 3),
-      U16Box(8, 9, 10, 11),
+      new I16Box(4, 5, 6, 7),
+      new I16Box(0, 1, 2, 3),
+      new I16Box(8, 9, 10, 11),
     ]);
   });
 
