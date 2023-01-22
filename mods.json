@@ -1,7 +1,7 @@
 {
   "imports": {
     "@/atlas-pack": "./mod.ts",
-    "@/oidlib": "https://deno.land/x/oidlib@v0.0.9/mod.ts",
+    "@/oidlib": "https://deno.land/x/oidlib@v0.0.10/mod.ts",
     "std/": "https://deno.land/std@0.171.0/"
   }
 }
