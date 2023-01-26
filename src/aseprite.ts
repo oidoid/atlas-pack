@@ -1,4 +1,4 @@
-import { Immutable, U16, XY } from '@/oidlib';
+import { Immutable, U16, XY } from '@/oidlib'
 
 /**
  * This typing assumes the options specified in atlas-pack and annotated herein
@@ -24,41 +24,41 @@ export namespace Aseprite {
    * has a `Frame` sequence, a Tag, and zero or more Slices.
    */
   export interface File {
-    readonly meta: Meta;
+    readonly meta: Meta
     /** All Frames for all files packed. */
-    readonly frames: FrameMap;
+    readonly frames: FrameMap
   }
 
   export interface FrameMap {
-    readonly [tagFrameNumber: TagFrameNumber]: Frame;
+    readonly [tagFrameNumber: TagFrameNumber]: Frame
   }
 
   export interface Meta {
     /** E.g., 'http://www.aseprite.org/'. */
-    readonly app: string;
+    readonly app: string
     /** E.g., '1.2.8.1'. */
-    readonly version: string;
+    readonly version: string
     /** The associated output basename. E.g., 'atlas.png'. */
-    readonly image: string;
+    readonly image: string
     /** E.g., 'RGBA8888' or 'I8'. */
-    readonly format: string;
+    readonly format: string
     /** Output dimensions. **Via CLI** `--sheet-pack`. */
-    readonly size: Readonly<WH<U16 | number>>;
+    readonly size: Readonly<WH<U16 | number>>
     /** E.g., '1'. */
-    readonly scale: string;
+    readonly scale: string
     /** All FrameTags for all files packed **via CLI** `--list-tags`. */
-    readonly frameTags: readonly FrameTag[];
+    readonly frameTags: readonly FrameTag[]
     /** All slices for all files packed **via CLI** `--list-slices`. */
-    readonly slices: readonly Slice[];
+    readonly slices: readonly Slice[]
   }
 
   /**
    * A `Tag` followed by a space followed by a frame number **via CLI**
    * `--filename-format '{tag}.{frame}'`.
    */
-  export type TagFrameNumber = string;
+  export type TagFrameNumber = string
 
-  export type Tag = string;
+  export type Tag = string
 
   /**
    * A single animation frame and the most primitive unit. Each file packed
@@ -71,14 +71,14 @@ export namespace Aseprite {
      * calculated by subtracting member's WH dimensions from sourceSize and
      * dividing by two.
      */
-    readonly frame: Readonly<Rect<U16 | number>>;
-    readonly rotated: boolean;
-    readonly trimmed: boolean;
+    readonly frame: Readonly<Rect<U16 | number>>
+    readonly rotated: boolean
+    readonly trimmed: boolean
     /** The `Frame`'s bounds within the file packed, not including padding. */
-    readonly spriteSourceSize: Readonly<Rect<U16 | number>>;
+    readonly spriteSourceSize: Readonly<Rect<U16 | number>>
     /** The width and height components of spriteSourceSize. */
-    readonly sourceSize: Readonly<WH<U16 | number>>;
-    readonly duration: Duration;
+    readonly sourceSize: Readonly<WH<U16 | number>>
+    readonly duration: Duration
   }
 
   /**
@@ -87,36 +87,36 @@ export namespace Aseprite {
    */
   export interface FrameTag {
     /** **By convention**, the associated `Frame`'s `Tag`. */
-    readonly name: Tag;
+    readonly name: Tag
     /** The inclusive starting Frame index. */
-    readonly from: U16 | number;
+    readonly from: U16 | number
     /**
      * The inclusive ending `Frame` index, possibly identical to the starting
      * frame index.
      */
-    readonly to: U16 | number;
-    readonly direction: Direction | string;
+    readonly to: U16 | number
+    readonly direction: Direction | string
   }
 
   /**
    * Positive animation length in milliseconds. **By convention**, animations
    * that should pause use the special Infinite value.
    */
-  export type Duration = U16 | Infinity | number;
+  export type Duration = U16 | Infinity | number
 
   /**
    * **By convention**, a reserved value to indicate a value without
    * termination.
    */
-  export type Infinity = typeof Infinity;
+  export type Infinity = typeof Infinity
   // deno-lint-ignore no-shadow-restricted-names
-  export const Infinity = U16.max;
+  export const Infinity = U16.max
 
   /**
    * The `Animation` playback orientation: forward, backward, or forward then
    * backward.
    */
-  export type Direction = typeof Direction[keyof typeof Direction];
+  export type Direction = typeof Direction[keyof typeof Direction]
   export const Direction = Immutable(
     {
       /** Animate from start to end; when looping, return to start. */
@@ -131,13 +131,13 @@ export namespace Aseprite {
        */
       PingPong: 'pingpong',
     } as const,
-  );
+  )
 
   export interface Slice {
-    readonly name: Tag;
+    readonly name: Tag
     /** Color in `#rrggbbaa` format. E.g., blue is '#0000ffff'. */
-    readonly color: string;
-    readonly keys: readonly Key[];
+    readonly color: string
+    readonly keys: readonly Key[]
   }
 
   export interface Key {
@@ -148,15 +148,15 @@ export namespace Aseprite {
      * `Key`'s `Frame` index may be calculated from
      * `FrameTag.index + Key.frame`.
      */
-    readonly frame: U16 | number;
+    readonly frame: U16 | number
     /** The `Slice` dimensions. */
-    readonly bounds: Readonly<Rect<U16 | number>>;
+    readonly bounds: Readonly<Rect<U16 | number>>
   }
 
   export interface Rect<T> extends Readonly<WH<T>>, Readonly<XY<T>> {}
 
   export interface WH<T> {
-    w: T;
-    h: T;
+    w: T
+    h: T
   }
 }

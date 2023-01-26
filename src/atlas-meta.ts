@@ -1,4 +1,4 @@
-import { Aseprite, Cel, CelID, Film, Playback } from '@/atlas-pack';
+import { Aseprite, Cel, CelID, Film, Playback } from '@/atlas-pack'
 import {
   Box,
   I16Box,
@@ -8,8 +8,8 @@ import {
   U16XY,
   U32,
   XY,
-} from '@/oidlib';
-import { mapValues } from 'std/collections/map_values.ts';
+} from '@/oidlib'
+import { mapValues } from 'std/collections/map_values.ts'
 
 /**
  * All film and metadata for a sprite sheet.
@@ -20,14 +20,14 @@ import { mapValues } from 'std/collections/map_values.ts';
  */
 export interface AtlasMeta<FilmID extends Aseprite.Tag> {
   /** The Aseprite version of the parsed file. E.g., '1.2.8.1'. */
-  readonly version: string;
+  readonly version: string
   /** The atlas image basename. E.g., 'atlas.png'. */
-  readonly filename: string;
+  readonly filename: string
   /** Atlas image format. E.g., 'RGBA8888' or 'I8'. */
-  readonly format: string;
+  readonly format: string
   /** Atlas image dimensions (power of 2). */
-  readonly wh: Readonly<U16XY>;
-  readonly filmByID: FilmByID<FilmID>;
+  readonly wh: Readonly<U16XY>
+  readonly filmByID: FilmByID<FilmID>
   /**
    * Every cel in the atlas keyed by a contiguous array of CelIDs. Used for fast
    * atlas source dimension look-up.
@@ -39,15 +39,15 @@ export interface AtlasMeta<FilmID extends Aseprite.Tag> {
    *   2 → cloud film cel 0
    *   ⋮
    */
-  readonly celBoundsByID: CelBoundsByID;
+  readonly celBoundsByID: CelBoundsByID
 }
 
 /** Film look up table. */
 export type FilmByID<FilmID extends Aseprite.Tag> = Readonly<
   { [id in FilmID]: Film }
->;
+>
 
-export type CelBoundsByID = readonly Readonly<U16Box>[];
+export type CelBoundsByID = readonly Readonly<U16Box>[]
 
 export namespace AtlasMeta {
   export function fromJSON<FilmID extends Aseprite.Tag>(
@@ -65,7 +65,7 @@ export namespace AtlasMeta {
       celBoundsByID: (json.celBoundsByID as []).map((bounds) =>
         new U16Box(bounds)
       ),
-    });
+    })
   }
 }
 
@@ -77,7 +77,7 @@ function parseFilm(json: JSONObject): Film {
     cels: (json.cels as []).map(parseCel),
     period: json.period as U32,
     direction: json.direction as Playback,
-  };
+  }
 }
 
 function parseCel(json: JSONObject): Cel {
@@ -89,5 +89,5 @@ function parseCel(json: JSONObject): Cel {
     slices: (json.slices as unknown as Box<number>[]).map((slice) =>
       new I16Box(slice)
     ),
-  };
+  }
 }
