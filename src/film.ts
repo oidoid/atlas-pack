@@ -1,4 +1,13 @@
-import { I16Box, Immutable, U16, U16Box, U16XY, U32 } from '@/oidlib'
+import {
+  BoxJSON,
+  I16Box,
+  Immutable,
+  U16,
+  U16Box,
+  U16XY,
+  U32,
+  XYJSON,
+} from '@/oidlib'
 
 /** A reserved value to indicate endless time. */
 export type InfiniteDuration = typeof InfiniteDuration
@@ -151,4 +160,21 @@ export namespace Playback {
       ] as const,
     ),
   )
+}
+
+export interface FilmJSON {
+  readonly id: string
+  readonly duration: number
+  readonly wh: Readonly<XYJSON>
+  readonly cels: readonly CelJSON[]
+  readonly period: number
+  readonly direction: string
+}
+
+export interface CelJSON {
+  readonly id: number
+  readonly bounds: Readonly<BoxJSON>
+  readonly duration: number
+  readonly sliceBounds: Readonly<BoxJSON>
+  readonly slices: readonly Readonly<BoxJSON>[]
 }
