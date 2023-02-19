@@ -1,5 +1,5 @@
 import { Animator, AtlasMeta } from '@/atlas-pack'
-import { assertNonNull } from '@/oidlib'
+import { assertNonNull } from '@/ooz'
 import atlasJSON from './atlas.json' assert { type: 'json' }
 import { FilmID } from './film-id.ts'
 

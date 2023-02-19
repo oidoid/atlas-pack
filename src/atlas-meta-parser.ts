@@ -18,7 +18,7 @@ import {
   U16Box,
   U16XY,
   U32,
-} from '@/oidlib'
+} from '@/ooz'
 
 export namespace AtlasMetaParser {
   /**

@@ -1,4 +1,4 @@
-import { Immutable } from '@/oidlib'
+import { Immutable } from '@/ooz'
 
 /**
  * The film identifier for all Animations in the Atlas. IDs are used to

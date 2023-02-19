@@ -6,7 +6,7 @@ import {
   InfiniteDuration,
   Playback,
 } from '@/atlas-pack'
-import { I16Box, U16, U16Box, U16XY, U32 } from '@/oidlib'
+import { I16Box, U16, U16Box, U16XY, U32 } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('parse()', async (test) => {

@@ -1,5 +1,5 @@
 import { Cel, Film, InfiniteDuration, Playback } from '@/atlas-pack'
-import { NumUtil } from '@/oidlib'
+import { NumUtil } from '@/ooz'
 
 /** Film playback state. */
 export class Animator {

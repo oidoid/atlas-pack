@@ -7,7 +7,7 @@ import {
   U16XY,
   U32,
   XYJSON,
-} from '@/oidlib'
+} from '@/ooz'
 
 /** A reserved value to indicate endless time. */
 export type InfiniteDuration = typeof InfiniteDuration

@@ -15,7 +15,7 @@ import {
   U16XY,
   U32,
   XYJSON,
-} from '@/oidlib'
+} from '@/ooz'
 import { mapValues } from 'std/collections/map_values.ts'
 
 /**

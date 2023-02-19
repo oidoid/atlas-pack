@@ -1,4 +1,4 @@
-import { Immutable, U16, XY } from '@/oidlib'
+import { Immutable, U16, XY } from '@/ooz'
 
 /**
  * This typing assumes the options specified in atlas-pack and annotated herein
