@@ -7,15 +7,7 @@ import {
   FilmJSON,
   Playback,
 } from '@/atlas-pack'
-import {
-  BoxJSON,
-  I16Box,
-  Immutable,
-  U16Box,
-  U16XY,
-  U32,
-  XYJSON,
-} from '@/ooz'
+import { BoxJSON, I16Box, Immutable, U16Box, U16XY, U32, XYJSON } from '@/ooz'
 import { mapValues } from 'std/collections/map_values.ts'
 
 /**
@@ -25,7 +17,7 @@ import { mapValues } from 'std/collections/map_values.ts'
  * data comes from the sprite sheet and is expected to be unchanging. If you
  * need a mutable copy, create a duplicate instance of the parts that change.
  */
-export interface AtlasMeta<FilmID extends Aseprite.Tag> {
+export interface AtlasMeta<FilmID extends Aseprite.FileTag> {
   /** The Aseprite version of the parsed file. E.g., '1.2.8.1'. */
   readonly version: string
   /** The atlas image basename. E.g., 'atlas.png'. */
@@ -50,7 +42,7 @@ export interface AtlasMeta<FilmID extends Aseprite.Tag> {
 }
 
 /** Film look up table. */
-export type FilmByID<FilmID extends Aseprite.Tag> = Readonly<
+export type FilmByID<FilmID extends Aseprite.FileTag> = Readonly<
   { [id in FilmID]: Film }
 >
 
@@ -72,7 +64,7 @@ export interface FilmByIDJSON {
 }
 
 export namespace AtlasMeta {
-  export function fromJSON<FilmID extends Aseprite.Tag>(
+  export function fromJSON<FilmID extends Aseprite.FileTag>(
     json: AtlasMetaJSON,
   ): AtlasMeta<FilmID> {
     return Immutable({
@@ -96,6 +88,7 @@ function parseFilm(json: FilmJSON): Film {
     cels: json.cels.map(parseCel),
     period: U32(json.period),
     direction: json.direction as Playback,
+    loops: json.loops == null ? Number.POSITIVE_INFINITY : json.loops,
   }
 }
 

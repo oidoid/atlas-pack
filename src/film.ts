@@ -94,6 +94,9 @@ export interface Film {
   readonly period: U32 | InfiniteDuration
 
   readonly direction: Playback
+
+  /** The number of times to play the animation, possibly infinite. */
+  readonly loops: number | typeof Number.POSITIVE_INFINITY
 }
 
 /** A single animation frame of a film. */
@@ -157,6 +160,11 @@ export namespace Playback {
          * duration cels.
          */
         'PingPong',
+
+        /**
+         * Like PingPong but start from end - 1 or start, whichever is greater.
+         */
+        'PingPongReverse',
       ] as const,
     ),
   )
@@ -169,6 +177,7 @@ export interface FilmJSON {
   readonly cels: readonly CelJSON[]
   readonly period: number
   readonly direction: string
+  readonly loops?: number | null
 }
 
 export interface CelJSON {

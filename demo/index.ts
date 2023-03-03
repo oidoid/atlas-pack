@@ -31,8 +31,8 @@ atlas-pack ┌>°┐
   context.imageSmoothingEnabled = false
 
   const atlas = await loadImage('atlas.png')
-  const atlasMeta = atlasJSON as unknown as AtlasMeta<FilmID>
-  const film = atlasMeta.filmByID.BackpackerWalkRight
+  const atlasMeta = AtlasMeta.fromJSON<FilmID>(atlasJSON)
+  const film = atlasMeta.filmByID['backpacker-WalkRight']
   const demo = {
     window,
     canvas,

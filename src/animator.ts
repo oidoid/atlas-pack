@@ -12,10 +12,6 @@ export class Animator {
    */
   #start: number
 
-  get film(): Film {
-    return this.#film
-  }
-
   constructor(film: Film, start: number = 0) {
     this.#film = film
     this.#start = start
@@ -27,6 +23,10 @@ export class Animator {
     return this.#film.cels[this.index(time)]!
   }
 
+  get film(): Film {
+    return this.#film
+  }
+
   /**
    * @internal
    * @return The active film cel index.
@@ -36,7 +36,8 @@ export class Animator {
 
     // If the film is infinite and at or exceeded the end, return the final cel.
     const infinite = this.#film.duration == InfiniteDuration
-    if (infinite && timeIndex >= (this.#film.cels.length - 1)) {
+    const loops = timeIndex / this.#film.cels.length
+    if (infinite && loops >= 1 || loops >= this.#film.loops) {
       return this.#film.cels.length - 1
     }
 
@@ -63,6 +64,8 @@ export class Animator {
  *   then rollover.
  * - Ping-pong (-len, len): start at the array beginning and double-back at each
  *   end.
+ * - Ping-pong reverse (-len, len): start at the array end and double-back at
+ *   each end.
  */
 const period: Readonly<
   { [playback in Playback]: (timeIndex: number, len: number) => number }
@@ -70,4 +73,6 @@ const period: Readonly<
   Forward: (timeIndex, len) => timeIndex % len,
   Reverse: (timeIndex, len) => (len - 1) - (timeIndex % len),
   PingPong: (timeIndex, len) => Math.abs(NumUtil.wrap(timeIndex, 2 - len, len)),
+  PingPongReverse: (timeIndex, len) =>
+    Math.abs(NumUtil.wrap((len - 1) - timeIndex, 2 - len, len)),
 })

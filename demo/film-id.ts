@@ -11,12 +11,12 @@ export namespace FilmID {
   export const values = Immutable(
     new Set(
       [
-        'FrogEat',
-        'FrogEatLoop',
-        'FrogIdle',
-        'BackpackerWalkRight',
-        'BackpackerWalkDown',
-        'BackpackerWalkUp',
+        'frog-Eat',
+        'frog-EatLoop',
+        'frog-Idle',
+        'backpacker-WalkRight',
+        'backpacker-WalkDown',
+        'backpacker-WalkUp',
       ] as const,
     ),
   )

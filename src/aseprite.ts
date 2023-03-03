@@ -30,7 +30,7 @@ export namespace Aseprite {
   }
 
   export interface FrameMap {
-    readonly [tagFrameNumber: TagFrameNumber]: Frame
+    readonly [fileTagFrameNumber: FileTagFrameNumber]: Frame
   }
 
   export interface Meta {
@@ -53,12 +53,16 @@ export namespace Aseprite {
   }
 
   /**
-   * A `Tag` followed by a space followed by a frame number **via CLI**
-   * `--filename-format '{tag}.{frame}'`.
+   * A `FileTag` followed by a hyphen followed by a frame number **via CLI**
+   * `--filename-format='{title}-{tag}-{frame}'`.
    */
-  export type TagFrameNumber = string
+  export type FileTagFrameNumber = `${FileTag}-${bigint}`
 
-  export type Tag = string
+  /**
+   * The filename stem followed by a double hyphen followed by the animation
+   * tag **via CLI** `--tagname-format={title}-{tag}`.
+   */
+  export type FileTag = `${string}-${string}`
 
   /**
    * A single animation frame and the most primitive unit. Each file packed
@@ -67,7 +71,7 @@ export namespace Aseprite {
   export interface Frame {
     /**
      * The `Frame`'s bounds within the atlas, including any border padding
-     * **via CLI** `--inner-padding n`. The padding dimensions may also be
+     * **via CLI** `--inner-padding=n`. The padding dimensions may also be
      * calculated by subtracting member's WH dimensions from sourceSize and
      * dividing by two.
      */
@@ -86,8 +90,11 @@ export namespace Aseprite {
    * the referenced `Frame`s, an animation is represented.
    */
   export interface FrameTag {
-    /** **By convention**, the associated `Frame`'s `Tag`. */
-    readonly name: Tag
+    /**
+     * **By convention**, the associated `Frame`'s `FileTag`. A tag by itself
+     * would be insufficient to guarantee uniqueness.
+     */
+    readonly name: FileTag
     /** The inclusive starting Frame index. */
     readonly from: U16 | number
     /**
@@ -96,6 +103,17 @@ export namespace Aseprite {
      */
     readonly to: U16 | number
     readonly direction: Direction | string
+    /**
+     * The number of times to play the animation (as a stringified number).
+     *
+     *   undefined → ∞
+     *   '0' → never
+     *   '1' → play once
+     *   '2' → play twice
+     *   '3' → play thrice
+     *   ⋮
+     */
+    readonly repeat?: `${bigint}` | string
   }
 
   /**
@@ -130,11 +148,16 @@ export namespace Aseprite {
        * considered a complete loop.
        */
       PingPong: 'pingpong',
+      /**
+       * Like PingPong but start from end - 1 or start, whichever is greater.
+       */
+      PingPongReverse: 'pingpong_reverse',
     } as const,
   )
 
   export interface Slice {
-    readonly name: Tag
+    /** **By convention**, a `FileTag`. */
+    readonly name: FileTag
     /** Color in `#rrggbbaa` format. E.g., blue is '#0000ffff'. */
     readonly color: string
     readonly keys: readonly Key[]

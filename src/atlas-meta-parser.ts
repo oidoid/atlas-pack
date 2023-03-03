@@ -27,7 +27,7 @@ export namespace AtlasMetaParser {
    *   string type for FilmID and perform their own Atlas.filmByID lookup
    *   checks.
    */
-  export function parse<FilmID extends Aseprite.Tag>(
+  export function parse<FilmID extends Aseprite.FileTag>(
     file: Aseprite.File | JSONObject,
     ids?: ReadonlySet<FilmID> | undefined,
   ): AtlasMeta<FilmID> {
@@ -45,7 +45,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parseFilmByID<FilmID extends Aseprite.Tag>(
+  export function parseFilmByID<FilmID extends Aseprite.FileTag>(
     factory: CelIDFactory,
     file: Aseprite.File,
     ids: ReadonlySet<FilmID> | undefined,
@@ -66,8 +66,8 @@ export namespace AtlasMetaParser {
       `Missing ID(s) in atlas: ${missingIDs.join(', ')}.`,
     )
 
-    // No orphan Slices. Each Slice has a Tag (and there may be multiple Slices
-    // with the same Tag).
+    // No orphan Slices. Each Slice has a FileTag (and there may be multiple
+    // Slices with the same FileTag).
     const orphanSlices = slices.filter((slice) =>
       !map.has(slice.name as FilmID)
     )
@@ -82,7 +82,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function newCelBoundsByID<FilmID extends Aseprite.Tag>(
+  export function newCelBoundsByID<FilmID extends Aseprite.FileTag>(
     factory: Readonly<CelIDFactory>,
     filmByID: FilmByID<FilmID>,
   ): CelBoundsByID {
@@ -100,22 +100,22 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function isFilmID<FilmID extends Aseprite.Tag>(
-    id: Aseprite.Tag,
+  export function isFilmID<FilmID extends Aseprite.FileTag>(
+    id: Aseprite.FileTag,
     ids: ReadonlySet<FilmID> | undefined,
   ): id is FilmID {
     return ids == null || ids.has(<FilmID> id)
   }
 
   /** @internal */
-  export function parseFilm<FilmID extends Aseprite.Tag>(
+  export function parseFilm<FilmID extends Aseprite.FileTag>(
     id: FilmID,
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
     slices: readonly Aseprite.Slice[],
     factory: CelIDFactory,
   ): Film {
-    const frames = parseTagFrames(frameTag, frameMap)
+    const frames = parseFrames(frameTag, frameMap)
     const cels = frames.map((frame, i) =>
       parseCel(frameTag, frame, i, slices, factory)
     )
@@ -170,19 +170,24 @@ export namespace AtlasMetaParser {
       period,
       duration: U32(duration),
       direction: parsePlayback(frameTag.direction),
+      loops: frameTag.repeat == null
+        ? Number.POSITIVE_INFINITY
+        : Number.parseInt(frameTag.repeat, 10),
     }
   }
 
   /** @internal */
-  function parseTagFrames(
+  function parseFrames(
     { name, from, to }: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
   ): readonly Aseprite.Frame[] {
     const frames = []
     for (; from <= to; from++) {
-      const tagFrameNumber: Aseprite.TagFrameNumber = `${name}-${from}`
-      const frame = frameMap[tagFrameNumber]
-      assert(frame != null, `Missing Frame "${tagFrameNumber}".`)
+      assert(name.includes('-'), `${name} is not a FileTag.`)
+      const fileTagFrameNumber =
+        `${name}-${from}` as Aseprite.FileTagFrameNumber
+      const frame = frameMap[fileTagFrameNumber]
+      assert(frame != null, `Missing Frame "${fileTagFrameNumber}".`)
       frames.push(frame)
     }
     return frames
@@ -197,6 +202,7 @@ export namespace AtlasMetaParser {
       'forward': 'Forward',
       'reverse': 'Reverse',
       'pingpong': 'PingPong',
+      'pingpong_reverse': 'PingPongReverse',
     }
     return playback[direction]
   }
@@ -269,7 +275,7 @@ export namespace AtlasMetaParser {
   ): readonly Readonly<I16Box>[] {
     const bounds = []
     for (const slice of slices) {
-      // Ignore Slices not for this Tag.
+      // Ignore Slices not for this FileTag.
       if (slice.name != frameTag.name) continue
       // Get the greatest relevant Key, if any.
       const key = slice.keys.filter((key) => key.frame <= index).at(-1)

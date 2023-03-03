@@ -18,6 +18,7 @@ Deno.test('Animator()', async (test) => {
       period: U32(1),
       duration: U16(2),
       direction: 'Forward' as const,
+      loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film, 0.5)
     const index = animator.index(0.5)
@@ -39,6 +40,7 @@ Deno.test('Animator()', async (test) => {
       period: U32(1),
       duration: U16(2),
       direction: 'Forward' as const,
+      loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
     const index = animator.index(1)
@@ -60,6 +62,7 @@ Deno.test('Animator()', async (test) => {
       period: U32(1),
       duration: U16(2),
       direction: 'Forward' as const,
+      loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
     const index = animator.index(1.5)
@@ -84,11 +87,13 @@ Deno.test('Animator()', async (test) => {
           duration: InfiniteDuration,
           sliceBounds: new I16Box(1, 1, 2, 2),
           slices: [],
+          loops: Number.POSITIVE_INFINITY,
         },
       ],
       period: U32(1),
       duration: InfiniteDuration,
       direction: 'Forward' as const,
+      loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
     let index = animator.index(0.5)
@@ -111,6 +116,7 @@ Deno.test('Animator()', async (test) => {
       period: U32(1),
       duration: U16(2),
       direction: 'Forward' as const,
+      loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
     const index = animator.index(1.5)
@@ -133,6 +139,7 @@ Deno.test('reset()', () => {
     duration: U16(2),
     period: U32(1),
     direction: 'Forward' as const,
+    loops: Number.POSITIVE_INFINITY,
   }
   const animator = new Animator(film)
   let index = animator.index(1.5)
@@ -159,10 +166,16 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(2),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const index = animator.index(1)
-      const expected = { Forward: 1, Reverse: 0, PingPong: 1 }
+      const expected = {
+        Forward: 1,
+        Reverse: 0,
+        PingPong: 1,
+        PingPongReverse: 0,
+      }
       assertEquals(index, expected[direction])
     })
   }
@@ -183,10 +196,16 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(2),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const index = animator.index(2)
-      const expected = { Forward: 0, Reverse: 1, PingPong: 0 }
+      const expected = {
+        Forward: 0,
+        Reverse: 1,
+        PingPong: 0,
+        PingPongReverse: 1,
+      }
       assertEquals(index, expected[direction])
     })
   }
@@ -233,6 +252,21 @@ Deno.test('index()', async (test) => {
         3,
         [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2],
       ],
+      [
+        'PingPongReverse',
+        2,
+        [1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0],
+      ],
+      [
+        'PingPongReverse',
+        0,
+        [3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2],
+      ],
+      [
+        'PingPongReverse',
+        3,
+        [0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1],
+      ],
     ] as [Playback, number, number[]][]
   ) {
     await test.step(`Direction ${direction} offset ${offset}.`, () => {
@@ -250,6 +284,7 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(4),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
@@ -276,16 +311,19 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(5),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
       for (let i = 0; i < film.cels.length * 3; ++i) {
         playback.push(animator.index(1 * i))
       }
+      // deno-fmt-ignore
       const expected = {
-        Forward: [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
-        Reverse: [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
-        PingPong: [0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2],
+        Forward:         [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
+        Reverse:         [4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0],
+        PingPong:        [0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2],
+        PingPongReverse: [4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2],
       }
       assertEquals(playback, expected[direction])
     })
@@ -307,6 +345,7 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(5),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
@@ -315,11 +354,12 @@ Deno.test('index()', async (test) => {
       }
       // deno-fmt-ignore
       const expected = {
-        // time     0   6  12  18  24  30  36  42  48  54  60  66  72  78  84
-        // % 5      0   1   2   3   4   0   1   2   3   4   0   1   2   3   4
-        Forward:  [ 0,  1,  2,  3,  4,  0,  1,  2,  3,  4,  0,  1,  2,  3,  4],
-        Reverse:  [ 4,  3,  2,  1,  0,  4,  3,  2,  1,  0,  4,  3,  2,  1,  0],
-        PingPong: [ 0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4],
+        // time            0   6  12  18  24  30  36  42  48  54  60  66  72  78  84
+        // % 5             0   1   2   3   4   0   1   2   3   4   0   1   2   3   4
+        Forward:         [ 0,  1,  2,  3,  4,  0,  1,  2,  3,  4,  0,  1,  2,  3,  4],
+        Reverse:         [ 4,  3,  2,  1,  0,  4,  3,  2,  1,  0,  4,  3,  2,  1,  0],
+        PingPong:        [ 0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4],
+        PingPongReverse: [ 4,  2,  0,  2,  4,  2,  0,  2,  4,  2,  0,  2,  4,  2,  0],
       };
       assertEquals(playback, expected[direction])
     })
@@ -341,6 +381,7 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(5),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
@@ -349,11 +390,12 @@ Deno.test('index()', async (test) => {
       }
       // deno-fmt-ignore
       const expected = {
-        //         v                             v                             v
-        // decimal 0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1
-        Forward:  [0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1],
-        Reverse:  [4, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 1, 0, 4, 3, 2, 1, 0, 4, 3],
-        PingPong: [0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2, 3, 4, 3, 2, 1, 0, 1, 2]
+        //                v                             v                             v
+        // decimal        0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1
+        Forward:         [0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 4, 0, 1],
+        Reverse:         [4, 4, 3, 2, 1, 0, 4, 3, 2, 1, 0, 0, 4, 3, 2, 1, 0, 4, 3, 2, 1, 1, 0, 4, 3, 2, 1, 0, 4, 3],
+        PingPong:        [0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 2, 3, 4, 3, 2, 1, 0, 1, 2],
+        PingPongReverse: [4, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 2, 1, 0, 1, 2, 3, 4, 3, 2],
       }
       assertEquals(playback, expected[direction])
     })
@@ -375,6 +417,7 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(5),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
@@ -383,9 +426,10 @@ Deno.test('index()', async (test) => {
       }
       // deno-fmt-ignore
       const expected = {
-        Forward:  [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
-        Reverse:  [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
-        PingPong: [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2]
+        Forward:         [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+        Reverse:         [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
+        PingPong:        [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2],
+        PingPongReverse: [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2],
       }
       assertEquals(playback, expected[direction])
     })
@@ -407,6 +451,7 @@ Deno.test('index()', async (test) => {
         period: U32(1),
         duration: U16(5),
         direction,
+        loops: Number.POSITIVE_INFINITY,
       }
       const animator = new Animator(film)
       const playback = []
@@ -415,9 +460,10 @@ Deno.test('index()', async (test) => {
       }
       // deno-fmt-ignore
       const expected = {
-        Forward:  [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
-        Reverse:  [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
-        PingPong: [0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1, 3, 2, 0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1]
+        Forward:         [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+        Reverse:         [4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0],
+        PingPong:        [0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1, 3, 2, 0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1],
+        PingPongReverse: [4, 1, 1, 4, 2, 1, 3, 2, 0, 3, 3, 0, 2, 3, 1, 2, 4, 1, 1, 4, 2, 1, 3, 2, 0, 3, 3, 0, 2, 3],
       }
       assertEquals(playback, expected[direction])
     })

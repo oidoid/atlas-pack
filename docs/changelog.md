@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v7.0.0
+
+- \[API\] Support Aseprite vAseprite 1.3-rc1-x64
+
 ## v6.0.0
 
 - \[API\] Class-ify XY and Box; add AtlasMeta.fromJSON().
