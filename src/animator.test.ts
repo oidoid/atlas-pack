@@ -15,7 +15,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'filename-Tag' as const,
+      id: 'filename--Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -37,7 +37,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'filename-Tag' as const,
+      id: 'filename--Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -59,7 +59,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'filename-Tag' as const,
+      id: 'filename--Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -74,7 +74,7 @@ Deno.test('Animator()', async (test) => {
 
   await test.step('Different durations.', () => {
     const film = {
-      id: 'filename-Tag' as const,
+      id: 'filename--Tag' as const,
       wh: new U16XY(0, 0),
       cels: [
         {
@@ -104,7 +104,7 @@ Deno.test('Animator()', async (test) => {
 
   await test.step('Different durations ping-pong reverse.', () => {
     const film = {
-      id: 'filename-Tag' as const,
+      id: 'filename--Tag' as const,
       wh: new U16XY(0, 0),
       cels: [
         {
@@ -206,7 +206,7 @@ Deno.test('reset()', () => {
     slices: [],
   }
   const film = {
-    id: 'filename-Tag' as const,
+    id: 'filename--Tag' as const,
     wh: new U16XY(0, 0),
     cels: [cel, cel],
     duration: U16(2),
@@ -233,7 +233,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
@@ -263,7 +263,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
@@ -317,7 +317,7 @@ Deno.test('index()', async (test) => {
   ) {
     await test.step(`Direction ${direction} different durations.`, () => {
       const film: Film = {
-        id: 'filename-Abc',
+        id: 'filename--Tag',
         wh: new U16XY(0, 0),
         cels: [
           ...Array(3).fill({
@@ -365,31 +365,31 @@ Deno.test('index()', async (test) => {
       }
       const meta = AtlasMetaParser.parse({
         frames: {
-          'filename-Abc-0': {
+          'filename--Tag--0': {
             duration: 3,
             frame: { x: 1, y: 2, w: 3, h: 4 },
             sourceSize: { w: 3, h: 4 },
             spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
           },
-          'filename-Abc-1': {
+          'filename--Tag--1': {
             duration: 1,
             frame: { x: 4, y: 2, w: 3, h: 4 },
             sourceSize: { w: 3, h: 4 },
             spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
           },
-          'filename-Abc-2': {
+          'filename--Tag--2': {
             duration: 2,
             frame: { x: 7, y: 6, w: 3, h: 4 },
             sourceSize: { w: 3, h: 4 },
             spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
           },
-          'filename-Abc-3': {
+          'filename--Tag--3': {
             duration: 1,
             frame: { x: 10, y: 6, w: 3, h: 4 },
             sourceSize: { w: 3, h: 4 },
             spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
           },
-          'filename-Abc-4': {
+          'filename--Tag--4': {
             duration: 5,
             frame: { x: 13, y: 6, w: 3, h: 4 },
             sourceSize: { w: 3, h: 4 },
@@ -398,7 +398,7 @@ Deno.test('index()', async (test) => {
         },
         meta: {
           frameTags: [
-            { name: 'filename-Abc', direction, from: 0, to: 4, repeat: 1000 },
+            { name: 'filename--Tag', direction, from: 0, to: 4, repeat: 1000 },
           ],
           slices: [],
           size: { w: 128, h: 128 },
@@ -409,7 +409,7 @@ Deno.test('index()', async (test) => {
       assertEquals(meta.celBoundsByID[film.cels[2]!.id], new U16Box(1, 2, 3, 4))
       assertEquals(meta.celBoundsByID[film.cels[3]!.id], new U16Box(1, 2, 3, 4))
       assertEquals(meta.celBoundsByID[film.cels[4]!.id], new U16Box(1, 2, 3, 4))
-      assertEquals(meta.filmByID['filename-Abc'], film)
+      assertEquals(meta.filmByID['filename--Tag'], film)
 
       const animator = new Animator(film)
       for (let i = 0, time = 0; time < 50; time++, i++) {
@@ -449,7 +449,7 @@ Deno.test('index()', async (test) => {
   ) {
     await test.step(`Loop-limited Direction ${direction} different durations.`, () => {
       const film: Film = {
-        id: 'filename-Abc',
+        id: 'filename--Tag',
         wh: new U16XY(0, 0),
         cels: [
           ...Array(3).fill({
@@ -575,7 +575,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel],
         period: U32(1),
@@ -602,7 +602,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -636,7 +636,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -672,7 +672,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -708,7 +708,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -742,7 +742,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'filename-Tag' as const,
+        id: 'filename--Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),

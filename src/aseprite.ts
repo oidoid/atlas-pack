@@ -53,16 +53,16 @@ export namespace Aseprite {
   }
 
   /**
-   * A `FileTag` followed by a hyphen followed by a frame number **via CLI**
-   * `--filename-format='{title}-{tag}-{frame}'`.
+   * A `FileTag` followed by a double-hyphen followed by a frame number
+   * **via CLI** `--filename-format='{title}--{tag}--{frame}'`.
    */
-  export type FileTagFrameNumber = `${FileTag}-${bigint}`
+  export type FileTagFrameNumber = `${FileTag}--${bigint}`
 
   /**
-   * The filename stem followed by a double hyphen followed by the animation
-   * tag **via CLI** `--tagname-format={title}-{tag}`.
+   * The filename stem followed by a double-hyphen followed by the animation
+   * tag **via CLI** `--tagname-format={title}--{tag}`.
    */
-  export type FileTag = `${string}-${string}`
+  export type FileTag = `${string}--${string}`
 
   /**
    * A single animation frame and the most primitive unit. Each file packed

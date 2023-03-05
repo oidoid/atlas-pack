@@ -171,9 +171,9 @@ export namespace AtlasMetaParser {
   ): readonly Aseprite.Frame[] {
     const frames = []
     for (; from <= to; from++) {
-      assert(name.includes('-'), `${name} is not a FileTag.`)
+      assert(name.includes('--'), `${name} is not a FileTag.`)
       const fileTagFrameNumber =
-        `${name}-${from}` as Aseprite.FileTagFrameNumber
+        `${name}--${from}` as Aseprite.FileTagFrameNumber
       const frame = frameMap[fileTagFrameNumber]
       assert(frame != null, `Missing Frame "${fileTagFrameNumber}".`)
       frames.push(frame)

@@ -39,8 +39,8 @@ atlas-pack ┌>°┐
     window,
     canvas,
     context,
-    backpacker: new Animator(atlasMeta.filmByID['backpacker-WalkRight'], time),
-    frog: new Animator(atlasMeta.filmByID['frog-EatLoop'], time),
+    backpacker: new Animator(atlasMeta.filmByID['backpacker--WalkRight'], time),
+    frog: new Animator(atlasMeta.filmByID['frog--EatLoop'], time),
     atlas,
     atlasMeta,
   }
