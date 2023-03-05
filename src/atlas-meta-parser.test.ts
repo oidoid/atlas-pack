@@ -1,10 +1,4 @@
-import {
-  Aseprite,
-  AtlasMetaParser,
-  CelID,
-  CelIDFactory,
-  InfiniteDuration,
-} from '@/atlas-pack'
+import { Aseprite, AtlasMetaParser, CelID, CelIDFactory } from '@/atlas-pack'
 import { I16Box, U16, U16Box, U16XY, U32 } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
@@ -139,13 +133,13 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 1,
               bounds: new U16Box(91, 55, 16, 16),
-              duration: InfiniteDuration,
+              duration: U32(65535),
               sliceBounds: new I16Box(7, 11, 3, 4),
               slices: [new I16Box(7, 11, 3, 4)],
             },
           ],
-          period: InfiniteDuration,
-          duration: InfiniteDuration,
+          period: U32(65535),
+          duration: U32(65535),
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
@@ -156,13 +150,13 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 2,
               bounds: new U16Box(73, 55, 16, 16),
-              duration: InfiniteDuration,
+              duration: U32(65535),
               sliceBounds: new I16Box(7, 10, 3, 5),
               slices: [new I16Box(7, 10, 3, 5)],
             },
           ],
-          period: InfiniteDuration,
-          duration: InfiniteDuration,
+          period: U32(65535),
+          duration: U32(65535),
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
@@ -173,13 +167,13 @@ Deno.test('parseFilmByID()', async (test) => {
             {
               id: <CelID> 3,
               bounds: new U16Box(55, 55, 16, 16),
-              duration: InfiniteDuration,
+              duration: U32(65535),
               sliceBounds: new I16Box(7, 9, 3, 6),
               slices: [new I16Box(7, 9, 3, 6)],
             },
           ],
-          period: InfiniteDuration,
-          duration: InfiniteDuration,
+          period: U32(65535),
+          duration: U32(65535),
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
@@ -287,13 +281,13 @@ Deno.test('parseFilm()', async (test) => {
           {
             id: <CelID> 0,
             bounds: new U16Box(185, 37, 16, 16),
-            duration: InfiniteDuration,
+            duration: U32(65535),
             sliceBounds: new I16Box(4, 11, 9, 4),
             slices: [new I16Box(4, 11, 9, 4)],
           },
         ],
-        period: InfiniteDuration,
-        duration: InfiniteDuration,
+        period: U32(65535),
+        duration: U32(65535),
         direction: 'Forward',
         loops: Number.POSITIVE_INFINITY,
       },
@@ -390,43 +384,6 @@ Deno.test('parseFilm()', async (test) => {
     )
   })
 
-  await test.step('Throws Error on intermediate Cel with infinite duration.', () => {
-    const frameTag: Aseprite.FrameTag = {
-      name: 'frog-walk',
-      from: 0,
-      to: 1,
-      direction: 'forward',
-      repeat: '1',
-    }
-    const frames = {
-      'frog-walk-0': {
-        frame: { x: 0, y: 0, w: 0, h: 0 },
-        rotated: false,
-        trimmed: false,
-        spriteSourceSize: { x: 0, y: 0, w: 0, h: 0 },
-        sourceSize: { w: 0, h: 0 },
-        duration: 65535,
-      },
-      'frog-walk-1': {
-        frame: { x: 1, y: 1, w: 0, h: 0 },
-        rotated: false,
-        trimmed: false,
-        spriteSourceSize: { x: 0, y: 0, w: 0, h: 0 },
-        sourceSize: { w: 0, h: 0 },
-        duration: 65535,
-      },
-    }
-    assertThrows(() =>
-      AtlasMetaParser.parseFilm(
-        'frog-walk',
-        frameTag,
-        frames,
-        [],
-        new CelIDFactory(),
-      )
-    )
-  })
-
   await test.step('Throws Error when no Frame is associated with Tag.', () => {
     const frameTag: Aseprite.FrameTag = {
       name: 'frog-walk',
@@ -509,7 +466,7 @@ Deno.test('parseCel()', async (test) => {
       {
         id: <CelID> 0,
         bounds: new U16Box(131, 19, 16, 16),
-        duration: InfiniteDuration,
+        duration: U32(65535),
         sliceBounds: new I16Box(4, 4, 8, 12),
         slices: [new I16Box(4, 4, 8, 12)],
       },
@@ -600,7 +557,7 @@ Deno.test('parseDuration()', async (test) => {
   await test.step('Parses infinite duration.', () =>
     assertEquals(
       AtlasMetaParser.parseDuration(65535),
-      InfiniteDuration,
+      U32(65535),
     ))
 
   await test.step('Parses negative duration.', () => {

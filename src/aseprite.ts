@@ -116,19 +116,8 @@ export namespace Aseprite {
     readonly repeat?: `${bigint}` | string
   }
 
-  /**
-   * Positive animation length in milliseconds. **By convention**, animations
-   * that should pause use the special Infinite value.
-   */
-  export type Duration = U16 | Infinity | number
-
-  /**
-   * **By convention**, a reserved value to indicate a value without
-   * termination.
-   */
-  export type Infinity = typeof Infinity
-  // deno-lint-ignore no-shadow-restricted-names
-  export const Infinity = U16.max
+  /** Positive animation length in milliseconds. */
+  export type Duration = U16 | number
 
   /**
    * The `Animation` playback orientation: forward, backward, or forward then

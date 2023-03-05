@@ -8,10 +8,7 @@ import {
   U32,
   XYJSON,
 } from '@/ooz'
-
-/** A reserved value to indicate endless time. */
-export type InfiniteDuration = typeof InfiniteDuration
-export const InfiniteDuration = U32.max
+import { Aseprite } from './aseprite.ts'
 
 /**
  * A sequence of animation cels.
@@ -29,18 +26,18 @@ export interface Film {
    * This ID matches a key in `AtlasMeta.filmsByID` but the typing isn't used
    * here because it adds a lot of templating overhead without much value.
    */
-  readonly id: string
+  readonly id: Aseprite.FileTag
 
   /**
-   * Positive film length in milliseconds for a full cycle, possibly infinite.
-   * For a ping-pong film, this is a full traversal forward plus the traversal
-   * backward excluding the first and last frame. Eg, in a five cel animation,
-   * the total duration would be the sum of the individual durations for the
-   * initial five frames and the middle three frames.
+   * Positive film length in milliseconds for a full cycle. For a ping-pong
+   * film, this is a full traversal forward plus the traversal backward
+   * excluding the first and last frame. Eg, in a five cel animation, the total
+   * duration would be the sum of the individual durations for the initial five
+   * frames and the middle three frames.
    *
    * This is a U32, not a U16, since its an aggregation of U16s.
    */
-  readonly duration: U32 | InfiniteDuration
+  readonly duration: U32
 
   /**
    * Width and height within the source atlas image in integral pixels.
@@ -52,9 +49,9 @@ export interface Film {
   readonly cels: readonly Cel[]
 
   /**
-   * The length of time before the cel may change, possibly infinite. This is
-   * the inverse of frequency, or cels per second, and is the greatest common
-   * multiple of cel durations, excluding infinite durations.
+   * The length of time before the cel may change. This is the inverse of
+   * frequency, or cels per second, and is the greatest common multiple of cel
+   * durations. No consideration for number of loops is made.
    *
    * Cels are duplicated by reference as needed by the parser to support a
    * uniform frequency.
@@ -75,23 +72,8 @@ export interface Film {
    *                 = 7
    *
    * Time is mapped to a period via trunc(time * frequency).
-   *
-   * Infinite durations are ignored for multi-cel animation greatest common
-   * multiple computations. The period of single cel animations is the duration
-   * of the cel.
-   *
-   * The same example with an additional infinite duration cel:
-   *
-   *   Duration  Time Window   Cel Index
-   *   100 ms      0 -  99 ms  0
-   *   400 ms    100 - 499 ms  1
-   *   200 ms    500 - 699 ms  2
-   *     ∞ ms    700 -   ∞ ms  3
-   *
-   * The period is still 100 ms since infinite durations only appear in the last
-   * cel and are treated specially.
    */
-  readonly period: U32 | InfiniteDuration
+  readonly period: U32
 
   readonly direction: Playback
 
@@ -111,14 +93,12 @@ export interface Cel {
   readonly bounds: Readonly<U16Box>
 
   /**
-   * Positive cel exposure requirement in integral milliseconds, possibly
-   * infinite.
+   * Positive cel exposure requirement in integral milliseconds.
    *
    * Aseprite uses U16 durations but `Film` has an aggregation so it must use
-   * a U32. However, that means that `Cel.duration` and `Film.duration` must
-   * agree on a definition of infinity that cannot be accidentally summed to.
+   * a U32.
    */
-  readonly duration: U32 | InfiniteDuration
+  readonly duration: U32
 
   /**
    * The union of all slices. If a point is not in sliceBounds, it's not in
@@ -140,24 +120,17 @@ export namespace Playback {
   export const values = Immutable(
     new Set(
       [
-        /**
-         * Animate from start to end; when looping, return to start. Supports an
-         * infinite duration in the last cel.
-         */
+        /** Animate from start to end; when looping, return to start. */
         'Forward',
 
-        /**
-         * Animate from end to start; when looping, return to end. Supports an
-         * infinite duration in the first cel.
-         */
+        /** Animate from end to start; when looping, return to end. */
         'Reverse',
 
         /**
          * Animate from start to end - 1 or start, whichever is greater; when
          * looping, change direction (initially, end to start + 1 or end,
          * whichever is lesser. A traversal from start to end - 1 then end to
-         * start + 1 is considered a complete loop. Does not support infinite
-         * duration cels.
+         * start + 1 is considered a complete loop.
          */
         'PingPong',
 

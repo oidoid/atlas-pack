@@ -1,6 +1,9 @@
-import { Animator, CelID, InfiniteDuration, Playback } from '@/atlas-pack'
+import { Animator, CelID, Playback } from '@/atlas-pack'
 import { I16Box, U16, U16Box, U16XY, U32 } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
+import { Aseprite } from './aseprite.ts'
+import { AtlasMetaParser } from './atlas-meta-parser.ts'
+import { Film } from './film.ts'
 
 Deno.test('Animator()', async (test) => {
   await test.step('Exposure < duration.', () => {
@@ -12,7 +15,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'abc',
+      id: 'filename-Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -34,7 +37,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'abc',
+      id: 'filename-Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -56,7 +59,7 @@ Deno.test('Animator()', async (test) => {
       slices: [],
     }
     const film = {
-      id: 'abc',
+      id: 'filename-Tag' as const,
       wh: new U16XY(0, 0),
       cels: [cel, cel],
       period: U32(1),
@@ -69,9 +72,9 @@ Deno.test('Animator()', async (test) => {
     assertEquals(index, 1)
   })
 
-  await test.step('Infinite duration.', () => {
+  await test.step('Different durations.', () => {
     const film = {
-      id: 'abc',
+      id: 'filename-Tag' as const,
       wh: new U16XY(0, 0),
       cels: [
         {
@@ -81,46 +84,116 @@ Deno.test('Animator()', async (test) => {
           sliceBounds: new I16Box(1, 1, 2, 2),
           slices: [],
         },
-        {
+        ...Array(1000).fill({
           id: <CelID> 1,
           bounds: new U16Box(1, 2, 3, 4),
-          duration: InfiniteDuration,
+          duration: U16(1000),
           sliceBounds: new I16Box(1, 1, 2, 2),
           slices: [],
-          loops: Number.POSITIVE_INFINITY,
-        },
+        }),
       ],
       period: U32(1),
-      duration: InfiniteDuration,
+      duration: U32(1001),
       direction: 'Forward' as const,
       loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
-    let index = animator.index(0.5)
-    assertEquals(index, 0)
-    index = animator.index(100)
-    assertEquals(index, 1)
+    assertEquals(animator.index(0.5), 0)
+    assertEquals(animator.index(100), 100)
   })
 
-  await test.step('One cel.', () => {
+  await test.step('Different durations ping-pong reverse.', () => {
     const film = {
-      id: 'abc',
+      id: 'filename-Tag' as const,
       wh: new U16XY(0, 0),
-      cels: [{
-        id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
-        slices: [],
-      }],
+      cels: [
+        {
+          id: <CelID> 0,
+          bounds: new U16Box(1, 2, 3, 4),
+          duration: U16(1),
+          sliceBounds: new I16Box(1, 1, 2, 2),
+          slices: [],
+        },
+        ...Array(10).fill({
+          id: <CelID> 1,
+          bounds: new U16Box(1, 2, 3, 4),
+          duration: U16(10),
+          sliceBounds: new I16Box(1, 1, 2, 2),
+          slices: [],
+        }),
+      ],
       period: U32(1),
-      duration: U16(2),
-      direction: 'Forward' as const,
+      duration: U32(11),
+      direction: 'PingPongReverse' as const,
       loops: Number.POSITIVE_INFINITY,
     }
     const animator = new Animator(film)
-    const index = animator.index(1.5)
-    assertEquals(index, 0)
+    assertEquals(animator.index(0), 10)
+    assertEquals(animator.cel(0).id, 1)
+    assertEquals(animator.index(1), 9)
+    assertEquals(animator.cel(1).id, 1)
+    assertEquals(animator.index(2), 8)
+    assertEquals(animator.cel(2).id, 1)
+    assertEquals(animator.index(3), 7)
+    assertEquals(animator.cel(3).id, 1)
+    assertEquals(animator.index(4), 6)
+    assertEquals(animator.cel(4).id, 1)
+    assertEquals(animator.index(5), 5)
+    assertEquals(animator.cel(5).id, 1)
+    assertEquals(animator.index(6), 4)
+    assertEquals(animator.cel(6).id, 1)
+    assertEquals(animator.index(7), 3)
+    assertEquals(animator.cel(7).id, 1)
+    assertEquals(animator.index(8), 2)
+    assertEquals(animator.cel(8).id, 1)
+    assertEquals(animator.index(9), 1)
+    assertEquals(animator.cel(9).id, 1)
+    assertEquals(animator.index(10), 0)
+    assertEquals(animator.cel(10).id, 0)
+    assertEquals(animator.index(11), 10)
+    assertEquals(animator.cel(11).id, 1)
+    assertEquals(animator.index(12), 9)
+    assertEquals(animator.cel(12).id, 1)
+    assertEquals(animator.index(13), 8)
+    assertEquals(animator.cel(13).id, 1)
+    assertEquals(animator.index(14), 7)
+    assertEquals(animator.cel(14).id, 1)
+    assertEquals(animator.index(15), 6)
+    assertEquals(animator.cel(15).id, 1)
+    assertEquals(animator.index(16), 5)
+    assertEquals(animator.cel(16).id, 1)
+    assertEquals(animator.index(17), 4)
+    assertEquals(animator.cel(17).id, 1)
+    assertEquals(animator.index(18), 3)
+    assertEquals(animator.cel(18).id, 1)
+    assertEquals(animator.index(19), 2)
+    assertEquals(animator.cel(19).id, 1)
+    assertEquals(animator.index(20), 1)
+    assertEquals(animator.cel(20).id, 1)
+    assertEquals(animator.index(21), 0)
+    assertEquals(animator.cel(21).id, 0)
+    assertEquals(animator.index(22), 10)
+    assertEquals(animator.cel(22).id, 1)
+    assertEquals(animator.index(23), 9)
+    assertEquals(animator.cel(23).id, 1)
+    assertEquals(animator.index(24), 8)
+    assertEquals(animator.cel(24).id, 1)
+    assertEquals(animator.index(25), 7)
+    assertEquals(animator.cel(25).id, 1)
+    assertEquals(animator.index(26), 6)
+    assertEquals(animator.cel(26).id, 1)
+    assertEquals(animator.index(27), 5)
+    assertEquals(animator.cel(27).id, 1)
+    assertEquals(animator.index(28), 4)
+    assertEquals(animator.cel(28).id, 1)
+    assertEquals(animator.index(29), 3)
+    assertEquals(animator.cel(29).id, 1)
+    assertEquals(animator.index(30), 2)
+    assertEquals(animator.cel(30).id, 1)
+    assertEquals(animator.index(31), 1)
+    assertEquals(animator.cel(31).id, 1)
+    assertEquals(animator.index(32), 0)
+    assertEquals(animator.cel(32).id, 0)
   })
 })
 
@@ -133,7 +206,7 @@ Deno.test('reset()', () => {
     slices: [],
   }
   const film = {
-    id: 'abc',
+    id: 'filename-Tag' as const,
     wh: new U16XY(0, 0),
     cels: [cel, cel],
     duration: U16(2),
@@ -160,7 +233,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
@@ -190,7 +263,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel],
         period: U32(1),
@@ -207,6 +280,230 @@ Deno.test('index()', async (test) => {
         PingPongReverse: 1,
       }
       assertEquals(index, expected[direction])
+    })
+  }
+
+  for (
+    const [direction, ids] of [
+      [
+        'forward',
+        // deno-fmt-ignore
+        [0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4],
+      ],
+      [
+        'reverse',
+        // deno-fmt-ignore
+        [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0],
+      ],
+      [
+        // An monotonically increasing input time is mapped to a cel.
+        // time input                  0  1  2  3  4  5  6  7  8  9 10 11
+        //                12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+        //                28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43
+        //                44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59
+        // unique mapping -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11
+        // index           6  5  4  3  0  1  2  3  4  5  6  7  8  9 10 11
+        // cel.id          3  2  2  1  0  0  0  1  2  2  3  4  4  4  4  4
+        'pingpong',
+        // deno-fmt-ignore
+        [0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4],
+      ],
+      [
+        'pingpong_reverse',
+        // deno-fmt-ignore
+        [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 0, 0],
+      ],
+    ] as [Aseprite.Direction, number[]][]
+  ) {
+    await test.step(`Direction ${direction} different durations.`, () => {
+      const film: Film = {
+        id: 'filename-Abc',
+        wh: new U16XY(0, 0),
+        cels: [
+          ...Array(3).fill({
+            id: <CelID> 0,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(3),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+          {
+            id: <CelID> 1,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(1),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          },
+          ...Array(2).fill({
+            id: <CelID> 2,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(2),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+          {
+            id: <CelID> 3,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(1),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          },
+          ...Array(5).fill({
+            id: <CelID> 4,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(5),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+        ],
+        period: U32(1),
+        duration: U32(
+          (direction == 'forward' || direction == 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+        ),
+        direction: AtlasMetaParser.parsePlayback(direction),
+        loops: 1000,
+      }
+      const meta = AtlasMetaParser.parse({
+        frames: {
+          'filename-Abc-0': {
+            duration: 3,
+            frame: { x: 1, y: 2, w: 3, h: 4 },
+            sourceSize: { w: 3, h: 4 },
+            spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
+          },
+          'filename-Abc-1': {
+            duration: 1,
+            frame: { x: 4, y: 2, w: 3, h: 4 },
+            sourceSize: { w: 3, h: 4 },
+            spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
+          },
+          'filename-Abc-2': {
+            duration: 2,
+            frame: { x: 7, y: 6, w: 3, h: 4 },
+            sourceSize: { w: 3, h: 4 },
+            spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
+          },
+          'filename-Abc-3': {
+            duration: 1,
+            frame: { x: 10, y: 6, w: 3, h: 4 },
+            sourceSize: { w: 3, h: 4 },
+            spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
+          },
+          'filename-Abc-4': {
+            duration: 5,
+            frame: { x: 13, y: 6, w: 3, h: 4 },
+            sourceSize: { w: 3, h: 4 },
+            spriteSourceSize: { x: 0, y: 0, w: 3, h: 4 },
+          },
+        },
+        meta: {
+          frameTags: [
+            { name: 'filename-Abc', direction, from: 0, to: 4, repeat: 1000 },
+          ],
+          slices: [],
+          size: { w: 128, h: 128 },
+        },
+      })
+      assertEquals(meta.celBoundsByID[film.cels[0]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[film.cels[1]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[film.cels[2]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[film.cels[3]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[film.cels[4]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.filmByID['filename-Abc'], film)
+
+      const animator = new Animator(film)
+      for (let i = 0, time = 0; time < 50; time++, i++) {
+        const id = animator.cel(time).id
+        assertEquals(
+          id,
+          ids[i],
+          `ID ${id} != expected ID ${ids[i]} at time ${time} (index ${i}).`,
+        )
+      }
+    })
+  }
+
+  for (
+    const [direction, ids] of [
+      [
+        'forward',
+        // deno-fmt-ignore
+        [0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+      ],
+      [
+        'reverse',
+        // deno-fmt-ignore
+        [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ],
+      [
+        'pingpong',
+        // deno-fmt-ignore
+        [0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      ],
+      [
+        'pingpong_reverse',
+        // deno-fmt-ignore
+        [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      ],
+    ] as [Aseprite.Direction, number[]][]
+  ) {
+    await test.step(`Loop-limited Direction ${direction} different durations.`, () => {
+      const film: Film = {
+        id: 'filename-Abc',
+        wh: new U16XY(0, 0),
+        cels: [
+          ...Array(3).fill({
+            id: <CelID> 0,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(3),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+          {
+            id: <CelID> 1,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(1),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          },
+          ...Array(2).fill({
+            id: <CelID> 2,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(2),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+          {
+            id: <CelID> 3,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(1),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          },
+          ...Array(5).fill({
+            id: <CelID> 4,
+            bounds: new U16Box(1, 2, 3, 4),
+            duration: U16(5),
+            sliceBounds: new I16Box(1, 1, 2, 2),
+            slices: [],
+          }),
+        ],
+        period: U32(1),
+        duration: U32(
+          (direction == 'forward' || direction == 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+        ),
+        direction: AtlasMetaParser.parsePlayback(direction),
+        loops: 2,
+      }
+      const animator = new Animator(film)
+      for (let i = 0, time = 0; time < 60; time++, i++) {
+        const id = animator.cel(time).id
+        assertEquals(
+          id,
+          ids[i],
+          `ID ${id} != expected ID ${ids[i]} at time ${time} (index ${i}).`,
+        )
+      }
     })
   }
 
@@ -278,7 +575,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel],
         period: U32(1),
@@ -305,7 +602,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -339,7 +636,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -375,7 +672,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -411,7 +708,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),
@@ -445,7 +742,7 @@ Deno.test('index()', async (test) => {
         slices: [],
       }
       const film = {
-        id: 'abc',
+        id: 'filename-Tag' as const,
         wh: new U16XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
         period: U32(1),

@@ -6,7 +6,6 @@ import {
   CelID,
   Film,
   FilmByID,
-  InfiniteDuration,
   Playback,
 } from '@/atlas-pack'
 import {
@@ -121,22 +120,15 @@ export namespace AtlasMetaParser {
     )
     assert(cels.length > 0, `"${frameTag.name}" film has no cels.`)
 
-    const invalidDurationCelIndex = cels.slice(
-      frameTag.direction == Aseprite.Direction.Reverse ? 1 : 0,
-      frameTag.direction == Aseprite.Direction.Forward ? -1 : undefined,
-    ).findIndex(({ duration }) => duration == InfiniteDuration)
-    assert(
-      invalidDurationCelIndex == -1,
-      `Cel ${invalidDurationCelIndex} must have finite duration (less than ` +
-        `${Aseprite.Infinity}) for ${frameTag.direction} playback in ` +
-        `"${frameTag.name}" film.`,
-    )
-
     let duration = cels.reduce(
-      (time, { duration }) => Math.min(InfiniteDuration, time + duration),
+      (time, { duration }) => time + duration,
       0,
     )
-    if (frameTag.direction == Aseprite.Direction.PingPong && cels.length > 2) {
+    if (
+      (frameTag.direction == Aseprite.Direction.PingPong ||
+        frameTag.direction == Aseprite.Direction.PingPongReverse) &&
+      cels.length > 2
+    ) {
       duration += duration - (cels[0]!.duration + cels.at(-1)!.duration)
     }
     assert(duration > 0, `Zero total duration for "${frameTag.name}" film.`)
@@ -155,12 +147,8 @@ export namespace AtlasMetaParser {
     // lookup uses the same formula.
     for (let i = cels.length - 1; i >= 0; i--) {
       const cel = cels[i]!
-      if (cel.duration == InfiniteDuration) continue
-      for (
-        let duration: number = period;
-        duration < cel.duration;
-        duration += period
-      ) cels.splice(i, 0, cel)
+      const copies = (cel.duration / period) - 1
+      cels.splice(i, 0, ...Array(copies).fill(cel))
     }
 
     return {
@@ -263,7 +251,6 @@ export namespace AtlasMetaParser {
   /** @internal */
   export function parseDuration(duration: Aseprite.Duration): U32 {
     assert(duration > 0, 'Cel duration is not positive.')
-    if (duration == Aseprite.Infinity) return InfiniteDuration
     return U32(duration)
   }
 
@@ -290,15 +277,11 @@ export namespace AtlasMetaParser {
     return new U16XY(wh.w, wh.h)
   }
 
-  function computePeriod(cels: readonly Cel[]): U32 | InfiniteDuration {
+  function computePeriod(cels: readonly Cel[]): U32 {
     const durations = cels.map((cel) => cel.duration)
     if (durations.length <= 1) return durations[0]!
 
-    const infinite = durations.at(-1) == InfiniteDuration
-    const finiteDurations = infinite ? durations.slice(0, -1) : durations
-    const period = greatestCommonDivisor(
-      finiteDurations as [U32, ...U32[]],
-    )
+    const period = greatestCommonDivisor(durations as [U32, ...U32[]])
 
     return U32(period)
   }

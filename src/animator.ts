@@ -1,5 +1,6 @@
-import { Cel, Film, InfiniteDuration, Playback } from '@/atlas-pack'
+import { Cel, Film, Playback } from '@/atlas-pack'
 import { NumUtil } from '@/ooz'
+import { Immutable } from '../../ooz/src/types/immutable.ts'
 
 /** Film playback state. */
 export class Animator {
@@ -34,20 +35,18 @@ export class Animator {
   index(time: number): number {
     const timeIndex = Math.trunc((time - this.#start) / this.#film.period)
 
-    // If the film is infinite and at or exceeded the end, return the final cel.
-    const infinite = this.#film.duration == InfiniteDuration
-    const loops = timeIndex / this.#film.cels.length
-    if (infinite && loops >= 1 || loops >= this.#film.loops) {
-      return this.#film.cels.length - 1
+    const loops = (time - this.#start) / this.#film.duration
+    if (loops >= this.#film.loops) {
+      return endIndex[this.#film.direction](this.#film)
     }
 
     // The film can loop. Compute the index from the period.
-    return period[this.#film.direction](timeIndex, this.#film.cels.length)
+    return period[this.#film.direction](this.#film, timeIndex)
   }
 
   /**
    * Clear the start time (set the animation to the starting cel) and optionally
-   * change the film. This is useful to reset the active film or switch films.
+   * change the film.
    */
   reset(start: number, film?: Film): void {
     this.#film = film ?? this.#film
@@ -68,11 +67,47 @@ export class Animator {
  *   each end.
  */
 const period: Readonly<
-  { [playback in Playback]: (timeIndex: number, len: number) => number }
-> = Object.freeze({
-  Forward: (timeIndex, len) => timeIndex % len,
-  Reverse: (timeIndex, len) => (len - 1) - (timeIndex % len),
-  PingPong: (timeIndex, len) => Math.abs(NumUtil.wrap(timeIndex, 2 - len, len)),
-  PingPongReverse: (timeIndex, len) =>
-    Math.abs(NumUtil.wrap((len - 1) - timeIndex, 2 - len, len)),
+  { [playback in Playback]: (film: Film, timeIndex: number) => number }
+> = Immutable({
+  Forward: (film, timeIndex) => timeIndex % film.cels.length,
+  Reverse(film, timeIndex) {
+    return (film.cels.length - 1) - (timeIndex % film.cels.length)
+  },
+  PingPong(film, timeIndex) {
+    // The number of copies of the starting cel.
+    const start = film.cels[0]!.duration / film.period
+    // The number of copies of the ending cel.
+    const end = film.cels[film.cels.length - 1]!.duration / film.period
+    // This wrapping has to be contiguous. A piecewise gap cannot exist. If the
+    // nonnegative values have a one-to-one mapping, the negative values cannot.
+    // The reason is that the ending cels have to be skipped when doubling back.
+    // The offset for negative wraps below accounts for that.
+    const wrap = NumUtil.wrap(
+      timeIndex,
+      start + end - film.cels.length,
+      film.cels.length,
+    )
+    return Math.abs(wrap < 0 ? (wrap - start + 1) : wrap)
+  },
+  PingPongReverse(film, timeIndex) {
+    return this.PingPong(film, (film.cels.length - 1) - timeIndex)
+  },
+})
+
+/** Ending indices when loop-limited. */
+const endIndex: Readonly<
+  { [playback in Playback]: (film: Film) => number }
+> = Immutable({
+  Forward: (film) => film.cels.length - 1,
+  Reverse: () => 0,
+  PingPong(film) {
+    return Math.min(film.cels[0]!.duration / film.period, film.cels.length - 1)
+  },
+  PingPongReverse(film) {
+    return Math.max(
+      film.cels.length -
+        (film.cels[film.cels.length - 1]!.duration / film.period + 1),
+      0,
+    )
+  },
 })

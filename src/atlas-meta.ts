@@ -82,7 +82,7 @@ export namespace AtlasMeta {
 
 function parseFilm(json: FilmJSON): Film {
   return {
-    id: json.id,
+    id: json.id as Aseprite.FileTag,
     duration: U32(json.duration),
     wh: U16XY.fromJSON(json.wh),
     cels: json.cels.map(parseCel),

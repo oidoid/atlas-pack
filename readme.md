@@ -147,15 +147,12 @@ rendered to a canvas.
 
 atlas-pack adds little:
 
-- A utility for playing Aseprite animations (forward, reverse, or ping-pong).
-  Mutable and immutable states are kept distinct.
+- A utility for playing Aseprite animations (forward, reverse, ping-pong, or
+  ping-pong reverse). Mutable and immutable states are kept distinct.
 - A sparser data structure that includes linking animation cels together in the
   same array and associating Aseprite slices with their cels. This can be useful
   for collision detection, for example.
 - Cel ID to bounds look-up-table. This is useful
-- Support (by convention) for infinite durations. When a cel duration is set to
-  65 535 (hexadecimal ffff) in the Aseprite GUI, it will be parsed in JavaScript
-  as `Number.POSITIVE_INFINITY`.
 - TypeScript typings for the Aseprite file format.
 - Tests for parsing and playback.
 - Open source.
