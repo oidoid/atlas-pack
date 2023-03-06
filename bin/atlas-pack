@@ -1,12 +1,11 @@
-#!/usr/bin/env -S deno --quiet run --allow-read --check=typescript
-// atlas-pack
+#!/usr/bin/env -S deno --quiet run --allow-read
 
-import { AtlasMetaParser } from '@/atlas-pack';
+import { AtlasMetaParser } from '@/atlas-pack'
 
-const decoder = new TextDecoder();
-const chunks = [];
+const decoder = new TextDecoder()
+const chunks = []
 for await (const chunk of Deno.stdin.readable) {
-  chunks.push(decoder.decode(chunk));
+  chunks.push(decoder.decode(chunk))
 }
-const json = JSON.parse(chunks.join(''));
-console.log(JSON.stringify(AtlasMetaParser.parse(json), null, 2));
+const json = JSON.parse(chunks.join(''))
+console.log(JSON.stringify(AtlasMetaParser.parse(json), null, 2))
