@@ -17,7 +17,7 @@ import { mapValues } from 'std/collections/map_values.ts'
  * data comes from the sprite sheet and is expected to be unchanging. If you
  * need a mutable copy, create a duplicate instance of the parts that change.
  */
-export interface AtlasMeta<FilmID extends Aseprite.FileTag> {
+export interface AtlasMeta<in FilmID extends Aseprite.FileTag> {
   /** The Aseprite version of the parsed file. E.g., '1.2.8.1'. */
   readonly version: string
   /** The atlas image basename. E.g., 'atlas.png'. */
@@ -42,7 +42,7 @@ export interface AtlasMeta<FilmID extends Aseprite.FileTag> {
 }
 
 /** Film look up table. */
-export type FilmByID<FilmID extends Aseprite.FileTag> = Readonly<
+export type FilmByID<in FilmID extends Aseprite.FileTag> = Readonly<
   { [id in FilmID]: Film }
 >
 
