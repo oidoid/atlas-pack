@@ -1,5 +1,4 @@
 {
-  // https://deno.land/manual@main/typescript/configuration
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
@@ -13,7 +12,11 @@
     "files": { "exclude": ["dist"] },
     "options": { "semiColons": false, "singleQuote": true }
   },
-  "importMap": "mods.json",
+  "imports": {
+    "@/atlas-pack": "./mod.ts",
+    "@/ooz": "https://deno.land/x/ooz@v0.0.14/mod.ts",
+    "std/": "https://deno.land/std@0.179.0/"
+  },
   "lint": {
     "files": { "exclude": ["dist"] },
     "rules": {
@@ -21,5 +24,7 @@
     }
   },
   "lock": false,
-  "test": { "files": { "exclude": ["dist"] } }
+  "name": "atlas-pack",
+  "test": { "files": { "exclude": ["dist"] } },
+  "version": "7.0.0"
 }

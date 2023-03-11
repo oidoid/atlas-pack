@@ -1,7 +1,0 @@
-{
-  "imports": {
-    "@/atlas-pack": "./mod.ts",
-    "@/ooz": "https://deno.land/x/ooz@v0.0.13/mod.ts",
-    "std/": "https://deno.land/std@0.171.0/"
-  }
-}
