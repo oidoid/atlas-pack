@@ -16,12 +16,16 @@ import { Aseprite } from './aseprite.ts'
  * Films advance at a frequency determined by their cels. Ideally, cels share a
  * high duration factor to avoid duplicate spacer cels.
  *
+ * An Aseprite file often contains multiple films (animations) but atlas-pack
+ * treats them as independent. Animators, for example, only consider one film at
+ * a time; there is no "next" film to automatically play when one finishes.
+ *
  * "Film" terminology is user over "animation" to avoid conflict with the
  * `Animation` global.
  */
 export interface Film {
   /**
-   * The Aseprite tag, a unique identifier for the film like "FrogIdle".
+   * The Aseprite tag, a unique identifier for the film like "Frog--Idle".
    *
    * This ID matches a key in `AtlasMeta.filmsByID` but the typing isn't used
    * here because it adds a lot of templating overhead without much value.
@@ -88,7 +92,7 @@ export interface Cel {
   /**
    * Location and area within the source atlas image in integral pixels from
    * the top-left. The width and height duplicate the owning film's size and are
-   * for convenience only. Sizes never vary.
+   * for convenience only. Sizes never vary within a film.
    */
   readonly bounds: Readonly<U16Box>
 

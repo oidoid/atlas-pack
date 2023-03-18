@@ -1,4 +1,4 @@
-Add `assertEquals(meta, AtlasMeta.fromJSON(AtlasMeta.toJSON(meta)))` test.
+Should the binaries be actual binaries with `deno compile`?
 Revise AtlasMeta.fromJSON() to use fewer casts.
 Explore an AtlasMetaParser revive-based API instead parsing as JSON as a second pass.
 Add FilmID argument support to atlas-pack executable.

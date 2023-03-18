@@ -4,7 +4,10 @@ import { Immutable } from '../../ooz/src/types/immutable.ts'
 
 /** Film playback state. */
 export class Animator {
-  /** The currently loaded animation. */
+  /**
+   * The currently loaded animation. Animators have no concept of a "next" film
+   * if the loaded completes and rely on the caller to change films as wnated.
+   */
   #film: Film
 
   /**
@@ -18,7 +21,7 @@ export class Animator {
     this.#start = start
   }
 
-  /** @return The active film cel. */
+  /** The active film cel. */
   cel(time: number): Cel {
     // Film length is greater than zero as enforced by parser.
     return this.#film.cels[this.index(time)]!
@@ -30,18 +33,21 @@ export class Animator {
 
   /**
    * @internal
-   * @return The active film cel index.
+   * The active film cel index.
    */
   index(time: number): number {
     const timeIndex = Math.trunc((time - this.#start) / this.#film.period)
 
-    const loops = (time - this.#start) / this.#film.duration
-    if (loops >= this.#film.loops) {
-      return endIndex[this.#film.direction](this.#film)
-    }
+    if (this.played(time)) return endIndex[this.#film.direction](this.#film)
 
     // The film can loop. Compute the index from the period.
     return period[this.#film.direction](this.#film, timeIndex)
+  }
+
+  /** True if film has met its loop count. */
+  played(time: number): boolean {
+    const loops = (time - this.#start) / this.#film.duration
+    return loops >= this.#film.loops
   }
 
   /**
@@ -101,13 +107,11 @@ const endIndex: Readonly<
   Forward: (film) => film.cels.length - 1,
   Reverse: () => 0,
   PingPong(film) {
-    return Math.min(film.cels[0]!.duration / film.period, film.cels.length - 1)
+    const start = film.cels[0]!.duration / film.period
+    return Math.min(start, film.cels.length - 1)
   },
   PingPongReverse(film) {
-    return Math.max(
-      film.cels.length -
-        (film.cels[film.cels.length - 1]!.duration / film.period + 1),
-      0,
-    )
+    const end = film.cels[film.cels.length - 1]!.duration / film.period
+    return Math.max(film.cels.length - (end + 1), 0)
   },
 })
