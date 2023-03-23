@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno --quiet run --allow-read
+#!/usr/bin/env -S deno --quiet run --allow-read --ext ts
 
 import { AtlasMetaParser } from '@/atlas-pack'
 
