@@ -26,7 +26,7 @@ export namespace AtlasMetaParser {
    *   string type for FilmID and perform their own Atlas.filmByID lookup
    *   checks.
    */
-  export function parse<FilmID extends Aseprite.FileTag>(
+  export function parse<const FilmID extends Aseprite.FileTag>(
     file: Aseprite.File | JSONObject,
     ids?: ReadonlySet<FilmID> | undefined,
   ): AtlasMeta<FilmID> {
@@ -44,7 +44,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parseFilmByID<FilmID extends Aseprite.FileTag>(
+  export function parseFilmByID<const FilmID extends Aseprite.FileTag>(
     factory: CelIDFactory,
     file: Aseprite.File,
     ids: ReadonlySet<FilmID> | undefined,
@@ -81,7 +81,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function newCelBoundsByID<FilmID extends Aseprite.FileTag>(
+  export function newCelBoundsByID<const FilmID extends Aseprite.FileTag>(
     factory: Readonly<CelIDFactory>,
     filmByID: FilmByID<FilmID>,
   ): CelBoundsByID {
@@ -99,7 +99,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function isFilmID<FilmID extends Aseprite.FileTag>(
+  export function isFilmID<const FilmID extends Aseprite.FileTag>(
     id: Aseprite.FileTag,
     ids: ReadonlySet<FilmID> | undefined,
   ): id is FilmID {
@@ -107,7 +107,7 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  export function parseFilm<FilmID extends Aseprite.FileTag>(
+  export function parseFilm<const FilmID extends Aseprite.FileTag>(
     id: FilmID,
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,

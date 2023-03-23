@@ -64,7 +64,7 @@ export interface FilmByIDJSON {
 }
 
 export namespace AtlasMeta {
-  export function fromJSON<FilmID extends Aseprite.FileTag>(
+  export function fromJSON<const FilmID extends Aseprite.FileTag>(
     json: AtlasMetaJSON,
   ): AtlasMeta<FilmID> {
     return Immutable({
