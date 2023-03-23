@@ -114,7 +114,7 @@ export namespace AtlasMetaParser {
     slices: readonly Aseprite.Slice[],
     factory: CelIDFactory,
   ): Film {
-    const frames = parseFrames(frameTag, frameMap)
+    const frames = [...parseFrames(frameTag, frameMap)]
     const cels = frames.map((frame, i) =>
       parseCel(frameTag, frame, i, slices, factory)
     )
@@ -165,20 +165,18 @@ export namespace AtlasMetaParser {
   }
 
   /** @internal */
-  function parseFrames(
+  function* parseFrames(
     { name, from, to }: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
-  ): readonly Aseprite.Frame[] {
-    const frames = []
+  ): IterableIterator<Aseprite.Frame> {
     for (; from <= to; from++) {
       assert(name.includes('--'), `${name} is not a FileTag.`)
       const fileTagFrameNumber =
         `${name}--${from}` as Aseprite.FileTagFrameNumber
       const frame = frameMap[fileTagFrameNumber]
       assert(frame != null, `Missing Frame "${fileTagFrameNumber}".`)
-      frames.push(frame)
+      yield frame
     }
-    return frames
   }
 
   /** @internal */
