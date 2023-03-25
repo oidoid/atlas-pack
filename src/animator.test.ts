@@ -28,7 +28,7 @@ Deno.test('Animator()', async (test) => {
     assertEquals(index, 0)
   })
 
-  await test.step('Exposure == duration.', () => {
+  await test.step('Exposure === duration.', () => {
     const cel = {
       id: <CelID> 0,
       bounds: new U16Box(1, 2, 3, 4),
@@ -358,7 +358,7 @@ Deno.test('index()', async (test) => {
         ],
         period: U32(1),
         duration: U32(
-          (direction == 'forward' || direction == 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+          (direction === 'forward' || direction === 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
         ),
         direction: AtlasMetaParser.parsePlayback(direction),
         loops: 1000,
@@ -417,7 +417,7 @@ Deno.test('index()', async (test) => {
         assertEquals(
           id,
           ids[i],
-          `ID ${id} != expected ID ${ids[i]} at time ${time} (index ${i}).`,
+          `ID ${id} !== expected ID ${ids[i]} at time ${time} (index ${i}).`,
         )
       }
     })
@@ -490,7 +490,7 @@ Deno.test('index()', async (test) => {
         ],
         period: U32(1),
         duration: U32(
-          (direction == 'forward' || direction == 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+          (direction === 'forward' || direction === 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
         ),
         direction: AtlasMetaParser.parsePlayback(direction),
         loops: 2,
@@ -501,7 +501,7 @@ Deno.test('index()', async (test) => {
         assertEquals(
           id,
           ids[i],
-          `ID ${id} != expected ID ${ids[i]} at time ${time} (index ${i}).`,
+          `ID ${id} !== expected ID ${ids[i]} at time ${time} (index ${i}).`,
         )
       }
     })
@@ -593,7 +593,7 @@ Deno.test('index()', async (test) => {
   }
 
   for (const direction of Playback.values) {
-    await test.step(`Exposure == duration, Direction ${direction} cycles.`, () => {
+    await test.step(`Exposure === duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
         bounds: new U16Box(1, 2, 3, 4),
@@ -699,7 +699,7 @@ Deno.test('index()', async (test) => {
   }
 
   for (const direction of Playback.values) {
-    await test.step(`Fractional exposure == duration, Direction ${direction} cycles.`, () => {
+    await test.step(`Fractional exposure === duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
         bounds: new U16Box(1, 2, 3, 4),

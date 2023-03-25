@@ -57,11 +57,11 @@ export namespace AtlasMetaParser {
       assert(!map.has(id), `Duplicate ID in atlas: "${id}".`)
       map.set(id, parseFilm(id, frameTag, file.frames, slices, factory))
     }
-    const missingIDs = ids == null || ids.size == map.size
+    const missingIDs = ids == null || ids.size === map.size
       ? []
       : [...ids.keys()].filter((id) => !map.has(id)).map((id) => `"${id}"`)
     assert(
-      missingIDs.length == 0,
+      missingIDs.length === 0,
       `Missing ID(s) in atlas: ${missingIDs.join(', ')}.`,
     )
 
@@ -71,7 +71,7 @@ export namespace AtlasMetaParser {
       !map.has(slice.name as FilmID)
     )
     assert(
-      orphanSlices.length == 0,
+      orphanSlices.length === 0,
       `Missing ID(s) for slice(s): ${
         orphanSlices.map((slice) => slice.name).join(', ')
       }.`,
@@ -90,7 +90,7 @@ export namespace AtlasMetaParser {
       for (const cel of film.cels) celBoundsByID[cel.id] = cel.bounds
     }
     assert(
-      celBoundsByID.length == factory.size,
+      celBoundsByID.length === factory.size,
       `Cel bounds lookup table has incorrect length ` +
         `(${celBoundsByID.length}); length should equal number of CelIDs ` +
         `created (${factory.size}).`,
@@ -125,8 +125,8 @@ export namespace AtlasMetaParser {
       0,
     )
     if (
-      (frameTag.direction == Aseprite.Direction.PingPong ||
-        frameTag.direction == Aseprite.Direction.PingPongReverse) &&
+      (frameTag.direction === Aseprite.Direction.PingPong ||
+        frameTag.direction === Aseprite.Direction.PingPongReverse) &&
       cels.length > 2
     ) {
       duration += duration - (cels[0]!.duration + cels.at(-1)!.duration)
@@ -137,7 +137,7 @@ export namespace AtlasMetaParser {
     const wh = parseU16XY(frames[0]!.sourceSize)
     const area = wh.x * wh.y
     assert(
-      cels.every(({ bounds }) => bounds.areaNum == area),
+      cels.every(({ bounds }) => bounds.areaNum === area),
       `Cel sizes for "${frameTag.name}" film vary.`,
     )
 
@@ -196,7 +196,7 @@ export namespace AtlasMetaParser {
   /** @internal */
   export function isDirection(value: string): value is Aseprite.Direction {
     return Object.values(Aseprite.Direction).some(
-      (direction) => value == direction,
+      (direction) => value === direction,
     )
   }
 
@@ -243,7 +243,7 @@ export namespace AtlasMetaParser {
   }
 
   function isEven(val: number): boolean {
-    return (val & 1) == 0
+    return (val & 1) === 0
   }
 
   /** @internal */
@@ -261,7 +261,7 @@ export namespace AtlasMetaParser {
     const bounds = []
     for (const slice of slices) {
       // Ignore Slices not for this FileTag.
-      if (slice.name != frameTag.name) continue
+      if (slice.name !== frameTag.name) continue
       // Get the greatest relevant Key, if any.
       const key = slice.keys.filter((key) => key.frame <= index).at(-1)
       if (key != null) bounds.push(new I16Box(key.bounds))
@@ -294,9 +294,9 @@ export namespace AtlasMetaParser {
 
   /** @internal */
   export function greatestCommonDivisorPair(lhs: Int, rhs: Int): Int {
-    assert(lhs != 0 && rhs != 0, 'Cannot divide by zero.')
+    assert(lhs !== 0 && rhs !== 0, 'Cannot divide by zero.')
     const remainder = lhs % rhs
-    if (remainder == 0) return rhs
+    if (remainder === 0) return rhs
     return greatestCommonDivisorPair(rhs, Int(remainder))
   }
 }
