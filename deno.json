@@ -31,5 +31,5 @@
   "lock": false,
   "name": "atlas-pack",
   "test": { "files": { "exclude": ["dist"] } },
-  "version": "7.0.0"
+  "version": "7.1.0"
 }
