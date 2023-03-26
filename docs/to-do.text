@@ -1,3 +1,4 @@
+Review Deno run docs are correct. 
 Should the binaries be actual binaries with `deno compile`?
 Revise AtlasMeta.fromJSON() to use fewer casts.
 Explore an AtlasMetaParser revive-based API instead parsing as JSON as a second pass.
