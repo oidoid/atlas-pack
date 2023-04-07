@@ -111,7 +111,7 @@ export namespace AtlasMetaParser {
     id: FilmID,
     frameTag: Aseprite.FrameTag,
     frameMap: Aseprite.FrameMap,
-    slices: readonly Aseprite.Slice[],
+    slices: Iterable<Aseprite.Slice>,
     factory: CelIDFactory,
   ): Film {
     const frames = [...parseFrames(frameTag, frameMap)]
@@ -205,7 +205,7 @@ export namespace AtlasMetaParser {
     frameTag: Aseprite.FrameTag,
     frame: Aseprite.Frame,
     frameNumber: number,
-    slices: readonly Aseprite.Slice[],
+    slices: Iterable<Aseprite.Slice>,
     factory: CelIDFactory,
   ): Cel {
     // to-do: slices seem to be one pixel too wide and tall for how they're
@@ -256,7 +256,7 @@ export namespace AtlasMetaParser {
   export function parseSlices(
     frameTag: Aseprite.FrameTag,
     index: number,
-    slices: readonly Aseprite.Slice[],
+    slices: Iterable<Aseprite.Slice>,
   ): readonly Readonly<I16Box>[] {
     const bounds = []
     for (const slice of slices) {
@@ -275,8 +275,9 @@ export namespace AtlasMetaParser {
     return new U16XY(wh.w, wh.h)
   }
 
-  function computePeriod(cels: readonly Cel[]): U32 {
-    const durations = cels.map((cel) => cel.duration)
+  function computePeriod(cels: Iterable<Cel>): U32 {
+    const durations = []
+    for (const cel of cels) durations.push(cel.duration)
     if (durations.length <= 1) return durations[0]!
 
     const period = greatestCommonDivisor(durations as [U32, ...U32[]])
