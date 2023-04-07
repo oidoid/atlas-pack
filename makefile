@@ -63,7 +63,7 @@ $(dist_dir)/%: $(demo_dir)/% | $(dist_dir)/; $(cp) '$<' '$@'
 $(demo_dir)/atlas.json $(demo_dir)/atlas.png&: $(atlas_in_files)
   bin/aseprite-batch \
     --merge-duplicates \
-    --sheet '$(demo_dir)/atlas.png' \
+    --sheet='$(demo_dir)/atlas.png' \
     $^ \
     --color-mode=indexed|
   bin/atlas-pack > '$(demo_dir)/atlas.json'
