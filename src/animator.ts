@@ -12,7 +12,7 @@ export class Animator {
 
   /**
    * The time the film started playing. Playback position is relative this start
-   * time.
+   * time. Start can be negative but never greater than actual.
    */
   #start: number
 
