@@ -1,11 +1,27 @@
-import { Aseprite, AtlasMetaParser, CelID, CelIDFactory } from '@/atlas-pack'
-import { I16Box, U16, U16Box, U16XY, U32 } from '@/ooz'
+import {
+  AsepriteDirection,
+  AsepriteFrameMap,
+  AsepriteFrameTag,
+  AsepriteMeta,
+  CelID,
+  CelIDFactory,
+  parseAtlasMeta,
+  parseBounds,
+  parseCel,
+  parseDuration,
+  parseFilm,
+  parseFilmByID,
+  parsePadding,
+  parsePlayback,
+  parseSlices,
+} from '@/atlas-pack'
+import { Box, XY } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('parse()', async (test) => {
   await test.step('Parses Meta.', () => {
     assertEquals(
-      AtlasMetaParser.parse(
+      parseAtlasMeta(
         {
           meta: {
             app: 'http://www.aseprite.org/',
@@ -25,7 +41,7 @@ Deno.test('parse()', async (test) => {
         version: '1.2.8.1',
         filename: 'atlas.png',
         format: 'I8',
-        wh: new U16XY(1, 2),
+        wh: new XY(1, 2),
         filmByID: {},
         celBoundsByID: [],
       },
@@ -98,9 +114,9 @@ Deno.test('parseFilmByID()', async (test) => {
       },
     ]
     assertEquals(
-      AtlasMetaParser.parseFilmByID(
+      parseFilmByID(
         new CelIDFactory(),
-        { meta: <Aseprite.Meta> (<unknown> { frameTags, slices }), frames },
+        { meta: <AsepriteMeta> (<unknown> { frameTags, slices }), frames },
         new Set([
           'scenery--Cloud',
           'palette--red',
@@ -111,69 +127,69 @@ Deno.test('parseFilmByID()', async (test) => {
       {
         'scenery--Cloud': {
           id: 'scenery--Cloud',
-          wh: new U16XY(16, 16),
+          wh: new XY(16, 16),
           cels: [
             {
               id: <CelID> 0,
-              bounds: new U16Box(221, 19, 16, 16),
-              duration: U16(1),
-              sliceBounds: new I16Box(8, 12, 2, 3),
-              slices: [new I16Box(8, 12, 2, 3)],
+              bounds: new Box(221, 19, 16, 16),
+              duration: 1,
+              sliceBounds: new Box(8, 12, 2, 3),
+              slices: [new Box(8, 12, 2, 3)],
             },
           ],
-          period: U32(1),
-          duration: U16(1),
+          period: 1,
+          duration: 1,
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
         'palette--red': {
           id: 'palette--red',
-          wh: new U16XY(16, 16),
+          wh: new XY(16, 16),
           cels: [
             {
               id: <CelID> 1,
-              bounds: new U16Box(91, 55, 16, 16),
-              duration: U32(65535),
-              sliceBounds: new I16Box(7, 11, 3, 4),
-              slices: [new I16Box(7, 11, 3, 4)],
+              bounds: new Box(91, 55, 16, 16),
+              duration: 65535,
+              sliceBounds: new Box(7, 11, 3, 4),
+              slices: [new Box(7, 11, 3, 4)],
             },
           ],
-          period: U32(65535),
-          duration: U32(65535),
+          period: 65535,
+          duration: 65535,
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
         'scenery--Conifer': {
           id: 'scenery--Conifer',
-          wh: new U16XY(16, 16),
+          wh: new XY(16, 16),
           cels: [
             {
               id: <CelID> 2,
-              bounds: new U16Box(73, 55, 16, 16),
-              duration: U32(65535),
-              sliceBounds: new I16Box(7, 10, 3, 5),
-              slices: [new I16Box(7, 10, 3, 5)],
+              bounds: new Box(73, 55, 16, 16),
+              duration: 65535,
+              sliceBounds: new Box(7, 10, 3, 5),
+              slices: [new Box(7, 10, 3, 5)],
             },
           ],
-          period: U32(65535),
-          duration: U32(65535),
+          period: 65535,
+          duration: 65535,
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
         'scenery--ConiferShadow': {
           id: 'scenery--ConiferShadow',
-          wh: new U16XY(16, 16),
+          wh: new XY(16, 16),
           cels: [
             {
               id: <CelID> 3,
-              bounds: new U16Box(55, 55, 16, 16),
-              duration: U32(65535),
-              sliceBounds: new I16Box(7, 9, 3, 6),
-              slices: [new I16Box(7, 9, 3, 6)],
+              bounds: new Box(55, 55, 16, 16),
+              duration: 65535,
+              sliceBounds: new Box(7, 9, 3, 6),
+              slices: [new Box(7, 9, 3, 6)],
             },
           ],
-          period: U32(65535),
-          duration: U32(65535),
+          period: 65535,
+          duration: 65535,
           direction: 'Forward',
           loops: Number.POSITIVE_INFINITY,
         },
@@ -206,9 +222,9 @@ Deno.test('parseFilmByID()', async (test) => {
       },
     }
     assertThrows(() =>
-      AtlasMetaParser.parseFilmByID(
+      parseFilmByID(
         new CelIDFactory(),
-        { meta: <Aseprite.Meta> (<unknown> { frameTags, slices: [] }), frames },
+        { meta: <AsepriteMeta> (<unknown> { frameTags, slices: [] }), frames },
         new Set(['scenery--Cloud', 'palette--red']),
       )
     )
@@ -217,7 +233,7 @@ Deno.test('parseFilmByID()', async (test) => {
 
 Deno.test('parseFilm()', async (test) => {
   await test.step('Parses FrameTag, Frame from Frame[], and Slice.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'cloud--s',
       from: 1,
       to: 1,
@@ -267,7 +283,7 @@ Deno.test('parseFilm()', async (test) => {
       },
     ] as const
     assertEquals(
-      AtlasMetaParser.parseFilm(
+      parseFilm(
         'cloud--s',
         frameTag,
         frames,
@@ -276,18 +292,18 @@ Deno.test('parseFilm()', async (test) => {
       ),
       {
         id: 'cloud--s',
-        wh: new U16XY(16, 16),
+        wh: new XY(16, 16),
         cels: [
           {
             id: <CelID> 0,
-            bounds: new U16Box(185, 37, 16, 16),
-            duration: U32(65535),
-            sliceBounds: new I16Box(4, 11, 9, 4),
-            slices: [new I16Box(4, 11, 9, 4)],
+            bounds: new Box(185, 37, 16, 16),
+            duration: 65535,
+            sliceBounds: new Box(4, 11, 9, 4),
+            slices: [new Box(4, 11, 9, 4)],
           },
         ],
-        period: U32(65535),
-        duration: U32(65535),
+        period: 65535,
+        duration: 65535,
         direction: 'Forward',
         loops: Number.POSITIVE_INFINITY,
       },
@@ -295,14 +311,14 @@ Deno.test('parseFilm()', async (test) => {
   })
 
   await test.step('Ping-pong total duration is correct.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'frog--idle',
       from: 0,
       to: 3,
       direction: 'pingpong',
       repeat: '1',
     }
-    const frames: Aseprite.FrameMap = {
+    const frames: AsepriteFrameMap = {
       'frog--idle--0': {
         frame: { x: 0, y: 0, w: 0, h: 0 },
         rotated: false,
@@ -337,7 +353,7 @@ Deno.test('parseFilm()', async (test) => {
       },
     }
     assertEquals(
-      AtlasMetaParser.parseFilm(
+      parseFilm(
         'frog--idle',
         frameTag,
         frames,
@@ -349,7 +365,7 @@ Deno.test('parseFilm()', async (test) => {
   })
 
   await test.step('Throws error on film with no cels.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'frog--walk',
       from: 1,
       to: 0,
@@ -374,7 +390,7 @@ Deno.test('parseFilm()', async (test) => {
       },
     }
     assertThrows(() =>
-      AtlasMetaParser.parseFilm(
+      parseFilm(
         'frog--walk',
         frameTag,
         frames,
@@ -385,14 +401,14 @@ Deno.test('parseFilm()', async (test) => {
   })
 
   await test.step('Throws Error when no Frame is associated with Tag.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'frog--walk',
       from: 0,
       to: 0,
       direction: 'forward',
     }
     assertThrows(() =>
-      AtlasMetaParser.parseFilm(
+      parseFilm(
         'frog--walk',
         frameTag,
         {},
@@ -404,37 +420,21 @@ Deno.test('parseFilm()', async (test) => {
 })
 
 Deno.test('parsePlayback()', async (test) => {
-  for (const [playback, direction] of Object.entries(Aseprite.Direction)) {
+  for (const [playback, direction] of Object.entries(AsepriteDirection)) {
     await test.step(
       `Direction ${playback}.`,
-      () =>
-        assertEquals(
-          AtlasMetaParser.parsePlayback(direction),
-          playback,
-        ),
+      () => assertEquals(parsePlayback(direction), playback),
     )
   }
 
   await test.step('Invalid direction.', () => {
-    assertThrows(() => AtlasMetaParser.parsePlayback('unknown'))
+    assertThrows(() => parsePlayback('unknown'))
   })
-})
-
-Deno.test('isDirection()', async (test) => {
-  for (const direction of Object.values(Aseprite.Direction)) {
-    await test.step(
-      `Direction ${direction}.`,
-      () => assertEquals(AtlasMetaParser.isDirection(direction), true),
-    )
-  }
-
-  await test.step('Unknown.', () =>
-    assertEquals(AtlasMetaParser.isDirection('unknown'), false))
 })
 
 Deno.test('parseCel()', async (test) => {
   await test.step('Parses 1:1 texture mapping.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 0,
@@ -456,7 +456,7 @@ Deno.test('parseCel()', async (test) => {
       },
     ] as const
     assertEquals(
-      AtlasMetaParser.parseCel(
+      parseCel(
         frameTag,
         frame,
         0,
@@ -465,10 +465,10 @@ Deno.test('parseCel()', async (test) => {
       ),
       {
         id: <CelID> 0,
-        bounds: new U16Box(131, 19, 16, 16),
-        duration: U32(65535),
-        sliceBounds: new I16Box(4, 4, 8, 12),
-        slices: [new I16Box(4, 4, 8, 12)],
+        bounds: new Box(131, 19, 16, 16),
+        duration: 65535,
+        sliceBounds: new Box(4, 4, 8, 12),
+        slices: [new Box(4, 4, 8, 12)],
       },
     )
   })
@@ -484,7 +484,7 @@ Deno.test('parseBounds()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     }
-    assertEquals(AtlasMetaParser.parseBounds(frame), new U16Box(1, 2, 3, 4))
+    assertEquals(parseBounds(frame), new Box(1, 2, 3, 4))
   })
 
   await test.step('Parses texture mapping with padding.', () => {
@@ -496,7 +496,7 @@ Deno.test('parseBounds()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     }
-    assertEquals(AtlasMetaParser.parseBounds(frame), new U16Box(2, 3, 3, 4))
+    assertEquals(parseBounds(frame), new Box(2, 3, 3, 4))
   })
 })
 
@@ -510,7 +510,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     }
-    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(0, 0))
+    assertEquals(parsePadding(frame), new XY(0, 0))
   })
 
   await test.step('Fails on indivisible padding.', () => {
@@ -522,7 +522,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 3, h: 4 },
       duration: 1,
     }
-    assertThrows(() => AtlasMetaParser.parsePadding(frame))
+    assertThrows(() => parsePadding(frame))
   })
 
   await test.step('Parses nonzero padding.', () => {
@@ -534,7 +534,7 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 4, h: 4 },
       duration: 1,
     }
-    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(2, 2))
+    assertEquals(parsePadding(frame), new XY(2, 2))
   })
 
   await test.step('Parses mixed padding.', () => {
@@ -546,32 +546,32 @@ Deno.test('parsePadding()', async (test) => {
       sourceSize: { w: 4, h: 6 },
       duration: 1,
     }
-    assertEquals(AtlasMetaParser.parsePadding(frame), new U16XY(2, 4))
+    assertEquals(parsePadding(frame), new XY(2, 4))
   })
 })
 
 Deno.test('parseDuration()', async (test) => {
   await test.step('Parses finite duration.', () =>
-    assertEquals(AtlasMetaParser.parseDuration(1), 1))
+    assertEquals(parseDuration(1), 1))
 
   await test.step('Parses infinite duration.', () =>
     assertEquals(
-      AtlasMetaParser.parseDuration(65535),
-      U32(65535),
+      parseDuration(65535),
+      65535,
     ))
 
   await test.step('Parses negative duration.', () => {
-    assertThrows(() => AtlasMetaParser.parseDuration(-1))
+    assertThrows(() => parseDuration(-1))
   })
 
   await test.step('Parses zero duration.', () => {
-    assertThrows(() => AtlasMetaParser.parseDuration(0))
+    assertThrows(() => parseDuration(0))
   })
 })
 
 Deno.test('parseSlices()', async (test) => {
   await test.step('Converts Slice to Box[].', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 0,
@@ -584,13 +584,13 @@ Deno.test('parseSlices()', async (test) => {
         keys: [{ frame: 0, bounds: { x: 0, y: 1, w: 2, h: 3 } }],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [
-      new I16Box(0, 1, 2, 3),
+    assertEquals(parseSlices(frameTag, 0, slices), [
+      new Box(0, 1, 2, 3),
     ])
   })
 
   await test.step('Filters out unrelated Tags.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 0,
@@ -603,11 +603,11 @@ Deno.test('parseSlices()', async (test) => {
         keys: [{ frame: 0, bounds: { x: 0, y: 1, w: 2, h: 3 } }],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [])
+    assertEquals(parseSlices(frameTag, 0, slices), [])
   })
 
   await test.step('Filters out unrelated Frame number Keys.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 2,
@@ -624,13 +624,13 @@ Deno.test('parseSlices()', async (test) => {
         ],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 1, slices), [
-      new I16Box(4, 5, 6, 7),
+    assertEquals(parseSlices(frameTag, 1, slices), [
+      new Box(4, 5, 6, 7),
     ])
   })
 
   await test.step('Converts Slice with multiple Keys to Box[].', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 1,
@@ -646,23 +646,23 @@ Deno.test('parseSlices()', async (test) => {
         ],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [
-      new I16Box(0, 1, 2, 3),
+    assertEquals(parseSlices(frameTag, 0, slices), [
+      new Box(0, 1, 2, 3),
     ])
   })
 
   await test.step('Converts no Slices.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 0,
       direction: 'forward',
     }
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, []), [])
+    assertEquals(parseSlices(frameTag, 0, []), [])
   })
 
   await test.step('Converts multiple Slices.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 1,
@@ -694,15 +694,15 @@ Deno.test('parseSlices()', async (test) => {
         keys: [{ frame: 0, bounds: { x: 8, y: 9, w: 10, h: 11 } }],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 1, slices), [
-      new I16Box(4, 5, 6, 7),
-      new I16Box(0, 1, 2, 3),
-      new I16Box(8, 9, 10, 11),
+    assertEquals(parseSlices(frameTag, 1, slices), [
+      new Box(4, 5, 6, 7),
+      new Box(0, 1, 2, 3),
+      new Box(8, 9, 10, 11),
     ])
   })
 
   await test.step('Parses no Slices when none are relevant for the Frame index.', () => {
-    const frameTag: Aseprite.FrameTag = {
+    const frameTag: AsepriteFrameTag = {
       name: 'stem--foo',
       from: 0,
       to: 0,
@@ -715,6 +715,6 @@ Deno.test('parseSlices()', async (test) => {
         keys: [{ frame: 1, bounds: { x: 0, y: 1, w: 2, h: 3 } }],
       },
     ] as const
-    assertEquals(AtlasMetaParser.parseSlices(frameTag, 0, slices), [])
+    assertEquals(parseSlices(frameTag, 0, slices), [])
   })
 })

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno --quiet run --allow-read --ext ts
 
-import { AtlasMetaParser } from '@/atlas-pack'
+import { parseAtlasMeta } from '@/atlas-pack'
 
 const decoder = new TextDecoder()
 const chunks = []
@@ -8,4 +8,4 @@ for await (const chunk of Deno.stdin.readable) {
   chunks.push(decoder.decode(chunk))
 }
 const json = JSON.parse(chunks.join(''))
-console.log(JSON.stringify(AtlasMetaParser.parse(json), null, 2))
+console.log(JSON.stringify(parseAtlasMeta(json), null, 2))

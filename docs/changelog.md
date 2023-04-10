@@ -2,6 +2,10 @@
 
 Versions and bullets are arranged chronologically from latest to oldest.
 
+## v8.0.0
+
+- \[API\] Drop namespaces and remove int typing.
+
 ## v7.1.0
 
 - \[API\] Add Animator.played().

@@ -1,14 +1,5 @@
-import {
-  BoxJSON,
-  I16Box,
-  Immutable,
-  U16,
-  U16Box,
-  U16XY,
-  U32,
-  XYJSON,
-} from '@/ooz'
-import { Aseprite } from './aseprite.ts'
+import { AsepriteFileTag } from '@/atlas-pack'
+import { Box, BoxJSON, XY, XYJSON } from '@/ooz'
 
 /**
  * A sequence of animation cels.
@@ -30,7 +21,7 @@ export interface Film {
    * This ID matches a key in `AtlasMeta.filmsByID` but the typing isn't used
    * here because it adds a lot of templating overhead without much value.
    */
-  readonly id: Aseprite.FileTag
+  readonly id: AsepriteFileTag
 
   /**
    * Positive film length in milliseconds for a full cycle. For a ping-pong
@@ -39,15 +30,15 @@ export interface Film {
    * duration would be the sum of the individual durations for the initial five
    * frames and the middle three frames.
    *
-   * This is a U32, not a U16, since its an aggregation of U16s.
+   * This is a number, not a number, since its an aggregation of numbers.
    */
-  readonly duration: U32
+  readonly duration: number
 
   /**
    * Width and height within the source atlas image in integral pixels.
    * Dimensions are identical for every cel.
    */
-  readonly wh: Readonly<U16XY>
+  readonly wh: Readonly<XY>
 
   /** Every film is expected to have at least one cel. */
   readonly cels: readonly Cel[]
@@ -77,7 +68,7 @@ export interface Film {
    *
    * Time is mapped to a period via trunc(time * frequency).
    */
-  readonly period: U32
+  readonly period: number
 
   readonly direction: Playback
 
@@ -94,58 +85,54 @@ export interface Cel {
    * the top-left. The width and height duplicate the owning film's size and are
    * for convenience only. Sizes never vary within a film.
    */
-  readonly bounds: Readonly<U16Box>
+  readonly bounds: Readonly<Box>
 
   /**
    * Positive cel exposure requirement in integral milliseconds.
    *
-   * Aseprite uses U16 durations but `Film` has an aggregation so it must use
-   * a U32.
+   * Aseprite uses number durations but `Film` has an aggregation so it must use
+   * a number.
    */
-  readonly duration: U32
+  readonly duration: number
 
   /**
    * The union of all slices. If a point is not in sliceBounds, it's not in
    * slices. Slice bounds are a subset of bounds and a superset of slices, may
    * vary cel-to-cel, and are flipped when no slices.
    */
-  readonly sliceBounds: Readonly<I16Box>
+  readonly sliceBounds: Readonly<Box>
 
   /** Slices within the cel in local pixels. Slices may vary cel-to-cel. */
-  readonly slices: readonly Readonly<I16Box>[]
+  readonly slices: readonly Readonly<Box>[]
 }
 
 /** A unique identifier for the cel, contiguous and starting at 0. */
-export type CelID = U16 & { [celID]: never }
+export type CelID = number & { [celID]: never }
 declare const celID: unique symbol
 
-export type Playback = Parameters<typeof Playback.values['has']>[0]
-export namespace Playback {
-  export const values = Immutable(
-    new Set(
-      [
-        /** Animate from start to end; when looping, return to start. */
-        'Forward',
+export type Playback = Parameters<typeof PlaybackSet['has']>[0]
+export const PlaybackSet = new Set(
+  [
+    /** Animate from start to end; when looping, return to start. */
+    'Forward',
 
-        /** Animate from end to start; when looping, return to end. */
-        'Reverse',
+    /** Animate from end to start; when looping, return to end. */
+    'Reverse',
 
-        /**
-         * Animate from start to end - 1 or start, whichever is greater; when
-         * looping, change direction (initially, end to start + 1 or end,
-         * whichever is lesser. A traversal from start to end - 1 then end to
-         * start + 1 is considered a complete loop.
-         */
-        'PingPong',
+    /**
+     * Animate from start to end - 1 or start, whichever is greater; when
+     * looping, change direction (initially, end to start + 1 or end,
+     * whichever is lesser. A traversal from start to end - 1 then end to
+     * start + 1 is considered a complete loop.
+     */
+    'PingPong',
 
-        /**
-         * Like PingPong but start from end - 1 or start, whichever is greater.
-         */
-        'PingPongReverse',
-      ] as const,
-    ),
-  )
-}
+    /**
+     * Like PingPong but start from end - 1 or start, whichever is greater.
+     */
+    'PingPongReverse',
+  ] as const,
+)
 
 export interface FilmJSON {
   readonly id: string

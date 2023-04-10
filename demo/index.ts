@@ -1,6 +1,4 @@
 import { Animator, AtlasMeta, Cel } from '@/atlas-pack'
-import { assertNonNull } from '@/ooz'
-import { XY } from '../../ooz/src/2d/xy/xy.ts'
 import atlasJSON from './atlas.json' assert { type: 'json' }
 import { FilmID } from './film-id.ts'
 
@@ -24,10 +22,10 @@ atlas-pack ┌>°┐
   )
 
   const canvas = window.document.getElementsByTagName('canvas').item(0)
-  assertNonNull(canvas, 'Canvas missing.')
+  if (canvas == null) throw Error('Canvas missing.')
 
   const context = canvas.getContext('2d')
-  assertNonNull(context, 'Context missing.')
+  if (context == null) throw Error('Context missing.')
 
   // Use nearest neighbor scaling.
   context.imageSmoothingEnabled = false
@@ -50,17 +48,17 @@ atlas-pack ┌>°┐
 function loop(demo: Demo, time: number): void {
   demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height)
 
-  draw(demo, demo.backpacker.cel(time), { x: 0, y: 0 })
-  draw(demo, demo.frog.cel(time), { x: 0, y: 128 })
+  draw(demo, demo.backpacker.cel(time), 0, 0)
+  draw(demo, demo.frog.cel(time), 0, 128)
 
   demo.window.requestAnimationFrame((time) => loop(demo, time))
 }
 
-function draw(demo: Demo, cel: Readonly<Cel>, xy: Readonly<XY<number>>): void {
+function draw(demo: Demo, cel: Readonly<Cel>, x: number, y: number): void {
   const scale = 16
   const { bounds } = cel
   const atlasSource = [bounds.x, bounds.y, bounds.w, bounds.h] as const
-  const canvasDest = [xy.x, xy.y, bounds.w * scale, bounds.h * scale] as const
+  const canvasDest = [x, y, bounds.w * scale, bounds.h * scale] as const
   demo.context.drawImage(demo.atlas, ...atlasSource, ...canvasDest)
 }
 

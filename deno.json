@@ -19,14 +19,7 @@
   },
   "lint": {
     "files": { "exclude": ["dist"] },
-    "rules": {
-      "exclude": [
-        "no-empty-interface",
-        "no-inferrable-types",
-        "no-misused-new",
-        "no-namespace"
-      ]
-    }
+    "rules": { "exclude": ["no-empty-interface", "no-misused-new"] }
   },
   "lock": false,
   "name": "atlas-pack",

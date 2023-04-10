@@ -1,6 +1,5 @@
 import { Cel, Film, Playback } from '@/atlas-pack'
-import { NumUtil } from '@/ooz'
-import { Immutable } from '../../ooz/src/types/immutable.ts'
+import { wrapNum } from '@/ooz'
 
 /** Film playback state. */
 export class Animator {
@@ -73,8 +72,8 @@ export class Animator {
  *   each end.
  */
 const period: Readonly<
-  { [playback in Playback]: (film: Film, timeIndex: number) => number }
-> = Immutable({
+  Record<Playback, (film: Film, timeIndex: number) => number>
+> = {
   Forward: (film, timeIndex) => timeIndex % film.cels.length,
   Reverse(film, timeIndex) {
     return (film.cels.length - 1) - (timeIndex % film.cels.length)
@@ -88,7 +87,7 @@ const period: Readonly<
     // nonnegative values have a one-to-one mapping, the negative values cannot.
     // The reason is that the ending cels have to be skipped when doubling back.
     // The offset for negative wraps below accounts for that.
-    const wrap = NumUtil.wrap(
+    const wrap = wrapNum(
       timeIndex,
       start + end - film.cels.length,
       film.cels.length,
@@ -98,12 +97,10 @@ const period: Readonly<
   PingPongReverse(film, timeIndex) {
     return this.PingPong(film, (film.cels.length - 1) - timeIndex)
   },
-})
+}
 
 /** Ending indices when loop-limited. */
-const endIndex: Readonly<
-  { [playback in Playback]: (film: Film) => number }
-> = Immutable({
+const endIndex: Readonly<Record<Playback, (film: Film) => number>> = {
   Forward: (film) => film.cels.length - 1,
   Reverse: () => 0,
   PingPong(film) {
@@ -114,4 +111,4 @@ const endIndex: Readonly<
     const end = film.cels[film.cels.length - 1]!.duration / film.period
     return Math.max(film.cels.length - (end + 1), 0)
   },
-})
+}

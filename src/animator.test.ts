@@ -1,25 +1,31 @@
-import { Animator, CelID, Playback } from '@/atlas-pack'
-import { I16Box, U16, U16Box, U16XY, U32 } from '@/ooz'
+import {
+  Animator,
+  AsepriteDirection,
+  CelID,
+  Film,
+  parseAtlasMeta,
+  parsePlayback,
+  Playback,
+  PlaybackSet,
+} from '@/atlas-pack'
+import { Box, XY } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
-import { Aseprite } from './aseprite.ts'
-import { AtlasMetaParser } from './atlas-meta-parser.ts'
-import { Film } from './film.ts'
 
 Deno.test('Animator()', async (test) => {
   await test.step('Exposure < duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: new U16Box(1, 2, 3, 4),
-      duration: U16(1),
-      sliceBounds: new I16Box(1, 1, 2, 2),
+      bounds: new Box(1, 2, 3, 4),
+      duration: 1,
+      sliceBounds: new Box(1, 1, 2, 2),
       slices: [],
     }
     const film = {
       id: 'filename--Tag' as const,
-      wh: new U16XY(0, 0),
+      wh: new XY(0, 0),
       cels: [cel, cel],
-      period: U32(1),
-      duration: U16(2),
+      period: 1,
+      duration: 2,
       direction: 'Forward' as const,
       loops: Number.POSITIVE_INFINITY,
     }
@@ -31,17 +37,17 @@ Deno.test('Animator()', async (test) => {
   await test.step('Exposure === duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: new U16Box(1, 2, 3, 4),
-      duration: U16(1),
-      sliceBounds: new I16Box(1, 1, 2, 2),
+      bounds: new Box(1, 2, 3, 4),
+      duration: 1,
+      sliceBounds: new Box(1, 1, 2, 2),
       slices: [],
     }
     const film = {
       id: 'filename--Tag' as const,
-      wh: new U16XY(0, 0),
+      wh: new XY(0, 0),
       cels: [cel, cel],
-      period: U32(1),
-      duration: U16(2),
+      period: 1,
+      duration: 2,
       direction: 'Forward' as const,
       loops: Number.POSITIVE_INFINITY,
     }
@@ -53,17 +59,17 @@ Deno.test('Animator()', async (test) => {
   await test.step('Exposure > duration.', () => {
     const cel = {
       id: <CelID> 0,
-      bounds: new U16Box(1, 2, 3, 4),
-      duration: U16(1),
-      sliceBounds: new I16Box(1, 1, 2, 2),
+      bounds: new Box(1, 2, 3, 4),
+      duration: 1,
+      sliceBounds: new Box(1, 1, 2, 2),
       slices: [],
     }
     const film = {
       id: 'filename--Tag' as const,
-      wh: new U16XY(0, 0),
+      wh: new XY(0, 0),
       cels: [cel, cel],
-      period: U32(1),
-      duration: U16(2),
+      period: 1,
+      duration: 2,
       direction: 'Forward' as const,
       loops: Number.POSITIVE_INFINITY,
     }
@@ -75,25 +81,25 @@ Deno.test('Animator()', async (test) => {
   await test.step('Different durations.', () => {
     const film = {
       id: 'filename--Tag' as const,
-      wh: new U16XY(0, 0),
+      wh: new XY(0, 0),
       cels: [
         {
           id: <CelID> 0,
-          bounds: new U16Box(1, 2, 3, 4),
-          duration: U16(1),
-          sliceBounds: new I16Box(1, 1, 2, 2),
+          bounds: new Box(1, 2, 3, 4),
+          duration: 1,
+          sliceBounds: new Box(1, 1, 2, 2),
           slices: [],
         },
         ...Array(1000).fill({
           id: <CelID> 1,
-          bounds: new U16Box(1, 2, 3, 4),
-          duration: U16(1000),
-          sliceBounds: new I16Box(1, 1, 2, 2),
+          bounds: new Box(1, 2, 3, 4),
+          duration: 1000,
+          sliceBounds: new Box(1, 1, 2, 2),
           slices: [],
         }),
       ],
-      period: U32(1),
-      duration: U32(1001),
+      period: 1,
+      duration: 1001,
       direction: 'Forward' as const,
       loops: Number.POSITIVE_INFINITY,
     }
@@ -105,25 +111,25 @@ Deno.test('Animator()', async (test) => {
   await test.step('Different durations ping-pong reverse.', () => {
     const film = {
       id: 'filename--Tag' as const,
-      wh: new U16XY(0, 0),
+      wh: new XY(0, 0),
       cels: [
         {
           id: <CelID> 0,
-          bounds: new U16Box(1, 2, 3, 4),
-          duration: U16(1),
-          sliceBounds: new I16Box(1, 1, 2, 2),
+          bounds: new Box(1, 2, 3, 4),
+          duration: 1,
+          sliceBounds: new Box(1, 1, 2, 2),
           slices: [],
         },
         ...Array(10).fill({
           id: <CelID> 1,
-          bounds: new U16Box(1, 2, 3, 4),
-          duration: U16(10),
-          sliceBounds: new I16Box(1, 1, 2, 2),
+          bounds: new Box(1, 2, 3, 4),
+          duration: 10,
+          sliceBounds: new Box(1, 1, 2, 2),
           slices: [],
         }),
       ],
-      period: U32(1),
-      duration: U32(11),
+      period: 1,
+      duration: 11,
       direction: 'PingPongReverse' as const,
       loops: Number.POSITIVE_INFINITY,
     }
@@ -200,17 +206,17 @@ Deno.test('Animator()', async (test) => {
 Deno.test('reset()', () => {
   const cel = {
     id: <CelID> 0,
-    bounds: new U16Box(0, 0, 0, 0),
-    duration: U16(1),
-    sliceBounds: new I16Box(1, 1, 2, 2),
+    bounds: new Box(0, 0, 0, 0),
+    duration: 1,
+    sliceBounds: new Box(1, 1, 2, 2),
     slices: [],
   }
   const film = {
     id: 'filename--Tag' as const,
-    wh: new U16XY(0, 0),
+    wh: new XY(0, 0),
     cels: [cel, cel],
-    duration: U16(2),
-    period: U32(1),
+    duration: 2,
+    period: 1,
     direction: 'Forward' as const,
     loops: Number.POSITIVE_INFINITY,
   }
@@ -223,21 +229,21 @@ Deno.test('reset()', () => {
 })
 
 Deno.test('index()', async (test) => {
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Direction ${direction} array start.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel],
-        period: U32(1),
-        duration: U16(2),
+        period: 1,
+        duration: 2,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -253,21 +259,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Direction ${direction} array end.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel],
-        period: U32(1),
-        duration: U16(2),
+        period: 1,
+        duration: 2,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -313,57 +319,57 @@ Deno.test('index()', async (test) => {
         // deno-fmt-ignore
         [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 0, 0],
       ],
-    ] as [Aseprite.Direction, number[]][]
+    ] as [AsepriteDirection, number[]][]
   ) {
     await test.step(`Direction ${direction} different durations.`, () => {
       const film: Film = {
         id: 'filename--Tag',
-        wh: new U16XY(0, 0),
+        wh: new XY(3, 4),
         cels: [
           ...Array(3).fill({
             id: <CelID> 0,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(3),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 3,
+            sliceBounds: new Box(1, 1, -1, -1),
             slices: [],
           }),
           {
             id: <CelID> 1,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(1),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(4, 2, 3, 4),
+            duration: 1,
+            sliceBounds: new Box(1, 1, -1, -1),
             slices: [],
           },
           ...Array(2).fill({
             id: <CelID> 2,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(2),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(7, 6, 3, 4),
+            duration: 2,
+            sliceBounds: new Box(1, 1, -1, -1),
             slices: [],
           }),
           {
             id: <CelID> 3,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(1),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(10, 6, 3, 4),
+            duration: 1,
+            sliceBounds: new Box(1, 1, -1, -1),
             slices: [],
           },
           ...Array(5).fill({
             id: <CelID> 4,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(5),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(13, 6, 3, 4),
+            duration: 5,
+            sliceBounds: new Box(1, 1, -1, -1),
             slices: [],
           }),
         ],
-        period: U32(1),
-        duration: U32(
-          (direction === 'forward' || direction === 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
-        ),
-        direction: AtlasMetaParser.parsePlayback(direction),
+        period: 1,
+        duration: (direction === 'forward' || direction === 'reverse')
+          ? 12
+          : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+        direction: parsePlayback(direction),
         loops: 1000,
       }
-      const meta = AtlasMetaParser.parse({
+      const meta = parseAtlasMeta({
         frames: {
           'filename--Tag--0': {
             duration: 3,
@@ -404,11 +410,11 @@ Deno.test('index()', async (test) => {
           size: { w: 128, h: 128 },
         },
       })
-      assertEquals(meta.celBoundsByID[film.cels[0]!.id], new U16Box(1, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[film.cels[1]!.id], new U16Box(1, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[film.cels[2]!.id], new U16Box(1, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[film.cels[3]!.id], new U16Box(1, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[film.cels[4]!.id], new U16Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[0], new Box(1, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[1], new Box(4, 2, 3, 4))
+      assertEquals(meta.celBoundsByID[2], new Box(7, 6, 3, 4))
+      assertEquals(meta.celBoundsByID[3], new Box(10, 6, 3, 4))
+      assertEquals(meta.celBoundsByID[4], new Box(13, 6, 3, 4))
       assertEquals(meta.filmByID['filename--Tag'], film)
 
       const animator = new Animator(film)
@@ -445,54 +451,54 @@ Deno.test('index()', async (test) => {
         // deno-fmt-ignore
         [4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 4, 4, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
       ],
-    ] as [Aseprite.Direction, number[]][]
+    ] as [AsepriteDirection, number[]][]
   ) {
     await test.step(`Loop-limited Direction ${direction} different durations.`, () => {
       const film: Film = {
         id: 'filename--Tag',
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [
           ...Array(3).fill({
             id: <CelID> 0,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(3),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 3,
+            sliceBounds: new Box(1, 1, 2, 2),
             slices: [],
           }),
           {
             id: <CelID> 1,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(1),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 1,
+            sliceBounds: new Box(1, 1, 2, 2),
             slices: [],
           },
           ...Array(2).fill({
             id: <CelID> 2,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(2),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 2,
+            sliceBounds: new Box(1, 1, 2, 2),
             slices: [],
           }),
           {
             id: <CelID> 3,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(1),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 1,
+            sliceBounds: new Box(1, 1, 2, 2),
             slices: [],
           },
           ...Array(5).fill({
             id: <CelID> 4,
-            bounds: new U16Box(1, 2, 3, 4),
-            duration: U16(5),
-            sliceBounds: new I16Box(1, 1, 2, 2),
+            bounds: new Box(1, 2, 3, 4),
+            duration: 5,
+            sliceBounds: new Box(1, 1, 2, 2),
             slices: [],
           }),
         ],
-        period: U32(1),
-        duration: U32(
-          (direction === 'forward' || direction === 'reverse') ? 12 : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
-        ),
-        direction: AtlasMetaParser.parsePlayback(direction),
+        period: 1,
+        duration: (direction === 'forward' || direction === 'reverse')
+          ? 12
+          : 16, // 3 + 1 + 2 + 1 + 5 + 1 + 2 + 1
+        direction: parsePlayback(direction),
         loops: 2,
       }
       const animator = new Animator(film)
@@ -569,17 +575,17 @@ Deno.test('index()', async (test) => {
     await test.step(`Direction ${direction} offset ${offset}.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(4),
+        period: 1,
+        duration: 4,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -592,21 +598,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Exposure === duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(5),
+        period: 1,
+        duration: 5,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -626,21 +632,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Exposure > duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(5),
+        period: 1,
+        duration: 5,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -662,21 +668,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Fractional exposure < duration, not met Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(5),
+        period: 1,
+        duration: 5,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -698,21 +704,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Fractional exposure === duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(5),
+        period: 1,
+        duration: 5,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
@@ -732,21 +738,21 @@ Deno.test('index()', async (test) => {
     })
   }
 
-  for (const direction of Playback.values) {
+  for (const direction of PlaybackSet) {
     await test.step(`Fractional exposure > duration, Direction ${direction} cycles.`, () => {
       const cel = {
         id: <CelID> 0,
-        bounds: new U16Box(1, 2, 3, 4),
-        duration: U16(1),
-        sliceBounds: new I16Box(1, 1, 2, 2),
+        bounds: new Box(1, 2, 3, 4),
+        duration: 1,
+        sliceBounds: new Box(1, 1, 2, 2),
         slices: [],
       }
       const film = {
         id: 'filename--Tag' as const,
-        wh: new U16XY(0, 0),
+        wh: new XY(0, 0),
         cels: [cel, cel, cel, cel, cel],
-        period: U32(1),
-        duration: U16(5),
+        period: 1,
+        duration: 5,
         direction,
         loops: Number.POSITIVE_INFINITY,
       }
