@@ -150,6 +150,11 @@ export function parseFilm<const FilmID extends AsepriteFileTag>(
     id,
     wh,
     cels,
+    sliceBounds: cels.reduce(
+      (union, cel) =>
+        cel.sliceBounds.flipped ? union : union.union(cel.sliceBounds),
+      cels[0]!.sliceBounds.copy(),
+    ),
     period,
     duration,
     direction: parsePlayback(frameTag.direction),
@@ -198,11 +203,9 @@ export function parseCel(
   slices: Iterable<AsepriteSlice>,
   factory: CelIDFactory,
 ): Cel {
-  // to-do: slices seem to be one pixel too wide and tall for how they're
-  // rendered in Aseprite
   const sliceBoxes = parseSlices(frameTag, frameNumber, slices)
   const sliceBounds = sliceBoxes.length < 1
-    ? new Box(1, 1, -1, -1)
+    ? new Box(0, 0, -1, -1)
     : sliceBoxes.reduce((sum, slice) => sum.union(slice))
   return {
     id: factory.new(),

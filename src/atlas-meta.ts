@@ -7,7 +7,7 @@ import {
   FilmJSON,
   Playback,
 } from '@/atlas-pack'
-import { Box, BoxJSON, XY, XYJSON } from '@/ooz'
+import { Box, PartialBox, PartialXY, XY } from '@/ooz'
 import { mapValues } from 'std/collections/map_values.ts'
 
 /**
@@ -65,9 +65,9 @@ export interface AtlasMetaJSON {
   readonly version: string
   readonly filename: string
   readonly format: string
-  readonly wh: Readonly<XYJSON>
+  readonly wh: Readonly<PartialXY>
   readonly filmByID: { readonly [id: string]: FilmJSON }
-  readonly celBoundsByID: readonly Readonly<BoxJSON>[]
+  readonly celBoundsByID: readonly Readonly<PartialBox>[]
 }
 
 function parseFilm(json: FilmJSON): Film {
@@ -76,6 +76,7 @@ function parseFilm(json: FilmJSON): Film {
     duration: json.duration,
     wh: XY.fromJSON(json.wh),
     cels: json.cels.map(parseCel),
+    sliceBounds: Box.fromJSON(json.sliceBounds),
     period: json.period,
     direction: json.direction as Playback,
     loops: json.loops == null ? Number.POSITIVE_INFINITY : json.loops,

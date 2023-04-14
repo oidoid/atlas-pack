@@ -1,5 +1,5 @@
 import { AsepriteFileTag } from '@/atlas-pack'
-import { Box, BoxJSON, XY, XYJSON } from '@/ooz'
+import { Box, PartialBox, PartialXY, XY } from '@/ooz'
 
 /**
  * A sequence of animation cels.
@@ -42,6 +42,9 @@ export interface Film {
 
   /** Every film is expected to have at least one cel. */
   readonly cels: readonly Cel[]
+
+  /** The union of all slices of all cels. */
+  readonly sliceBounds: Readonly<Box>
 
   /**
    * The length of time before the cel may change. This is the inverse of
@@ -137,8 +140,9 @@ export const PlaybackSet = new Set(
 export interface FilmJSON {
   readonly id: string
   readonly duration: number
-  readonly wh: Readonly<XYJSON>
+  readonly wh: Readonly<PartialXY>
   readonly cels: readonly CelJSON[]
+  readonly sliceBounds: Readonly<PartialBox>
   readonly period: number
   readonly direction: string
   readonly loops?: number | null
@@ -146,8 +150,8 @@ export interface FilmJSON {
 
 export interface CelJSON {
   readonly id: number
-  readonly bounds: Readonly<BoxJSON>
+  readonly bounds: Readonly<PartialBox>
   readonly duration: number
-  readonly sliceBounds: Readonly<BoxJSON>
-  readonly slices: readonly Readonly<BoxJSON>[]
+  readonly sliceBounds: Readonly<PartialBox>
+  readonly slices: readonly Readonly<PartialBox>[]
 }
