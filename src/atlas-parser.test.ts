@@ -5,7 +5,7 @@ import {
   AsepriteMeta,
   CelID,
   CelIDFactory,
-  parseAtlasMeta,
+  parseAtlas,
   parseBounds,
   parseCel,
   parseDuration,
@@ -21,7 +21,7 @@ import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 Deno.test('parse()', async (test) => {
   await test.step('Parses Meta.', () => {
     assertEquals(
-      parseAtlasMeta(
+      parseAtlas(
         {
           meta: {
             app: 'http://www.aseprite.org/',

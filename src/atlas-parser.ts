@@ -8,7 +8,7 @@ import {
   AsepriteFrameTag,
   AsepriteSlice,
   AsepriteWH,
-  AtlasMeta,
+  Atlas,
   Cel,
   CelID,
   Film,
@@ -23,10 +23,10 @@ import { assert, Box, JSONObject, NonNull, XY } from '@/ooz'
  *   string type for FilmID and perform their own Atlas.filmByID lookup
  *   checks.
  */
-export function parseAtlasMeta<const FilmID extends AsepriteFileTag>(
+export function parseAtlas<const FilmID extends AsepriteFileTag>(
   file: AsepriteFile | JSONObject,
   ids?: ReadonlySet<FilmID> | undefined,
-): AtlasMeta<FilmID> {
+): Atlas<FilmID> {
   const factory = new CelIDFactory()
   const asepriteFile = file as AsepriteFile
   const filmByID = parseFilmByID(factory, asepriteFile, ids)

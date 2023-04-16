@@ -18,8 +18,8 @@ export interface Film {
   /**
    * The Aseprite tag, a unique identifier for the film like "Frog--Idle".
    *
-   * This ID matches a key in `AtlasMeta.filmsByID` but the typing isn't used
-   * here because it adds a lot of templating overhead without much value.
+   * This ID matches a key in `Atlas.filmsByID` but the typing isn't used here
+   * because it adds a lot of templating overhead without much value.
    */
   readonly id: AsepriteFileTag
 

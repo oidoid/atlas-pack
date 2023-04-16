@@ -1,4 +1,4 @@
-import { Animator, AtlasMeta, Cel } from '@/atlas-pack'
+import { Animator, Atlas, Cel } from '@/atlas-pack'
 import atlasJSON from './atlas.json' assert { type: 'json' }
 import { FilmID } from './film-id.ts'
 
@@ -8,8 +8,8 @@ interface Demo {
   readonly context: CanvasRenderingContext2D
   readonly backpacker: Animator
   readonly frog: Animator
-  readonly atlas: HTMLImageElement
-  readonly atlasMeta: AtlasMeta<FilmID>
+  readonly sheet: HTMLImageElement
+  readonly atlas: Atlas<FilmID>
 }
 
 async function main(window: Window): Promise<void> {
@@ -30,17 +30,17 @@ atlas-pack ┌>°┐
   // Use nearest neighbor scaling.
   context.imageSmoothingEnabled = false
 
-  const atlas = await loadImage('atlas.png')
-  const atlasMeta = AtlasMeta.fromJSON<FilmID>(atlasJSON)
+  const sheet = await loadImage('atlas.png')
+  const atlas = Atlas.fromJSON<FilmID>(atlasJSON)
   const time = performance.now()
   const demo = {
     window,
     canvas,
     context,
-    backpacker: new Animator(atlasMeta.filmByID['backpacker--WalkRight'], time),
-    frog: new Animator(atlasMeta.filmByID['frog--EatLoop'], time),
+    backpacker: new Animator(atlas.filmByID['backpacker--WalkRight'], time),
+    frog: new Animator(atlas.filmByID['frog--EatLoop'], time),
+    sheet,
     atlas,
-    atlasMeta,
   }
   window.requestAnimationFrame((time) => loop(demo, time))
 }
@@ -59,7 +59,7 @@ function draw(demo: Demo, cel: Readonly<Cel>, x: number, y: number): void {
   const { bounds } = cel
   const atlasSource = [bounds.x, bounds.y, bounds.w, bounds.h] as const
   const canvasDest = [x, y, bounds.w * scale, bounds.h * scale] as const
-  demo.context.drawImage(demo.atlas, ...atlasSource, ...canvasDest)
+  demo.context.drawImage(demo.sheet, ...atlasSource, ...canvasDest)
 }
 
 function loadImage(uri: string): Promise<HTMLImageElement> {

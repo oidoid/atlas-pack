@@ -17,11 +17,11 @@ import { mapValues } from 'std/collections/map_values.ts'
  * data comes from the sprite sheet and is expected to be unchanging. If you
  * need a mutable copy, create a duplicate instance of the parts that change.
  */
-export class AtlasMeta<in FilmID extends AsepriteFileTag> {
+export class Atlas<in FilmID extends AsepriteFileTag> {
   static fromJSON<const FilmID extends AsepriteFileTag>(
-    json: AtlasMetaJSON,
-  ): AtlasMeta<FilmID> {
-    return new AtlasMeta(
+    json: AtlasJSON,
+  ): Atlas<FilmID> {
+    return new Atlas(
       json.version,
       json.filename,
       json.format,
@@ -61,7 +61,7 @@ export type FilmByID<in FilmID extends AsepriteFileTag> = Readonly<
   { [id in FilmID]: Film }
 >
 
-export interface AtlasMetaJSON {
+export interface AtlasJSON {
   readonly version: string
   readonly filename: string
   readonly format: string

@@ -56,7 +56,7 @@ There are four steps in the workflow:
   big PNG sprite sheet containing all frames of animation from all input files
   as well as an associated JSON texture lookup file are output.
 - **Pack**: Use `atlas-pack` to parse the sprite sheet JSON and generate an
-  immutable sprite `AtlasMeta` optimized for lookup and sharing.
+  immutable sprite `Atlas` optimized for lookup and sharing.
 - **Run**: Every distinct renderable object should then create its own
   `Animator` state. Finally, `Animator` is used to update and render the `Film`
   state sub-textures each frame.
@@ -65,10 +65,10 @@ Aseprite itself provides everything needed. However, the latter two steps
 benefit from the tooling provided by atlas-pack:
 
 - `aseprite-batch`: A thin wrapper around the Aseprite executable with the
-  defaults expected by the `AtlasMetaParser`.
+  defaults expected by the `AtlasParser`.
 - `atlas-pack`: Accepts a sprite sheet JSON file and outputs an immutable
-  `AtlasMeta` for efficient `Film` (animation) sub-texture lookup. Each sprite
-  sheet has one `AtlasMeta` object.
+  `Atlas` for efficient `Film` (animation) sub-texture lookup. Each sprite sheet
+  has one `Atlas` object.
 - `Animator`: The current playback state for a given `Film`. There are often
   multiple distinct `Animator`s associated with the same `Film`. A renderer
   should consult `Animator` states to determine the appropriate sub-texture
@@ -98,9 +98,8 @@ deno \
 ```
 
 The output is a big image of sprites (`atlas.png`) and an
-[`AtlasMeta`](src/AtlasMeta.ts) (`atlas.json`). These outputs should be
-regenerated any time assets (Aseprite files) change, usually as part of a build
-step.
+[`Atlas`](src/Atlas.ts) (`atlas.json`). These outputs should be regenerated any
+time assets (Aseprite files) change, usually as part of a build step.
 
 <details markdown>
 <summary>💡 Troubleshooting…</summary>

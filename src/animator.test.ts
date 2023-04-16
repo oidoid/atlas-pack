@@ -3,7 +3,7 @@ import {
   AsepriteDirection,
   CelID,
   Film,
-  parseAtlasMeta,
+  parseAtlas,
   parsePlayback,
   Playback,
   PlaybackSet,
@@ -378,7 +378,7 @@ Deno.test('index()', async (test) => {
         direction: parsePlayback(direction),
         loops: 1000,
       }
-      const meta = parseAtlasMeta({
+      const atlas = parseAtlas({
         frames: {
           'filename--Tag--0': {
             duration: 3,
@@ -419,12 +419,12 @@ Deno.test('index()', async (test) => {
           size: { w: 128, h: 128 },
         },
       })
-      assertEquals(meta.celBoundsByID[0], new Box(1, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[1], new Box(4, 2, 3, 4))
-      assertEquals(meta.celBoundsByID[2], new Box(7, 6, 3, 4))
-      assertEquals(meta.celBoundsByID[3], new Box(10, 6, 3, 4))
-      assertEquals(meta.celBoundsByID[4], new Box(13, 6, 3, 4))
-      assertEquals(meta.filmByID['filename--Tag'], film)
+      assertEquals(atlas.celBoundsByID[0], new Box(1, 2, 3, 4))
+      assertEquals(atlas.celBoundsByID[1], new Box(4, 2, 3, 4))
+      assertEquals(atlas.celBoundsByID[2], new Box(7, 6, 3, 4))
+      assertEquals(atlas.celBoundsByID[3], new Box(10, 6, 3, 4))
+      assertEquals(atlas.celBoundsByID[4], new Box(13, 6, 3, 4))
+      assertEquals(atlas.filmByID['filename--Tag'], film)
 
       const animator = new Animator(film)
       for (let i = 0, time = 0; time < 50; time++, i++) {
