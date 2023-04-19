@@ -30,7 +30,6 @@ atlas-pack ┌>°┐
   // Use nearest neighbor scaling.
   context.imageSmoothingEnabled = false
 
-  const sheet = await loadImage('atlas.png')
   const atlas = Atlas.fromJSON<FilmID>(atlasJSON)
   const time = performance.now()
   const demo = {
@@ -39,7 +38,7 @@ atlas-pack ┌>°┐
     context,
     backpacker: new Animator(atlas.filmByID['backpacker--WalkRight'], time),
     frog: new Animator(atlas.filmByID['frog--EatLoop'], time),
-    sheet,
+    sheet: await loadImage('atlas.png'),
     atlas,
   }
   window.requestAnimationFrame((time) => loop(demo, time))
